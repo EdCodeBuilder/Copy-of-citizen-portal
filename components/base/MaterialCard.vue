@@ -10,6 +10,15 @@
         <v-img :src="avatar" />
       </v-avatar>
 
+      <v-avatar
+        v-else-if="identIcon"
+        size="128"
+        class="mx-auto v-card--material__avatar elevation-8"
+        color="white"
+      >
+        <div class="mt-1" v-html="identicon"></div>
+      </v-avatar>
+
       <v-sheet
         v-else
         :class="{
@@ -18,7 +27,6 @@
         :color="color"
         :max-height="icon ? 90 : undefined"
         :width="inline || icon ? 'auto' : '100%'"
-        elevation="6"
         class="text-start v-card--material__heading mb-n6"
         dark
       >
@@ -45,7 +53,7 @@
         <slot name="reveal-actions" />
       </v-col>
 
-      <div v-else-if="icon && title" class="ml-4">
+      <div v-else-if="icon && title" :class="$vuetify.rtl ? 'mr-4' : 'ml-4'">
         <div class="card-title font-weight-light" v-text="title" />
       </div>
     </div>
@@ -63,10 +71,15 @@
 </template>
 
 <script>
+import { toSvg } from 'jdenticon'
 export default {
   name: 'MaterialCard',
 
   props: {
+    identIcon: {
+      type: String,
+      default: '',
+    },
     avatar: {
       type: String,
       default: '',
@@ -101,29 +114,32 @@ export default {
     },
     coloredShadow: Boolean,
   },
-  methods: {
-    shadowImageProfile(image) {
-      return {
-        backgroundImage: `url(${image})`,
-        opacity: 1,
-      };
-    },
-  },
   computed: {
     classes() {
       return {
         'v-card--material--has-heading': this.hasHeading,
         'v-card--material--hover-reveal': this.hoverReveal,
-      };
+      }
     },
     hasHeading() {
-      return Boolean(this.$slots.heading || this.title || this.icon);
+      return Boolean(this.$slots.heading || this.title || this.icon)
     },
     hasAltHeading() {
-      return Boolean(this.$slots.heading || (this.title && this.icon));
+      return Boolean(this.$slots.heading || (this.title && this.icon))
+    },
+    identicon() {
+      return toSvg(this.identIcon, 128)
     },
   },
-};
+  methods: {
+    shadowImageProfile(image) {
+      return {
+        backgroundImage: `url(${image})`,
+        opacity: 1,
+      }
+    },
+  },
+}
 </script>
 
 <style lang="sass">
@@ -134,6 +150,7 @@ export default {
     margin-bottom: -32px
 
   &__heading
+    border-radius: 6px
     position: relative
     top: -40px
     transition: .3s ease

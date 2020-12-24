@@ -3,9 +3,12 @@
 </template>
 
 <script>
+import ItemGroup from '@/components/base/ItemGroup'
 export default {
-  name: "ItemSubGroup",
-
+  name: 'ItemSubGroup',
+  components: {
+    BaseItemGroup: ItemGroup,
+  },
   props: {
     item: {
       type: Object,
@@ -17,5 +20,5 @@ export default {
       }),
     },
   },
-};
+}
 </script>

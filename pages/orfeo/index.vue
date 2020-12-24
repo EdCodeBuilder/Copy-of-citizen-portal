@@ -1,7 +1,7 @@
 <template>
   <v-container id="dashboard" fluid tag="section">
     <v-row>
-      <v-col cols="12" sm="6" lg="3">
+      <v-col class="my-4" cols="12" sm="6" lg="3">
         <base-material-stats-card
           color="danger"
           icon="mdi-clipboard-check"
@@ -32,7 +32,7 @@
         </base-material-stats-card>
       </v-col>
 
-      <v-col cols="12" sm="6" lg="3">
+      <v-col class="my-4" cols="12" sm="6" lg="3">
         <base-material-stats-card
           color="info"
           icon="mdi-file-cloud-outline"
@@ -63,7 +63,7 @@
         </base-material-stats-card>
       </v-col>
 
-      <v-col cols="12" sm="6" lg="3">
+      <v-col class="my-4" cols="12" sm="6" lg="3">
         <base-material-stats-card
           color="warning"
           icon="mdi-printer"
@@ -94,7 +94,7 @@
         </base-material-stats-card>
       </v-col>
 
-      <v-col cols="12" sm="6" lg="3">
+      <v-col class="my-4" cols="12" sm="6" lg="3">
         <base-material-stats-card
           color="success"
           icon="mdi-send"
@@ -125,7 +125,7 @@
         </base-material-stats-card>
       </v-col>
 
-      <v-col cols="12" sm="12" lg="6" class="mx-auto">
+      <v-col cols="12" sm="12" lg="6" class="my-4 mx-auto">
         <base-material-chart-card
           hover-reveal
           :data="monthly_chart.data"
@@ -155,7 +155,7 @@
             </v-tooltip>
           </template>
           <h4 class="title font-weight-light">
-            {{ $t('orfeo.chart.month') }} - {{ $moment().format('YYYY') }}
+            {{ $t('orfeo.chart.month') }} - {{ monthly_range }}
           </h4>
           <p
             v-for="(item, i) in monthly_data.data"
@@ -181,7 +181,7 @@
         </base-material-chart-card>
       </v-col>
 
-      <v-col cols="12" sm="12" lg="6" class="mx-auto">
+      <v-col cols="12" sm="12" lg="6" class="my-4 mx-auto">
         <base-material-chart-card
           id="file-type"
           hover-reveal
@@ -238,7 +238,7 @@
         </base-material-chart-card>
       </v-col>
 
-      <v-col cols="12">
+      <v-col class="my-4" cols="12">
         <base-material-card
           icon="mdi-folder"
           :title="$t('orfeo.table.folder')"
@@ -347,7 +347,7 @@
         </base-material-card>
       </v-col>
 
-      <v-col cols="12" sm="12" lg="12">
+      <v-col class="my-4" cols="12" sm="12" lg="12">
         <base-material-card
           icon="mdi-earth"
           :title="$t('orfeo.table.dashboard')"
@@ -414,7 +414,7 @@
 </template>
 
 <router lang="yaml">
-path: /dashboard
+path: /orfeo
 meta:
   title: Dashboard
 </router>
@@ -441,6 +441,7 @@ export default {
     },
     monthly_chart: {},
     monthly_data: {},
+    monthly_range: '2020',
     type_chart: {},
     read_chart: {
       options: {},
@@ -638,6 +639,7 @@ export default {
         .countByMonth({ params: this.form.data() })
         .then((response) => {
           this.monthly_data = response
+          this.monthly_range = response.details.years
           const series3 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
           const months = [
             'En',
@@ -756,6 +758,9 @@ export default {
       this.getByRead()
     },
   },
+  head: (vm) => ({
+    title: vm.$t('orfeo.titles.index'),
+  }),
 }
 </script>
 

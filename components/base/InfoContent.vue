@@ -24,38 +24,41 @@
 
 <script>
 export default {
-  name: "InfoContent",
+  name: 'InfoContent',
   props: {
     icon: {
       type: String,
-      //default: "mdi-view-dashboard"
+      default: 'mdi-alert',
     },
     iconColor: {
       type: String,
-      default: "info",
+      default: 'info',
     },
     iconSize: {
       type: Number,
       default: 61.6,
     },
-    subtitle: String,
+    subtitle: {
+      type: String,
+      default: undefined,
+    },
     textCenter: Boolean,
     textRight: Boolean,
     textLeft: Boolean,
     infoHorizontal: Boolean,
   },
   computed: {
-    classes: function () {
+    classes() {
       return {
-        "mx-auto pb-4 px-2": true,
-        "info-horizontal text-left": this.infoHorizontal,
-        "text-right": this.textRight,
-        "text-left": this.textLeft,
-        "text-center": this.textCenter,
-      };
+        'mx-auto pb-4 px-2': true,
+        'info-horizontal text-left': this.infoHorizontal,
+        'text-right': this.textRight,
+        'text-left': this.textLeft,
+        'text-center': this.textCenter,
+      }
     },
   },
-};
+}
 </script>
 
 <style lang="sass" scoped>

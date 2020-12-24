@@ -1,15 +1,16 @@
-import {Model} from "@/models/Model";
-import {Api} from "@/models/Api";
+import { Model } from '@/models/Model'
+import { Api } from '@/models/Api'
 
-export class User extends Model {
-  constructor(data= {}) {
-    super(Api.END_POINTS.(), data);
+export class ForgotPassword extends Model {
+  constructor(
+    data = {
+      email: null,
+      email_confirmation: null,
+      username: null,
+      document: null,
+      captcha: null,
+    }
+  ) {
+    super(Api.END_POINTS.FORGOT_PASSWORD(), data)
   }
-
-  login() {
-    return this.post( Api.END_POINTS.LOGIN(), this.data())
-  }
-
-  logout(options = {}) {
-    return this.post( Api.END_POINTS.LOGOUT(), options)
-  }
+}

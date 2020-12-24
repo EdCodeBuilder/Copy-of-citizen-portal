@@ -1,0 +1,69 @@
+//http://mcg.mbitson.com/
+/* src/core/components/mdTheme/palette.js */
+$primary: (
+    'base': #594d95,
+    'lighten-5': #ebeaf2,
+    'lighten-4': #cdcadf,
+    'lighten-3': #aca6ca,
+    'lighten-2': #8b82b5,
+    'lighten-1': #7268a5,
+    'darken-1': #51468d,
+    'darken-2': #483d82,
+    'darken-3': #3e3478,
+    'darken-4': #2e2567,
+    'accent-1': #b5aaff,
+    'accent-2': #8877ff,
+    'accent-3': #5b44ff,
+    'accent-4': #452aff
+);
+
+$secondary: (
+    'base': #704691,
+    'lighten-5': #eee9f2,
+    'lighten-4': #d4c8de,
+    'lighten-3': #b8a3c8,
+    'lighten-2': #9b7eb2,
+    'lighten-1': #8562a2,
+    'darken-1': #683f89,
+    'darken-2': #5d377e,
+    'darken-3': #532f74,
+    'darken-4': #412062,
+    'accent-1': #cea2ff,
+    'accent-2': #b46fff,
+    'accent-3': #993cff,
+    'accent-4': #8c23ff
+);
+
+$tertiary: (
+    'base': #d7d460,
+    'lighten-5': #fafaec,
+    'lighten-4': #f3f2cf,
+    'lighten-3': #ebeab0,
+    'lighten-2': #e3e190,
+    'lighten-1': #ddda78,
+    'darken-1': #d3cf58,
+    'darken-2': #cdc94e,
+    'darken-3': #c7c344,
+    'darken-4': #beb933,
+    'accent-1': #ffffff,
+    'accent-2': #fffdd2,
+    'accent-3': #fffc9f,
+    'accent-4': #fffb85
+);
+
+$accent: (
+    'base': #d7c060,
+    'lighten-5': #faf7ec,
+    'lighten-4': #f3eccf,
+    'lighten-3': #ebe0b0,
+    'lighten-2': #e3d390,
+    'lighten-1': #ddc978,
+    'darken-1': #d3ba58,
+    'darken-2': #cdb24e,
+    'darken-3': #c7aa44,
+    'darken-4': #be9c33,
+    'accent-1': #ffffff,
+    'accent-2': #fff3d2,
+    'accent-3': #ffe69f,
+    'accent-4': #ffe085
+);

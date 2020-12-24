@@ -12,24 +12,30 @@
         :ratio="ratio"
         :responsive-options="responsiveOptions"
         :type="type"
-        style="max-height: 150px;"
+        style="max-height: 150px"
       />
     </template>
-
     <slot slot="reveal-actions" name="reveal-actions" />
-
     <slot />
-
     <slot slot="actions" name="actions" />
+    <v-progress-linear
+      color="deep-purple accent-4"
+      indeterminate
+      rounded
+      :active="progress"
+      height="6"
+    ></v-progress-linear>
   </base-material-card>
 </template>
 
 <script>
+import MaterialCard from '@/components/base/MaterialCard'
 export default {
-  name: "MaterialChartCard",
-
+  name: 'MaterialChartCard',
+  components: {
+    BaseMaterialCard: MaterialCard,
+  },
   inheritAttrs: false,
-
   props: {
     data: {
       type: Object,
@@ -54,10 +60,14 @@ export default {
     type: {
       type: String,
       required: true,
-      validator: (v) => ["Bar", "Line", "Pie"].includes(v),
+      validator: (v) => ['Bar', 'Line', 'Pie'].includes(v),
+    },
+    progress: {
+      type: Boolean,
+      default: false,
     },
   },
-};
+}
 </script>
 
 <style lang="sass">
@@ -72,7 +82,7 @@ export default {
       color: inherit
       opacity: .7
       font-size: 0.975rem
-      font-weight: 100
+      font-weight: 400
 
     .ct-grid
       stroke: rgba(255, 255, 255, 0.2)
@@ -82,6 +92,9 @@ export default {
     .ct-series-a .ct-bar,
     .ct-series-a .ct-slice-donut
       stroke: rgba(255,255,255,.8)
+
+    .ct-bar
+      stroke-width: 10px
 
     .ct-series-a .ct-slice-pie,
     .ct-series-a .ct-area

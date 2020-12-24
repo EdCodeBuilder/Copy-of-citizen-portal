@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <dashboard-drawer :expand-on-hover.sync="expandOnHover" />
-    <dashboard-app-bar v-model="expandOnHover" />
+    <dashboard-app-bar />
     <v-main>
       <v-container>
+        <v-offline />
         <nuxt />
       </v-container>
     </v-main>
@@ -24,18 +24,18 @@
 <script>
 import { Api } from '@/models/Api'
 import AppBar from '@/components/dashboard/AppBar'
-import Drawer from '@/components/dashboard/Drawer'
 import SnackBar from '@/components/base/SnackBar'
 import DashboardFooter from '@/components/dashboard/DashboardFooter'
 import Settings from '@/components/dashboard/Settings'
+import VOffline from '~/components/base/VOffline'
 export default {
   name: 'DashboardLayout',
   components: {
     DashboardAppBar: AppBar,
-    DashboardDrawer: Drawer,
     DashboardFooter,
     DashboardSettings: Settings,
     Snack: SnackBar,
+    VOffline,
   },
   data() {
     return {

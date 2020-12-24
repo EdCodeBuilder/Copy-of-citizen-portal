@@ -1,13 +1,20 @@
 <template>
-$END$
+  <v-app>
+    <app-bar :is-dark="true" />
+    <PasswordView />
+    <CoreFooter :is-dark="true" />
+    <Snack />
+  </v-app>
 </template>
 
 <script>
 export default {
-name: "password"
+  name: 'Password',
+  components: {
+    AppBar: () => import('~/components/auth/AppBar'),
+    PasswordView: () => import('~/components/auth/PasswordView'),
+    CoreFooter: () => import('~/components/auth/AuthFooter'),
+    Snack: () => import('~/components/base/SnackBar'),
+  },
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -4,11 +4,7 @@
     :prepend-icon="item.icon"
     :sub-group="subGroup"
     append-icon="mdi-menu-down"
-    :color="
-      bgColor !== 'rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.7)'
-        ? 'white'
-        : 'grey darken-1'
-    "
+    :color="textColor"
   >
     <template v-slot:activator>
       <v-list-item-icon
@@ -19,14 +15,14 @@
 
       <v-list-item-avatar
         v-else-if="item.avatar"
-        class="align-self-center"
+        class="align-self-center elevation-12"
         color="white"
       >
-        <Identicon class="mt-1" :size="45" :value="item.avatar" />
+        <div class="mt-1" v-html="identicon"></div>
       </v-list-item-avatar>
 
       <v-list-item-content>
-        <v-list-item-title v-text="item.title.capitalize()" />
+        <v-list-item-title class="text-uppercase" v-text="item.title" />
       </v-list-item-content>
     </template>
 
@@ -43,13 +39,18 @@
 
 <script>
 // Utilities
-import kebabCase from "lodash/kebabCase";
+import { toSvg } from 'jdenticon'
+import Item from '@/components/base/Item'
+import ItemSubGroup from '@/components/base/ItemSubGroup'
+import kebabCase from 'lodash/kebabCase'
 
 export default {
-  name: "ItemGroup",
-
+  name: 'ItemGroup',
+  components: {
+    BaseItem: Item,
+    BaseItemSubGroup: ItemSubGroup,
+  },
   inheritAttrs: false,
-
   props: {
     item: {
       type: Object,
@@ -69,56 +70,80 @@ export default {
       default: false,
     },
   },
-
   computed: {
+    textColor() {
+      const bg = ![
+        'rgba(228, 226, 226, 0.3), rgba(255, 255, 255, 0.8)',
+        'rgba(33, 147, 176, .2), rgba(109, 213, 237, .6)',
+      ].includes(this.bgColor)
+      return bg ? 'white' : 'grey darken-1'
+    },
     bgColor: {
       get() {
-        return this.$store.getters["app/getBarColor"];
+        return this.$store.getters['app/getBarColor']
       },
       set(val) {
-        this.$store.dispatch("app/serBarColor", val);
+        this.$store.dispatch('app/serBarColor', val)
       },
     },
     children() {
-      return this.item.children.map((item) => ({
-        ...item,
-        to: !item.to ? undefined : `${this.item.group}/${item.to}`,
-      }));
+      return this.item.children.map((item) => {
+        let to
+        if (item.to && typeof item.to === 'object') {
+          to = item.to
+        }
+        if (item.to && typeof item.to === 'string') {
+          to = `${this.item.group}/${item.to}`
+        }
+        return {
+          ...item,
+          to,
+        }
+      })
     },
     computedText() {
-      if (!this.item || !this.item.title) return "";
+      if (!this.item || !this.item.title) return ''
 
-      let text = "";
+      let text = ''
 
-      this.item.title.split(" ").forEach((val) => {
-        text += val.substring(0, 1);
-      });
+      this.item.title.split(' ').forEach((val) => {
+        text += val.substring(0, 1)
+      })
 
-      return text;
+      return text
     },
     group() {
-      return this.genGroup(this.item.children);
+      return this.genGroup(this.item.children)
+    },
+    identicon() {
+      return toSvg(this.item.avatar, 40)
     },
   },
-
   methods: {
     genGroup(children) {
       return children
         .filter((item) => item.to)
         .map((item) => {
-          const parent = item.group || this.item.group;
-          let group = `${parent}/${kebabCase(item.to)}`;
+          let to = ''
+          if (typeof item.to === 'object') {
+            to = item.to.name
+          }
+          if (typeof item.to === 'string') {
+            to = item.to
+          }
+          const parent = item.group || this.item.group
+          let group = `${parent}/${kebabCase(to)}`
 
           if (item.children) {
-            group = `${group}|${this.genGroup(item.children)}`;
+            group = `${group}|${this.genGroup(item.children)}`
           }
 
-          return group;
+          return group
         })
-        .join("|");
+        .join('|')
     },
   },
-};
+}
 </script>
 
 <style>

@@ -44,6 +44,30 @@
           </v-list-item>
         </v-list>
       </v-menu>
+      <template v-slot:extension>
+        <v-row dense>
+          <v-col cols="12" class="d-inline text-right">
+            {{ $t('orfeo.event.status') }}
+            <v-chip small dark color="danger">
+              <v-icon small left>{{ icons['danger'] }}</v-icon>
+              {{ $t('orfeo.stats.filed') }}
+            </v-chip>
+            <v-chip small dark color="info">
+              <v-icon small left>{{ icons['info'] }}</v-icon>
+              {{ $t('orfeo.stats.principal') }}
+            </v-chip>
+            <v-chip small dark color="warning">
+              <v-icon small left>{{ icons['warning'] }}</v-icon>
+              {{ $t('orfeo.stats.printed') }}
+            </v-chip>
+
+            <v-chip small dark color="success">
+              <v-icon small left>{{ icons['success'] }}</v-icon>
+              {{ $t('orfeo.stats.sent') }}
+            </v-chip>
+          </v-col>
+        </v-row>
+      </template>
     </v-toolbar>
     <v-divider />
     <v-calendar
@@ -122,6 +146,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <filter-form :loading="loading" is-calendar @on-submit="onFilter" />
     <v-overlay :value="loading">
       <v-progress-circular
         indeterminate
@@ -133,7 +158,7 @@
 </template>
 
 <router lang="yaml">
-path: /calendar
+path: /orfeo/calendar
 meta:
   title: Calendar
 </router>
@@ -145,6 +170,7 @@ export default {
   auth: 'auth',
   components: {
     CalendarEvent: () => import('@/components/orfeo/Event'),
+    FilterForm: () => import('@/components/orfeo/Filter'),
   },
   data: (vm) => ({
     loading: false,
@@ -159,6 +185,12 @@ export default {
     selectedEvent: {},
     selectedElement: null,
     selectedOpen: false,
+    icons: {
+      danger: 'mdi-clipboard-check',
+      info: 'mdi-file-cloud-outline',
+      warning: 'mdi-printer',
+      success: 'mdi-send',
+    },
   }),
   computed: {
     typeToLabel() {
@@ -201,17 +233,24 @@ export default {
       this.loading = true
       const start = this.start ? this.start.date : this.start
       const end = this.end ? this.end.date : this.end
+      let params = {
+        ...this.form.data(),
+        start_date: start,
+        final_date: end,
+      }
+      if (this.form.query && this.form.query !== '') {
+        params = {
+          ...this.form.data(),
+        }
+      }
       this.form
-        .calendar({
-          params: {
-            ...this.form.data(),
-            start_date: start,
-            final_date: end,
-          },
-        })
+        .calendar({ params })
         .then((response) => {
           this.events = response.data.map((evt) => {
             const date = evt.created_at.split('.').shift()
+            if (response.data.length === 1) {
+              this.viewDay({ date })
+            }
             return {
               ...evt,
               name: evt.subject,
@@ -252,7 +291,21 @@ export default {
     getEventColor(event) {
       return event.color
     },
+    onFilter(data) {
+      this.form = new Orfeo(data)
+      this.type = 'month'
+      if (data.start_date) {
+        this.focus = data.start_date
+        this.date = data.start_date
+      }
+      this.$nextTick(function () {
+        this.getCalendar()
+      })
+    },
   },
+  head: (vm) => ({
+    title: vm.$t('orfeo.titles.calendar'),
+  }),
 }
 </script>
 

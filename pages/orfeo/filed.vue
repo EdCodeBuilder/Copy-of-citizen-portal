@@ -1,7 +1,7 @@
 <template>
   <v-container id="dashboard" fluid tag="section">
     <v-row>
-      <v-col cols="12">
+      <v-col class="my-4" cols="12">
         <base-material-card
           icon="mdi-domain"
           :title="$t('orfeo.table.filed')"
@@ -156,7 +156,6 @@
 </template>
 
 <router lang="yaml">
-path: /orfeo
 meta:
   title: Orfeo
 </router>
@@ -342,5 +341,8 @@ export default {
       })
     },
   },
+  head: (vm) => ({
+    title: vm.$t('orfeo.titles.filed'),
+  }),
 }
 </script>

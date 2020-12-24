@@ -4,7 +4,7 @@
       <v-card
         class="d-inline-block mx-auto my-auto"
         elevation="6"
-        max-width="844"
+        :max-width="$vuetify.breakpoint.mdAndUp ? '710' : '300'"
       >
         <validation-observer v-slot="{ handleSubmit }">
           <v-form @submit.prevent="handleSubmit(onSubmit)">
@@ -17,20 +17,21 @@
                   class="hidden-sm-and-down"
                   align-self="center"
                 >
-                  <div id="office-man" style="max-width: 400px;" />
+                  <div id="office-man" style="max-width: 400px" />
                 </v-col>
                 <v-col cols="12" md="6" sm="12">
                   <Sim></Sim>
                   <validation-provider
                     v-slot="{ errors }"
                     rules="required|min:3|max:45"
+                    vid="username"
                     :name="$t('inputs.Username')"
                   >
                     <v-text-field
                       v-model.trim="form.username"
                       type="text"
                       name="username"
-                      color="primary"
+                      class="mt-8"
                       :label="$t('inputs.Username')"
                       :error-messages="errors"
                       clearable
@@ -43,20 +44,20 @@
                   </validation-provider>
                   <validation-provider
                     v-slot="{ errors }"
-                    rules="required|min:3|max:45"
+                    rules="required|min:8|max:12"
+                    vid="password"
                     :name="$t('inputs.Password')"
                   >
                     <v-text-field
                       v-model.trim="form.password"
-                      class="mb-8"
                       name="password"
                       color="primary"
-                      :labe="$t('inputs.Password')"
+                      :label="$t('inputs.Password')"
                       prepend-icon="mdi-lock-outline"
                       :error-messages="errors"
                       clearable
                       counter
-                      :maxlength="45"
+                      :maxlength="12"
                       autocomplete="off"
                       required="required"
                       :type="show ? 'text' : 'password'"
@@ -64,15 +65,15 @@
                       @click:append="show = !show"
                     />
                   </validation-provider>
-                  <v-checkbox type="checkbox" required>
+                  <v-checkbox v-model="form.remember" type="checkbox" required>
                     <template v-slot:label>
-                      {{ $t('pages.Login.Title') }}
+                      {{ $t('inputs.RememberMe') }}
                       <v-spacer></v-spacer>
                       <nuxt-link
-                        to="/login"
+                        :to="localePath('/password/forgot')"
                         class="primary--text caption hidden-sm-and-down"
                       >
-                        Forgot your password?
+                        {{ $t('texts.ForgotPassword') }}
                       </nuxt-link>
                       <v-tooltip top>
                         <template v-slot:activator="{ on, attrs }">
@@ -86,21 +87,29 @@
                             <v-icon>mdi-help-circle</v-icon>
                           </v-btn>
                         </template>
-                        <span>Forgot your password?</span>
+                        <span>{{ $t('texts.ForgotPassword') }}</span>
                       </v-tooltip>
                     </template>
                   </v-checkbox>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="primary">
-                      Login
+                    <v-btn
+                      :loading="loading"
+                      :disabled="loading"
+                      type="submit"
+                      color="primary"
+                    >
+                      {{ $t('buttons.Login') }}
                     </v-btn>
                   </v-card-actions>
                   <v-card-actions class="hidden-sm-and-down">
                     <Town></Town>
                     <v-spacer></v-spacer>
-                    <nuxt-link to="/login" class="primary--text caption">
-                      Go to old version
+                    <nuxt-link
+                      :to="localePath('/password/reset')"
+                      class="primary--text caption"
+                    >
+                      {{ $t('texts.OldLogin') }}
                     </nuxt-link>
                   </v-card-actions>
                 </v-col>
@@ -113,22 +122,33 @@
   </v-row>
 </template>
 
+<router lang="yaml">
+path: /login
+meta:
+  title: Login
+</router>
+
 <script>
 import lottie from 'lottie-web/build/player/lottie'
 import * as office from '~/static/lottie/office.json'
 import Sim from '~/components/icons/Sim'
 import Town from '~/components/icons/Town'
 export default {
-  name: 'Index',
+  name: 'Login',
+  auth: 'guest',
+  middleware: ['token'],
   layout: 'page',
   components: {
     Sim,
     Town,
   },
   data: () => ({
+    show: false,
+    loading: false,
     form: {
       username: null,
       password: null,
+      remember: false,
     },
   }),
   computed: {
@@ -144,7 +164,22 @@ export default {
     })
   },
   methods: {
-    onSubmit: () => alert('Ok'),
+    onSubmit() {
+      this.loading = true
+      this.$auth
+        .loginWith('local', { data: this.form })
+        .then(() => {
+          this.$router.push(this.localePath('/'))
+        })
+        .catch((errors) => {
+          this.loading = false
+          const error = errors.response ? errors.response.data.message : errors
+          this.$snackbar({ message: error })
+        })
+    },
   },
+  head: (vm) => ({
+    title: vm.$t('titles.Login'),
+  }),
 }
 </script>

@@ -9,10 +9,10 @@
         <template v-if="icon">
           <v-icon class="v-empty-state-icon">{{ icon }}</v-icon>
         </template>
-        <strong class="v-empty-state-label grey--text" v-if="label">{{
+        <strong v-if="label" class="v-empty-state-label grey--text">{{
           label
         }}</strong>
-        <p class="v-empty-state-description grey--text" v-if="description">
+        <p v-if="description" class="v-empty-state-description grey--text">
           {{ description }}
         </p>
 
@@ -24,35 +24,43 @@
 
 <script>
 export default {
-  name: "EmptyState",
+  name: 'EmptyState',
   props: {
     rounded: Boolean,
     size: {
       type: Number,
       default: 420,
     },
-    icon: String,
-    label: String,
-    description: String,
+    icon: {
+      type: String,
+      default: undefined,
+    },
+    label: {
+      type: String,
+      default: undefined,
+    },
+    description: {
+      type: String,
+      default: undefined,
+    },
   },
-
   computed: {
     emptyStateClasses() {
       return {
-        "v-rounded": this.rounded,
-      };
+        'v-rounded': this.rounded,
+      }
     },
     emptyStateStyles() {
       if (this.rounded) {
-        const size = this.size + "px";
+        const size = this.size + 'px'
 
         return {
           width: size,
           height: size,
-        };
+        }
       }
-      return {};
+      return {}
     },
   },
-};
+}
 </script>
