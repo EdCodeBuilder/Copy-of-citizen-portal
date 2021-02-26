@@ -19,10 +19,10 @@ export class Admin extends Model {
   }
 
   assignRole(userId, options = {}) {
-    return this.post( Api.END_POINTS.ROLES_USER(userId), options )
+    return this.post(Api.END_POINTS.ROLES_USER(userId), options)
   }
 
   retractRole(userId, options = {}) {
-    return this.delete( Api.END_POINTS.ROLES_USER(userId), options )
+    return this.delete(Api.END_POINTS.ROLES_USER(userId), options)
   }
 }

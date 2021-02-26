@@ -101,8 +101,9 @@
                       </v-list-item-content>
                       <v-list-item-action
                         v-if="
-                          ['third_party_text'].includes(key.value || key.field) &&
-                          userIsA('contractors-portal-third-party')
+                          ['third_party_text'].includes(
+                            key.value || key.field
+                          ) && userIsA('contractors-portal-third-party')
                         "
                       >
                         <v-switch

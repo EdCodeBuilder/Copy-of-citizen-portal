@@ -5,6 +5,10 @@
     <v-main>
       <v-container>
         <v-offline />
+        <v-banner elevation="2" outlined transition="slide-y-transition">
+          <v-icon slot="icon" color="primary" size="36">mdi-dev-to</v-icon>
+          Ambiente de pruebas
+        </v-banner>
         <nuxt />
       </v-container>
       <snack />
