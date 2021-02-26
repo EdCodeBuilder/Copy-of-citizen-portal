@@ -21,4 +21,5 @@ export default {
     `${api}${path}/contracts/${contractId}/files`,
   CONTRACT_TYPES: () => `${api}${path}/contract-types`,
   FILE_TYPES: () => `${api}${path}/file-types`,
+  FONTS: () => `${api}${path}/fonts`,
 }

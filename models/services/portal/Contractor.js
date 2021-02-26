@@ -25,6 +25,7 @@ export class Contractor extends Model {
       neighborhood_id: null,
       neighborhood: null,
       address: null,
+      font_type_id: null,
       contract_id: null,
       contract: null,
       transport: false,
