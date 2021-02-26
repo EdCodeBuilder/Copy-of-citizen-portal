@@ -29,6 +29,12 @@ const actions = {
       resolve()
     })
   },
+  setTheme: ({ commit }, payload) => {
+    return new Promise((resolve) => {
+      commit('SET_DARK_TYPE', payload)
+      resolve()
+    })
+  },
   toggleRightDrawer: ({ commit }, payload) => {
     return new Promise((resolve) => {
       commit('SET_RIGHT_DRAWER', payload)
@@ -38,7 +44,9 @@ const actions = {
   toggleDarker: ({ commit }, payload) => {
     return new Promise((resolve) => {
       commit('SET_DARKER', payload)
-      commit('SET_SCRIM', 'rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)')
+      if (payload) {
+        commit('SET_SCRIM', 'rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)')
+      }
       resolve()
     })
   },
@@ -72,9 +80,39 @@ const actions = {
       resolve()
     })
   },
+  removeFromSnackBar: ({ commit }, payload) => {
+    return new Promise((resolve) => {
+      commit('REMOVE_FROM_SNACKBAR', payload)
+      resolve()
+    })
+  },
   unsetSnackBar: ({ commit }, payload) => {
     return new Promise((resolve) => {
       commit('UNSET_SNACKBAR')
+      resolve()
+    })
+  },
+  unsetMenuDrawer: ({ commit }) => {
+    return new Promise((resolve) => {
+      commit('UNSET_MENU_DRAWER')
+      resolve()
+    })
+  },
+  setMenuDrawer: ({ commit }, payload) => {
+    return new Promise((resolve) => {
+      commit('SET_MENU_DRAWER', payload)
+      resolve()
+    })
+  },
+  setPermissions: ({ commit }, payload) => {
+    return new Promise((resolve) => {
+      commit('SET_PERMISSIONS', payload)
+      resolve()
+    })
+  },
+  unsetPermissions: ({ commit }, payload) => {
+    return new Promise((resolve) => {
+      commit('UNSET_PERMISSIONS', payload)
       resolve()
     })
   },

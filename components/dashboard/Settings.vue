@@ -7,10 +7,17 @@
     width="300"
   >
     <v-card-text>
-      <strong class="mb-3 d-inline-block">SIDEBAR FILTERS</strong>
+      <v-btn block class="my-2" color="primary" @click="install">
+        {{ $t('sidebar.install') }}
+        <v-icon right dark>mdi-plus-circle</v-icon>
+      </v-btn>
+      <v-divider class="my-4 secondary" />
+      <strong class="mb-3 d-inline-block">
+        {{ $t('sidebar.filters') }}
+      </strong>
       <v-item-group v-model="color">
         <v-item v-for="c in colors" :key="c" :value="c">
-          <template v-slot="{ active, toggle }">
+          <template #default="{ active, toggle }">
             <v-avatar
               :class="active && 'v-settings__item--active'"
               :color="c"
@@ -22,18 +29,20 @@
         </v-item>
       </v-item-group>
       <v-divider class="my-4 secondary" />
-      <strong class="mb-3 d-inline-block">SIDEBAR BACKGROUND</strong>
+      <strong class="mb-3 d-inline-block">
+        {{ $t('sidebar.background') }}
+      </strong>
       <v-item-group v-model="scrim">
         <v-item
-          v-for="scrim in scrims"
-          :key="scrim"
-          :value="scrim"
+          v-for="screen in scrims"
+          :key="screen"
+          :value="screen"
           class="mx-1"
         >
-          <template v-slot="{ active, toggle }">
+          <template #default="{ active, toggle }">
             <v-avatar
               :class="active && 'v-settings__item--active'"
-              :color="scrim"
+              :color="screen"
               class="v-settings__item"
               size="24"
               @click="toggle"
@@ -42,16 +51,15 @@
         </v-item>
       </v-item-group>
       <v-divider class="my-4 secondary" />
-      <v-row align="center" no-gutters>
-        <v-col cols="auto">Dark Mode</v-col>
-        <v-spacer />
-        <v-col cols="auto">
-          <DarkLight />
-        </v-col>
-      </v-row>
+      <strong class="mb-3 d-inline-block">
+        {{ $t('sidebar.dark') }}
+      </strong>
+      <DarkLight />
       <v-divider class="my-4 secondary" />
       <v-row align="center" no-gutters>
-        <v-col cols="auto">Language</v-col>
+        <v-col cols="auto">
+          {{ $t('sidebar.language') }}
+        </v-col>
         <v-spacer />
         <v-col cols="auto">
           <language />
@@ -59,7 +67,9 @@
       </v-row>
       <v-divider class="my-4 secondary" />
       <v-row align="center" no-gutters>
-        <v-col cols="auto">Sidebar Image</v-col>
+        <v-col cols="auto">
+          {{ $t('sidebar.image') }}
+        </v-col>
         <v-spacer />
         <v-col cols="auto">
           <v-switch
@@ -72,7 +82,9 @@
       </v-row>
       <v-divider class="my-4 secondary" />
       <v-row align="center" no-gutters>
-        <v-col cols="auto">RTL</v-col>
+        <v-col cols="auto">
+          {{ $t('sidebar.rtl') }}
+        </v-col>
         <v-spacer />
         <v-col cols="auto">
           <v-btn icon @click.stop="$vuetify.rtl = !$vuetify.rtl">
@@ -83,22 +95,19 @@
 
       <v-divider class="my-4 secondary" />
 
-      <strong class="mb-3 d-inline-block">IMAGES</strong>
+      <strong class="mb-3 d-inline-block">
+        {{ $t('sidebar.images') }}
+      </strong>
 
       <v-item-group v-model="image" class="d-flex justify-space-between mb-3">
-        <v-item
-          v-for="image in images"
-          :key="image"
-          :value="image"
-          class="mx-1"
-        >
-          <template v-slot="{ active, toggle }">
+        <v-item v-for="img in images" :key="img" :value="img" class="mx-1">
+          <template #default="{ active, toggle }">
             <v-sheet
               :class="active && 'v-settings__item--active'"
               class="d-inline-block v-settings__item"
               @click="toggle"
             >
-              <v-img :src="image" height="100" width="50" />
+              <v-img :src="img" height="100" width="50" />
             </v-sheet>
           </template>
         </v-item>
@@ -233,6 +242,30 @@ export default {
   },
   mounted() {
     this.$vuetify.rtl = this.rtl
+  },
+  methods: {
+    install() {
+      const that = this
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault()
+        // Stash the event so it can be triggered later.
+        let deferredPrompt = e
+        // Update UI to notify the user they can add to home screen
+        deferredPrompt.prompt()
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            that.$snackbar({
+              message: 'Aplicación Instalada',
+              color: 'success',
+            })
+          } else {
+            that.$snackbar({ message: 'Instalación Cancelada' })
+          }
+          deferredPrompt = null
+        })
+      })
+    },
   },
 }
 </script>

@@ -1,8 +1,8 @@
 <template>
   <offline @detected-condition="isOnline">
-    <template v-slot:online>
+    <template #online>
       <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
+        <template #activator="{ on, attrs }">
           <v-icon v-if="onLine" v-bind="attrs" color="success" v-on="on">
             mdi-wifi
           </v-icon>

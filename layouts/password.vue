@@ -4,6 +4,7 @@
     <PasswordView />
     <CoreFooter :is-dark="true" />
     <Snack />
+    <update-notification />
   </v-app>
 </template>
 
@@ -15,6 +16,7 @@ export default {
     PasswordView: () => import('~/components/auth/PasswordView'),
     CoreFooter: () => import('~/components/auth/AuthFooter'),
     Snack: () => import('~/components/base/SnackBar'),
+    UpdateNotification: () => import('@/components/base/UpdateAvailable'),
   },
 }
 </script>

@@ -6,7 +6,7 @@
     origin="top right"
     transition="scale-transition"
   >
-    <template v-slot:activator="{ on }">
+    <template #activator="{ on }">
       <v-btn icon v-on="on">
         <v-icon v-if="$i18n.locale === 'es'">$vuetify.icons.es</v-icon>
         <v-icon v-else>$vuetify.icons.en</v-icon>

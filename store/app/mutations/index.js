@@ -4,6 +4,9 @@ const mutations = {
       state.locale = locale
     }
   },
+  SET_DARK_TYPE(state, payload) {
+    state.darkType = payload
+  },
   SET_BAR_IMAGE(state, payload) {
     state.barImage = payload
   },
@@ -35,7 +38,8 @@ const mutations = {
     state.showSnack = payload
   },
   SET_SNACKBAR(state, payload) {
-    state.snackBar = {
+    state.snackBar.push({
+      id: `snack_${Math.random().toString(36).substr(2, 9)}`,
       color: payload.color || 'error',
       title: payload.title || '¡Error!',
       message:
@@ -43,9 +47,17 @@ const mutations = {
         'Algo salió mal, estamos trabajando para resolver el inconveniente.',
       icon: payload.icon || 'mdi-bell-plus',
       position: payload.position || 'bottom',
+      timeout: payload.timeout || 5000,
+    })
+  },
+  REMOVE_FROM_SNACKBAR(state, payload) {
+    const index = state.snackBar.findIndex((item) => item.id === payload)
+    if (index !== -1) {
+      state.snackBar.splice(index, 1)
     }
   },
   UNSET_SNACKBAR(state) {
+    /*
     state.snackBar = {
       color: 'error',
       title: '¡Error!',
@@ -53,7 +65,22 @@ const mutations = {
         'Algo salió mal, estamos trabajando para resolver el inconveniente.',
       icon: 'mdi-bell-plus',
       position: 'bottom',
+      timeout: 5000,
     }
+     */
+    state.snackBar = []
+  },
+  SET_MENU_DRAWER(state, payload) {
+    state.menu = payload
+  },
+  UNSET_MENU_DRAWER(state) {
+    state.menu = []
+  },
+  SET_PERMISSIONS(state, payload) {
+    state.permissions = payload
+  },
+  UNSET_PERMISSIONS(state) {
+    state.permissions = []
   },
 }
 

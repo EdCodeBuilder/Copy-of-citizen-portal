@@ -5,6 +5,7 @@ import En from '@/components/icons/En'
 import Bogota from '@/components/icons/Bogota'
 import Town from '@/components/icons/Town'
 import IDRD from '@/components/icons/IDRD'
+import Pse from '@/components/icons/Pse'
 
 export default function ({ app }) {
   return {
@@ -34,6 +35,9 @@ export default function ({ app }) {
         },
         idrd: {
           component: IDRD
+        },
+        pse: {
+          component: Pse
         },
       }
     },

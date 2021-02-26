@@ -6,7 +6,7 @@
     append-icon="mdi-menu-down"
     :color="textColor"
   >
-    <template v-slot:activator>
+    <template #activator>
       <v-list-item-icon
         v-if="text"
         class="v-list-item__icon--text"
@@ -18,6 +18,7 @@
         class="align-self-center elevation-12"
         color="white"
       >
+        <!-- eslint-disable-next-line vue/no-v-html -->
         <div class="mt-1" v-html="identicon"></div>
       </v-list-item-avatar>
 

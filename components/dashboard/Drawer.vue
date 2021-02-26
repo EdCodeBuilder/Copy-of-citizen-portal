@@ -14,7 +14,7 @@
     mini-variant-width="75"
     width="260"
   >
-    <template v-slot:img="props">
+    <template #img="props">
       <v-img :gradient="`to bottom, ${bgColor}`" v-bind="props" />
     </template>
     <v-list>
@@ -24,9 +24,9 @@
             class="text-uppercase font-weight-regular display-2"
           >
             <div :class="$vuetify.rtl ? 'ml-3' : 'mr-3'" class="logo-mini">
-              SIM
+              PC
             </div>
-            <div class="logo-normal">SISTEMA DE INFORMACIÓN MISIONAL</div>
+            <div class="logo-normal">PORTAL CONTRATISTA</div>
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -40,7 +40,7 @@
 
     <v-list expand nav dense>
       <div />
-      <template v-for="(item, i) in items">
+      <template v-for="(item, i) in menu">
         <base-item-group
           v-if="item.children"
           :key="`group-${i}`"
@@ -67,29 +67,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    menu: {
+      type: [Array],
+      default: () => [],
+    },
   },
-  data: () => ({
-    items: [
-      {
-        icon: 'mdi-view-dashboard',
-        title: 'Dashboard',
-        to: '/orfeo',
-        exact: true,
-      },
-      {
-        icon: 'mdi-calendar',
-        title: 'Calendario',
-        to: '/orfeo/calendar',
-        exact: true,
-      },
-      {
-        icon: 'mdi-domain',
-        title: 'Radicados',
-        to: '/orfeo/filed',
-        exact: true,
-      },
-    ],
-  }),
   computed: {
     drawerDark() {
       return ![

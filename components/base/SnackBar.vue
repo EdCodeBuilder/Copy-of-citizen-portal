@@ -1,43 +1,47 @@
 <template>
-  <v-snackbar
-    v-model="showSnack"
-    :color="snackBar.color"
-    :bottom="bottom"
-    :top="top"
-    :left="left"
-    :right="right"
-    dark
-  >
-    <v-icon color="white" class="mr-3">
-      {{ snackBar.icon }}
-    </v-icon>
-
-    {{ snackBar.message }}
-
-    <template v-slot:action>
-      <v-icon size="16" @click="onClose">mdi-close-circle</v-icon>
-    </template>
-  </v-snackbar>
+  <v-snack-bar-queue
+    :items="snackBar"
+    @remove="removeItem"
+    @close="removeItem"
+  />
 </template>
 
 <script>
 export default {
   name: 'SnackBar',
+  components: {
+    VSnackBarQueue: () => import('./SnackBarQueue'),
+  },
   data: () => ({
-    top: false,
-    bottom: true,
-    left: false,
-    right: false,
+    items: [
+      {
+        color: 'error',
+        title: '¡Error!',
+        message:
+          'Algo salió mal, estamos trabajando para resolver el inconveniente.',
+        icon: 'mdi-bell-plus',
+        position: 'bottom',
+        timeout: 5000,
+      },
+      {
+        color: 'success',
+        title: '¡Error!',
+        message: 'Mensaje 2',
+        icon: 'mdi-bell-plus',
+        position: 'bottom',
+        timeout: 5000,
+      },
+      {
+        color: 'warning',
+        title: '¡Error!',
+        message: 'Mensaje 3',
+        icon: 'mdi-bell-plus',
+        position: 'bottom',
+        timeout: 5000,
+      },
+    ],
   }),
   computed: {
-    showSnack: {
-      get() {
-        return this.$store.getters['app/getSnackBarStatus']
-      },
-      set(value) {
-        this.$store.dispatch('app/toggleSnackBar', value)
-      },
-    },
     snackBar: {
       get() {
         return this.$store.getters['app/getSnackBar']
@@ -48,31 +52,17 @@ export default {
     },
   },
   created() {
-    this.$store.watch(
-      (state) => state.app.snackBar.show,
-      () => {
-        if (this.$store.state.app.snackBar.show) {
-          this.onSnackSetPosition()
-          this.show = true
-        } else {
-          this.$store.dispatch('app/unsetSnackBar')
-        }
-      }
-    )
+    /*
+    this.items.map((i) => {
+      return (this.snackBar = i)
+    })
+     */
   },
   methods: {
-    onSnackSetPosition() {
-      this.top = false
-      this.bottom = false
-      this.left = false
-      this.right = false
-      for (const loc of this.snackBar.position) {
-        this[loc] = true
+    removeItem(id) {
+      if (id) {
+        this.$store.dispatch('app/removeFromSnackBar', id)
       }
-    },
-    onClose() {
-      this.showSnack = false
-      this.$emit('onCloseSnackBar')
     },
   },
 }

@@ -35,7 +35,7 @@ export default {
   input_text_required: {
     required: true,
     min: 3,
-    max: 80,
+    max: 191,
   },
   input_password_required: {
     required: true,

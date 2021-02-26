@@ -1,7 +1,7 @@
-// const api = process.env.VUE_APP_API_URL_BASE
-const api = 'http://127.0.0.1:8000'
+const api = process.env.VUE_APP_API_URL_BASE
 export default {
   ORFEO: () => `${api}/api/orfeo/filed`,
+  EXCEL: () => `${api}/api/orfeo/excel`,
   ORFEO_DEPENDENCIES: () => `${api}/api/orfeo/dependencies`,
   ORFEO_DOCUMENT_TYPES: () => `${api}/api/orfeo/document-types`,
   ORFEO_FOLDERS: () => `${api}/api/orfeo/folders`,

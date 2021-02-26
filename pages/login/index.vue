@@ -44,7 +44,7 @@
                   </validation-provider>
                   <validation-provider
                     v-slot="{ errors }"
-                    rules="required|min:8|max:12"
+                    rules="required|min:8|max:20"
                     vid="password"
                     :name="$t('inputs.Password')"
                   >
@@ -57,7 +57,7 @@
                       :error-messages="errors"
                       clearable
                       counter
-                      :maxlength="12"
+                      :maxlength="20"
                       autocomplete="off"
                       required="required"
                       :type="show ? 'text' : 'password'"
@@ -66,7 +66,7 @@
                     />
                   </validation-provider>
                   <v-checkbox v-model="form.remember" type="checkbox" required>
-                    <template v-slot:label>
+                    <template #label>
                       {{ $t('inputs.RememberMe') }}
                       <v-spacer></v-spacer>
                       <nuxt-link
@@ -76,7 +76,7 @@
                         {{ $t('texts.ForgotPassword') }}
                       </nuxt-link>
                       <v-tooltip top>
-                        <template v-slot:activator="{ on, attrs }">
+                        <template #activator="{ on, attrs }">
                           <v-btn
                             icon
                             color="primary"
@@ -105,12 +105,6 @@
                   <v-card-actions class="hidden-sm-and-down">
                     <Town></Town>
                     <v-spacer></v-spacer>
-                    <nuxt-link
-                      :to="localePath('/password/reset')"
-                      class="primary--text caption"
-                    >
-                      {{ $t('texts.OldLogin') }}
-                    </nuxt-link>
                   </v-card-actions>
                 </v-col>
               </div>
@@ -125,7 +119,7 @@
 <router lang="yaml">
 path: /login
 meta:
-  title: Login
+title: Login
 </router>
 
 <script>
@@ -135,13 +129,13 @@ import Sim from '~/components/icons/Sim'
 import Town from '~/components/icons/Town'
 export default {
   name: 'Login',
-  auth: 'guest',
-  middleware: ['token'],
-  layout: 'page',
   components: {
     Sim,
     Town,
   },
+  layout: 'page',
+  auth: 'guest',
+  middleware: ['token'],
   data: () => ({
     show: false,
     loading: false,
@@ -150,6 +144,9 @@ export default {
       password: null,
       remember: false,
     },
+  }),
+  head: (vm) => ({
+    title: vm.$t('titles.Login'),
   }),
   computed: {
     styles: (vm) => (vm.$vuetify.breakpoint.mdAndUp ? 'min-width: 400px;' : ''),
@@ -169,7 +166,7 @@ export default {
       this.$auth
         .loginWith('local', { data: this.form })
         .then(() => {
-          this.$router.push(this.localePath('/'))
+          this.$router.push(this.localePath({ name: 'index' }))
         })
         .catch((errors) => {
           this.loading = false
@@ -178,8 +175,5 @@ export default {
         })
     },
   },
-  head: (vm) => ({
-    title: vm.$t('titles.Login'),
-  }),
 }
 </script>

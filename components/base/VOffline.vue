@@ -1,6 +1,6 @@
 <template>
   <offline :slot-name="slotName" @detected-condition="isOnline">
-    <template v-slot:[onlineSlot]>
+    <template #[onlineSlot]>
       <v-banner
         v-model="message"
         :single-line="$vuetify.breakpoint.mdAndUp"
@@ -11,12 +11,12 @@
           mdi-wifi-strength-3
         </v-icon>
         {{ $t('errors.online') }}
-        <template v-slot:actions>
+        <template #actions>
           <v-btn color="primary" text @click="message = false">OK</v-btn>
         </template>
       </v-banner>
     </template>
-    <template v-slot:[offlineSlot]>
+    <template #[offlineSlot]>
       <v-banner
         v-model="message"
         :single-line="$vuetify.breakpoint.mdAndUp"
@@ -27,7 +27,7 @@
           mdi-wifi-strength-3-alert
         </v-icon>
         {{ $t('errors.offline') }}
-        <template v-slot:actions>
+        <template #actions>
           <v-btn color="primary" text @click="message = false">OK</v-btn>
         </template>
       </v-banner>

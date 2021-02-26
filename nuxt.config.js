@@ -1,4 +1,9 @@
 export default {
+  ssr: false,
+  dev: process.env.NODE_ENV !== 'production',
+  env: {
+    baseURL: process.env.VUE_APP_BASE_URL
+  },
   /*
    ** Headers of the page
    */
@@ -7,19 +12,25 @@ export default {
     title: process.env.VUE_APP_TITLE || '',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0' },
       {
         hid: 'description',
         name: 'description',
         content: process.env.VUE_APP_DESCRIPTION || ''
-      }
+      },
+      { name: 'msapplication-TileColor', content: '#594d95' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: `/portal-contratista-dev/favicon.ico` },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto+Slab:100,200,300,400,500,600,700,800,900&display=swap' }
     ],
   },
+  /*
+  generate: {
+    dir: 'orfeo-dashboard',
+  },
+   */
   /*
    ** Customize the progress-bar color
    */
@@ -41,6 +52,10 @@ export default {
   plugins: [
     { src: '~/plugins/vuex-persist', ssr: false },
     { src: '~/plugins/chartist', ssr: false },
+    { src: '~/plugins/apexcharts', ssr: false },
+    { src: '~/plugins/google-maps', ssr: false },
+    { src: '~/plugins/tiptap', ssr: false },
+    { src: '~/plugins/consent', ssr: false },
     { src: '~/plugins/vee-validate' },
     { src: '~/plugins/i18n' },
     { src: '~/plugins/string' },
@@ -64,6 +79,7 @@ export default {
     'nuxt-axios-duplicate-blocker',
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/proxy',
     '@nuxtjs/auth-next',
     'cookie-universal-nuxt',
     '@nuxtjs/recaptcha',
@@ -105,6 +121,25 @@ export default {
       }
     ]
   ],
+
+  // PWA
+  pwa: {
+    meta: {
+      name: process.env.VUE_APP_MANIFIEST_TITLE,
+      author: 'Instituto Distrital de Recreación y Deporte',
+      description: process.env.VUE_APP_DESCRIPTION,
+      mobileAppIOS: true,
+      nativeUI: true,
+    },
+    manifest: {
+      name: process.env.VUE_APP_MANIFIEST_TITLE,
+      short_name: process.env.VUE_APP_TITLE,
+      description: process.env.VUE_APP_DESCRIPTION,
+      theme_color: '#ffffff',
+      lang: 'es',
+      start_url: `${process.env.VUE_APP_PUBLIC_PATH}/es/login/?standalone=true`,
+    },
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -125,13 +160,15 @@ export default {
     size: 'compact' // Size: 'compact', 'normal', 'invisible' (v2)
   },
   auth: {
-    //redirect: false,
+    redirect: false,
+    /*
     redirect: {
       login: '/login',
       logout: '/login',
       callback: false,
-      home: false,
+      home: '/',
     },
+     */
     strategies: {
       local: {
         scheme: 'refresh',
@@ -152,12 +189,12 @@ export default {
         },
         endpoints: {
           login: {
-            url: '/login',
+            url: '/api/contractors-portal/login',
             method: 'post',
             propertyName: 'access_token'
           },
           refresh: {
-            url: 'oauth/token/refresh',
+            url: '/oauth/token/refresh',
             method: 'post'
           },
           logout: {
@@ -176,6 +213,7 @@ export default {
     plugins: ['@/plugins/auth.js']
   },
   router: {
+    base: process.env.VUE_APP_PUBLIC_PATH,
     middleware: ['i18n', 'auth'],
   },
   /*
@@ -199,5 +237,5 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
-  }
+  },
 }

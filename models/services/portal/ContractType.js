@@ -1,8 +1,8 @@
 import { Model } from '@/models/Model'
 import { Api } from '@/models/Api'
 
-export class Dependency extends Model {
+export class ContractType extends Model {
   constructor(data = {}) {
-    super(Api.END_POINTS.ORFEO_DEPENDENCIES(), data)
+    super(Api.END_POINTS.CONTRACT_TYPES(), data)
   }
 }

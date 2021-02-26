@@ -106,3 +106,8 @@ $icon-size: 24px !default
 @mixin chart-color($color, $shadow-color, $color-400, $color-600)
   .ct-slice-pie
     fill: $shadow-color !important
+
+//Heat Map
+@mixin heat-map-color($color, $key)
+  .svg-map__location-heat-#{$key}
+    fill: $color !important

@@ -9,3 +9,6 @@
       @if $key != 'shades'
         &.#{$key}
           @include chart-color($key, map_get($value, 'base'), map_get($value, 'lighten-1'), map_get($value, 'darken-4') )
+
+.apexcharts-toolbar
+ z-index: 5

@@ -1,5 +1,9 @@
 <template>
-  <v-container class="error-page fill-height" tag="section">
+  <v-container
+    :style="!$store.state.auth.loggedIn ? 'margin-top: -1%' : ''"
+    class="error-page fill-height"
+    tag="section"
+  >
     <v-row
       class="text-right fill-height my-auto"
       justify="center"
@@ -12,12 +16,17 @@
           style="max-width: 400px"
         />
         <div v-else id="cable-error" style="max-width: 500px" />
-        <h1 v-if="error.statusCode !== 404" class="title font-weight-black">
+        <h1
+          v-if="error.statusCode !== 404"
+          :class="{ 'white--text': !$store.state.auth.loggedIn }"
+          class="title font-weight-black"
+        >
           {{ `Error: ${error.statusCode}` }}
         </h1>
         <div
           v-if="error.statusCode === 404"
           :class="{
+            'white--text': !$store.state.auth.loggedIn,
             'display-3': $vuetify.breakpoint.mdAndUp,
             'display-2': $vuetify.breakpoint.smAndDown,
           }"
@@ -28,6 +37,7 @@
         <div
           v-else
           :class="{
+            'white--text': !$store.state.auth.loggedIn,
             'display-3': $vuetify.breakpoint.mdAndUp,
             'display-2': $vuetify.breakpoint.smAndDown,
           }"
@@ -48,12 +58,21 @@ import lottie from 'lottie-web/build/player/lottie'
 import * as error404 from '~/static/lottie/404.json'
 import * as cable from '~/static/lottie/cable.json'
 export default {
-  layout: 'empty',
+  layout(ctx) {
+    return ctx.app.store.state.auth.loggedIn ? 'empty' : 'password'
+  },
   props: {
     error: {
       type: Object,
       default: null,
     },
+  },
+  head() {
+    const title =
+      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
+    return {
+      title,
+    }
   },
   computed: {
     pageNotFound() {
@@ -78,13 +97,6 @@ export default {
       autoplay: true,
       animationData: cable.default,
     })
-  },
-  head() {
-    const title =
-      this.error.statusCode === 404 ? this.pageNotFound : this.otherError
-    return {
-      title,
-    }
   },
 }
 </script>

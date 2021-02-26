@@ -188,18 +188,21 @@ import { ForgotPassword } from '@/models/services/auth/ForgotPassword'
 
 export default {
   name: 'Forgot',
-  auth: 'guest',
-  middleware: ['token'],
-  layout: 'password',
   components: {
     InfoContent: () => import('~/components/base/InfoContent'),
     EmptyState: () => import('@/components/base/EmptyState'),
   },
+  layout: 'password',
+  auth: 'guest',
+  middleware: ['token'],
   data: () => ({
     loading: false,
     success: false,
     message: null,
     form: new ForgotPassword(),
+  }),
+  head: (vm) => ({
+    title: vm.$t('titles.Password'),
   }),
   mounted() {
     this.form.setFormInstance(this.$refs.forgot)
@@ -240,9 +243,6 @@ export default {
       this.$snackbar({ message: error })
     },
   },
-  head: (vm) => ({
-    title: vm.$t('titles.Password'),
-  }),
 }
 </script>
 

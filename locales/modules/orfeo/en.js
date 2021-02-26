@@ -7,9 +7,13 @@ export default {
   },
   stats: {
     filed: 'Filed',
+    help_filed: 'File number generated in the system.',
     principal: 'Image',
+    help_principal: 'The filing has main image in PDF.',
     printed: 'Printed',
+    help_printed: 'Filed marked as printed.',
     sent: 'Sent',
+    help_sent: 'The document has a submission form.',
   },
   chart: {
     month: 'Filed by Month',

@@ -176,11 +176,12 @@ import { ResetPassword } from '@/models/services/auth/ResetPassword'
 
 export default {
   name: 'Reset',
-  layout: 'password',
-  auth: 'guest',
   components: {
     InfoContent: () => import('~/components/base/InfoContent'),
+    EmptyState: () => import('@/components/base/EmptyState'),
   },
+  layout: 'password',
+  auth: 'guest',
   data: () => ({
     show: false,
     show_confirmation: false,
@@ -188,6 +189,9 @@ export default {
     message: null,
     loading: false,
     form: new ResetPassword(),
+  }),
+  head: (vm) => ({
+    title: vm.$t('titles.PasswordReset'),
   }),
   methods: {
     onSubmit() {
@@ -214,8 +218,5 @@ export default {
         .finally(() => (this.loading = false))
     },
   },
-  head: (vm) => ({
-    title: vm.$t('titles.PasswordReset'),
-  }),
 }
 </script>

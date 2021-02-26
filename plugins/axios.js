@@ -30,7 +30,7 @@ export default ({ app, $axios, redirect, error }) => {
           redirect(`/${app.i18n.locale}/login`)
         }
       }
-      if (![401, 422, 429, 404].includes(errors.response.status)) {
+      if (![401, 422, 429, 404, 419].includes(errors.response.status)) {
         // eslint-disable-next-line
         console.log(errors.response)
         error({

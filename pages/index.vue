@@ -1,345 +1,277 @@
 <template>
   <v-container id="dashboard" fluid tag="section">
     <v-row>
-      <v-col cols="12">
-        <v-data-iterator
-          :items="modules"
-          :items-per-page.sync="itemsPerPage"
-          :server-items-length="total"
-          :search="search"
-          :options.sync="pagination"
-          :loading="loading"
-          :footer-props="{
-            'items-per-page-options': [5, 10, 15, 25, 30, 35, 50, 100],
-          }"
+      <v-col class="my-4" cols="12" sm="6" lg="4">
+        <base-material-stats-card
+          color="danger"
+          icon="mdi-clipboard-check"
+          title="Total"
+          :value="counters.total"
+          animated-number
+          :progress="finding"
+          sub-icon="mdi-ticket-confirmation"
+          :sub-text="counters.total"
         >
-          <template v-slot:loading>
-            <v-card flat>
-              <v-card-text>
-                <v-skeleton-loader
-                  loading
-                  :type="`list-item-avatar-two-line@${itemsPerPage}`"
-                />
-              </v-card-text>
-            </v-card>
-          </template>
-          <template v-slot:header>
-            <v-toolbar flat :extended="$vuetify.breakpoint.smAndDown">
-              <v-toolbar-title v-text="$t('titles.Modules')" />
-              <v-spacer />
-              <v-text-field
-                v-model="search"
-                :label="$t('buttons.Search')"
-                type="search"
-                single-line
-                clearable
-                hide-details
-                class="hidden-sm-and-down ml-3"
-                prepend-icon="mdi-magnify"
-                :loading="loading"
-                :disabled="loading"
-              />
-              <v-spacer />
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
+          <v-tooltip top>
+            <template #activator="{ attrs, on }">
+              <v-btn
+                v-bind="attrs"
+                class="mx-1"
+                color="primary"
+                light
+                icon
+                x-small
+                @click="getCounters"
+                v-on="on"
+              >
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+            </template>
+            <span>{{ $t('buttons.Refresh') }}</span>
+          </v-tooltip>
+          <v-menu>
+            <template #activator="{ on: menu, attrs }">
+              <v-tooltip top>
+                <template #activator="{ on: tooltip }">
                   <v-btn
                     v-bind="attrs"
+                    class="mx-1"
+                    color="primary"
+                    light
                     icon
-                    :loading="loading"
-                    :disabled="loading"
-                    @click="list = true"
-                    v-on="on"
+                    x-small
+                    v-on="{ ...menu, ...tooltip }"
                   >
-                    <v-icon v-text="'mdi-format-list-bulleted'" />
+                    <v-icon>mdi-help-circle-outline</v-icon>
                   </v-btn>
                 </template>
-                <span v-text="$t('buttons.List')" />
+                <span>{{ $t('buttons.Help') }}</span>
               </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
+            </template>
+            <v-card max-width="250">
+              <v-card-title class="title">
+                <v-icon left>mdi-help-circle-outline</v-icon>
+                Total
+              </v-card-title>
+              <v-card-text class="caption">
+                Usuarios Registrados en el sistema
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </base-material-stats-card>
+      </v-col>
+
+      <v-col class="my-4" cols="12" sm="6" lg="4">
+        <base-material-stats-card
+          color="info"
+          icon="mdi-file-cloud-outline"
+          title="Secop"
+          :value="counters.secop"
+          animated-number
+          :progress="finding"
+          sub-icon="mdi-ticket-confirmation"
+          :sub-text="counters.secop"
+        >
+          <v-tooltip top>
+            <template #activator="{ attrs, on }">
+              <v-btn
+                v-bind="attrs"
+                class="mx-1"
+                color="primary"
+                light
+                icon
+                x-small
+                @click="getCounters"
+                v-on="on"
+              >
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+            </template>
+            <span>{{ $t('buttons.Refresh') }}</span>
+          </v-tooltip>
+          <v-menu>
+            <template #activator="{ on: menu, attrs }">
+              <v-tooltip top>
+                <template #activator="{ on: tooltip }">
                   <v-btn
                     v-bind="attrs"
+                    class="mx-1"
+                    color="primary"
+                    light
                     icon
-                    :loading="loading"
-                    :disabled="loading"
-                    @click="list = false"
-                    v-on="on"
+                    x-small
+                    v-on="{ ...menu, ...tooltip }"
                   >
-                    <v-icon v-text="'mdi-grid'" />
+                    <v-icon>mdi-help-circle-outline</v-icon>
                   </v-btn>
                 </template>
-                <span v-text="$t('buttons.Grid')" />
+                <span>{{ $t('buttons.Help') }}</span>
               </v-tooltip>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on, attrs }">
+            </template>
+            <v-card max-width="250">
+              <v-card-title class="title">
+                <v-icon left>mdi-help-circle-outline</v-icon>
+                Secop
+              </v-card-title>
+              <v-card-text class="caption">
+                Usuarios que cuentan con pantallazo de SECOP
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </base-material-stats-card>
+      </v-col>
+
+      <v-col class="my-4" cols="12" sm="6" lg="4">
+        <base-material-stats-card
+          color="warning"
+          icon="mdi-printer"
+          title="ARL"
+          :value="counters.arl"
+          animated-number
+          :progress="finding"
+          sub-icon="mdi-ticket-confirmation"
+          :sub-text="counters.arl"
+        >
+          <v-tooltip top>
+            <template #activator="{ attrs, on }">
+              <v-btn
+                v-bind="attrs"
+                class="mx-1"
+                color="primary"
+                light
+                icon
+                x-small
+                @click="getCounters"
+                v-on="on"
+              >
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+            </template>
+            <span>{{ $t('buttons.Refresh') }}</span>
+          </v-tooltip>
+          <v-menu>
+            <template #activator="{ on: menu, attrs }">
+              <v-tooltip top>
+                <template #activator="{ on: tooltip }">
                   <v-btn
                     v-bind="attrs"
+                    class="mx-1"
+                    color="primary"
+                    light
                     icon
-                    :loading="loading"
-                    :disabled="loading"
-                    @click="getModules"
-                    v-on="on"
+                    x-small
+                    v-on="{ ...menu, ...tooltip }"
                   >
-                    <v-icon v-text="'mdi-refresh'" />
+                    <v-icon>mdi-help-circle-outline</v-icon>
                   </v-btn>
                 </template>
-                <span v-text="$t('buttons.Refresh')" />
+                <span>{{ $t('buttons.Help') }}</span>
               </v-tooltip>
-              <template v-if="$vuetify.breakpoint.smAndDown" v-slot:extension>
-                <v-text-field
-                  v-model="search"
-                  :label="$t('buttons.Search')"
-                  type="search"
-                  single-line
-                  clearable
-                  hide-details
-                  prepend-icon="mdi-magnify"
-                  :loading="loading"
-                  :disabled="loading"
-                />
-              </template>
-            </v-toolbar>
-          </template>
-          <template v-slot:default="props">
-            <v-skeleton-loader
-              :loading="loading"
-              :type="`list-item-avatar-two-line@${itemsPerPage}`"
-            >
-              <v-row>
-                <v-col v-if="list" cols="12" sm="12" md="12">
-                  <v-list two-line>
-                    <v-list-item v-for="(item, i) in props.items" :key="i">
-                      <v-list-item-avatar>
-                        <v-img :src="item.image" />
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title v-text="item.name" />
-                        <v-list-item-subtitle v-text="item.area" />
-                      </v-list-item-content>
-                      <v-list-item-action>
-                        <template v-if="item.compatible">
-                          <v-btn fab small color="primary" :to="item.redirect">
-                            {{ $t('buttons.Go') }}
-                          </v-btn>
-                        </template>
-                        <template v-else>
-                          <form
-                            :action="item.redirect"
-                            method="post"
-                            target="_blank"
-                          >
-                            <input
-                              type="hidden"
-                              name="vector_modulo"
-                              :value="item.encoded"
-                            />
-                            <v-btn
-                              fab
-                              small
-                              block
-                              color="primary"
-                              name="Btn_Ir"
-                              type="submit"
-                              v-text="$t('buttons.Go')"
-                            />
-                          </form>
-                        </template>
-                      </v-list-item-action>
-                    </v-list-item>
-                  </v-list>
-                </v-col>
-                <v-col
-                  v-for="(item, i) in props.items"
-                  v-else
-                  :key="i"
-                  class="mt-4 mx-auto"
-                  cols="12"
-                  sm="6"
-                  lg="3"
-                >
-                  <v-card>
-                    <v-card-text class="px-0">
-                      <v-list two-line>
-                        <v-list-item>
-                          <v-list-item-avatar>
-                            <v-img :src="item.image" />
-                          </v-list-item-avatar>
-                          <v-list-item-content>
-                            <v-list-item-title v-text="item.name" />
-                            <v-list-item-subtitle v-text="item.area" />
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list>
-                    </v-card-text>
-                    <v-card-actions>
-                      <template v-if="item.compatible">
-                        <v-btn
-                          block
-                          color="primary"
-                          :to="item.redirect"
-                          v-text="$t('buttons.Go')"
-                        >
-                        </v-btn>
-                      </template>
-                      <template v-else>
-                        <form
-                          :action="item.redirect"
-                          method="post"
-                          target="_blank"
-                        >
-                          <input
-                            type="hidden"
-                            name="vector_modulo"
-                            :value="item.encoded"
-                          />
-                          <v-btn
-                            block
-                            color="primary"
-                            name="Btn_Ir"
-                            type="submit"
-                            v-text="$t('buttons.Go')"
-                          />
-                        </form>
-                      </template>
-                    </v-card-actions>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-skeleton-loader>
-          </template>
-          <template v-slot:no-data>
-            <v-card v-if="items.length === 0" flat>
-              <v-card-text>
-                <v-empty-state
-                  icon="mdi-grid-off"
-                  :label="$t('texts.EmptyModules')"
-                  :description="$t('texts.EmptyModulesText')"
-                />
+            </template>
+            <v-card max-width="250">
+              <v-card-title class="title">
+                <v-icon left>mdi-help-circle-outline</v-icon>
+                ARL
+              </v-card-title>
+              <v-card-text class="caption">
+                Usuarios que cuentan con ARL
               </v-card-text>
             </v-card>
-            <v-card flat>
-              <v-card-text>
-                <v-empty-state
-                  icon="mdi-text-search"
-                  :label="$t('$vuetify.dataIterator.noResultsText')"
-                />
-              </v-card-text>
-            </v-card>
-          </template>
-          <template v-slot:no-results>
-            <v-card flat>
-              <v-card-text>
-                <v-empty-state
-                  icon="mdi-text-search"
-                  :label="$t('$vuetify.dataIterator.noResultsText')"
-                />
-              </v-card-text>
-            </v-card>
-          </template>
-        </v-data-iterator>
+          </v-menu>
+        </base-material-stats-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import { Module } from '@/models/services/auth/Module'
+import { Contractor } from '~/models/services/portal/Contractor'
 
 export default {
-  layout: 'principal',
+  name: 'Dashboard',
   auth: 'auth',
   components: {
-    VEmptyState: () => import('@/components/base/EmptyState'),
+    BaseMaterialStatsCard: () => import('@/components/base/MaterialStatsCard'),
   },
   data: () => ({
-    loading: false,
-    search: '',
-    form: new Module(),
-    modules: [],
-    items: [],
-    list: true,
-    itemsPerPage: 35,
-    total: 0,
-    pagination: {},
+    form: new Contractor(),
+    finding: false,
+    counters: {
+      total: 0,
+      secop: 0,
+      arl: 0,
+    },
   }),
-  watch: {
-    'pagination.page'() {
-      this.getModules()
-    },
-    itemsPerPage() {
-      this.getModules()
-    },
-    search(search) {
-      if (!search) {
-        this.modules = this.items
-      }
-      search = (search || '').toString().toLowerCase()
-      if (search.trim() === '') {
-        this.modules = this.items
-      }
-      this.modules = this.items.filter((item) =>
-        Object.keys(item).some((key) =>
-          this.defaultFilter(this.getObjectValueByPath(item, key), search, item)
-        )
-      )
-    },
+  fetch() {
+    this.getCounters()
   },
+  head: () => ({
+    title: 'Dashboard',
+  }),
   methods: {
-    getModules() {
-      this.loading = true
-      const { page, itemsPerPage } = this.pagination
-      const params = {
-        page,
-        per_page: itemsPerPage,
-      }
+    getCounters() {
+      this.start()
       this.form
-        .user({ params })
+        .count()
         .then((response) => {
-          this.items = response.data
-          this.modules = response.data
-          this.total = response.meta.total
+          this.counters = response.data
         })
         .catch((errors) => {
-          this.$snackbar({
-            show: true,
-            message: errors.message,
-          })
+          this.$snackbar({ message: errors.message })
         })
-        .finally(() => (this.loading = false))
+        .finally(() => this.stop())
     },
-    onSubmit($ref) {
-      this.$refs[$ref].submit()
+    // Loading
+    start() {
+      this.finding = true
     },
-    defaultFilter(value, search = null, item) {
-      return (
-        value != null &&
-        search != null &&
-        typeof value !== 'boolean' &&
-        value
-          .toString()
-          .toLocaleLowerCase()
-          .includes(search.toLocaleLowerCase())
-      )
-    },
-    getObjectValueByPath(obj, path, fallback = undefined) {
-      if (obj == null || !path || typeof path !== 'string') return fallback
-      if (obj[path] !== undefined) return obj[path]
-      path = path.replace(/\[(\w+)\]/g, '.$1') // convert indexes to properties
-      path = path.replace(/^\./, '') // strip a leading dot
-      return this.getNestedValue(obj, path.split('.'), fallback)
-    },
-    getNestedValue(obj, path, fallback) {
-      const last = path.length - 1
-      if (last < 0) return obj === undefined ? fallback : obj
-      for (let i = 0; i < last; i++) {
-        if (obj == null) {
-          return fallback
-        }
-        obj = obj[path[i]]
-      }
-      if (obj == null) return fallback
-      return obj[path[last]] === undefined ? fallback : obj[path[last]]
+    stop() {
+      this.finding = false
     },
   },
 }
 </script>
+
+<style lang="scss">
+#file-type {
+  .ct-label.ct-vertical {
+    font-size: 12px;
+  }
+}
+#simple-bar {
+  .ct-series-a .ct-bar {
+    fill: #00cae3 !important;
+    stroke: #00cae3 !important;
+  }
+}
+.v-apexchart-card {
+  .apexcharts-menu-item {
+    color: black;
+  }
+  .apexcharts-toolbar {
+    color: white;
+  }
+  .apexcharts-tooltip {
+    color: black;
+  }
+  .apexcharts-menu-icon svg,
+  .apexcharts-pan-icon svg,
+  .apexcharts-zoom-icon svg,
+  .apexcharts-zoomin-icon svg,
+  .apexcharts-zoomout-icon svg,
+  .apexcharts-reset-icon svg {
+    fill: white !important;
+  }
+  .apexcharts-menu-icon.apexcharts-selected svg,
+  .apexcharts-pan-icon.apexcharts-selected svg,
+  .apexcharts-zoom-icon.apexcharts-selected svg,
+  .apexcharts-zoomin-icon.apexcharts-selected svg,
+  .apexcharts-zoomout-icon.apexcharts-selected svg,
+  .apexcharts-reset-icon.apexcharts-selected svg {
+    fill: #fff !important;
+  }
+  .apexcharts-tooltip-marker {
+    fill: #00b0ff;
+  }
+}
+</style>

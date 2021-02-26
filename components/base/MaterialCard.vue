@@ -16,6 +16,7 @@
         class="mx-auto v-card--material__avatar elevation-8"
         color="white"
       >
+        <!-- eslint-disable-next-line vue/no-v-html -->
         <div class="mt-1" v-html="identicon"></div>
       </v-avatar>
 
@@ -55,7 +56,11 @@
 
       <div v-else-if="icon && title" :class="$vuetify.rtl ? 'mr-4' : 'ml-4'">
         <div class="card-title font-weight-light" v-text="title" />
+        <p v-if="caption" class="caption font-weight-light" v-text="caption" />
       </div>
+      <template v-if="$slots.toolbar">
+        <slot name="toolbar"></slot>
+      </template>
     </div>
 
     <slot />
@@ -109,6 +114,10 @@ export default {
       default: '',
     },
     title: {
+      type: String,
+      default: '',
+    },
+    caption: {
       type: String,
       default: '',
     },

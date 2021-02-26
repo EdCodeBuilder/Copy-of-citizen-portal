@@ -18,11 +18,11 @@
     </v-navigation-drawer>
     <dashboard-footer />
     <snack />
+    <update-notification />
   </v-app>
 </template>
 
 <script>
-import { Api } from '@/models/Api'
 import AppBar from '@/components/dashboard/AppBar'
 import SnackBar from '@/components/base/SnackBar'
 import DashboardFooter from '@/components/dashboard/DashboardFooter'
@@ -36,6 +36,7 @@ export default {
     DashboardSettings: Settings,
     Snack: SnackBar,
     VOffline,
+    UpdateNotification: () => import('@/components/base/UpdateAvailable'),
   },
   data() {
     return {
@@ -52,9 +53,6 @@ export default {
         this.$store.dispatch('app/toggleRightDrawer', val)
       },
     },
-  },
-  mounted() {
-    this.$axios.get(Api.END_POINTS.CSFR_TOKEN())
   },
 }
 </script>

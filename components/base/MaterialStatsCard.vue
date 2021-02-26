@@ -5,7 +5,7 @@
     v-bind="$attrs"
     v-on="$listeners"
   >
-    <template v-slot:after-heading>
+    <template #after-heading>
       <div :class="$vuetify.rtl ? 'text-left mr-auto' : 'text-right ml-auto'">
         <div class="body-3 grey--text font-weight-light" v-text="title" />
         <h3
@@ -33,9 +33,17 @@
     </v-icon>
 
     <span
+      v-if="!!subText"
       :class="subTextColor"
       class="caption grey--text font-weight-light"
       v-text="subText"
+    />
+    <v-time-ago
+      v-if="!!timeAgo"
+      :loading="progress"
+      :prefix="$t('buttons.Updated')"
+      classes="caption grey--text font-weight-light"
+      :date-time="timeAgo"
     />
     <v-spacer />
     <slot />
@@ -56,6 +64,7 @@ export default {
   name: 'MaterialStatsCard',
   components: {
     BaseMaterialCard: () => import('@/components/base/MaterialCard'),
+    VTimeAgo: () => import('@/components/base/TimeAgo'),
     AnimatedNumber,
   },
   inheritAttrs: false,
@@ -78,6 +87,10 @@ export default {
       default: undefined,
     },
     subText: {
+      type: [String, Number],
+      default: undefined,
+    },
+    timeAgo: {
       type: [String, Number],
       default: undefined,
     },

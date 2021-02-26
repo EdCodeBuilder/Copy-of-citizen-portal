@@ -117,5 +117,5 @@ export default function ({ app }) {
   })
 }
 
-Vue.component('validation-provider', ValidationProvider)
-Vue.component('validation-observer', ValidationObserver)
+Vue.component('ValidationProvider', ValidationProvider)
+Vue.component('ValidationObserver', ValidationObserver)

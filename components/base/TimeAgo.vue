@@ -1,6 +1,6 @@
 <template>
   <v-tooltip top>
-    <template v-slot:activator="{ attrs, on }">
+    <template #activator="{ attrs, on }">
       <span v-bind="attrs" :class="classes" v-on="on">
         {{ loading ? $t('buttons.Loading') : timeAgo }}
       </span>

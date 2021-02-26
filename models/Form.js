@@ -12,6 +12,7 @@ export class Form {
     this.form = null
     this.errors = new Error()
     this.$axios = service.$app().$axios
+    this.resetOnlyWhenUpdate = true
   }
 
   /**
@@ -96,6 +97,8 @@ export class Form {
             )
           }
         }
+      } else if (typeof val === 'boolean') {
+        formData.append(namespace, val ? 1 : 0)
       } else {
         formData.append(namespace, val)
       }
@@ -271,7 +274,7 @@ export class Form {
    * @param reset
    */
   onSuccess(reset = false) {
-    if (reset) {
+    if (reset && this.resetOnlyWhenUpdate) {
       this.reset()
     }
   }

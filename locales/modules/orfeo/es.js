@@ -7,9 +7,13 @@ export default {
   },
   stats: {
     filed: 'Radicado',
+    help_filed: 'Número de radicado generado en el sistema.',
     principal: 'Con Imagen',
+    help_principal: 'El radicado tiene imagen principal en PDF.',
     printed: 'Impreso',
+    help_printed: 'Radicados marcados como impresos.',
     sent: 'Enviado',
+    help_sent: 'El documento tiene planilla de envío.',
   },
   chart: {
     month: 'Radicado por Mes',
@@ -33,6 +37,8 @@ export default {
     status: 'Estado',
     start_date: 'Fecha Inicial',
     final_date: 'Fecha Final',
+    quantity: 'Cantidad',
+    percent: 'Porcentaje',
   },
   event: {
     id: 'ID',

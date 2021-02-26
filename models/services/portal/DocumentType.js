@@ -1,8 +1,8 @@
 import { Model } from '@/models/Model'
 import { Api } from '@/models/Api'
 
-export class User extends Model {
+export class DocumentType extends Model {
   constructor(data = {}) {
-    super(Api.END_POINTS.ORFEO_USERS(), data)
+    super(Api.END_POINTS.DOCUMENT_TYPES(), data)
   }
 }
