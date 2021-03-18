@@ -1095,7 +1095,8 @@
                         </v-address-field>
                       </v-dialog>
                     </v-col>
-                    <!-- Rut -->
+                    <!--
+                     Rut
                     <v-col cols="12" md="12" sm="12">
                       <validation-provider
                         v-slot="{ errors }"
@@ -1121,7 +1122,7 @@
                         </v-file-input>
                       </validation-provider>
                     </v-col>
-                    <!-- Bank -->
+                     Bank
                     <v-col cols="12" md="12" sm="12">
                       <validation-provider
                         v-slot="{ errors }"
@@ -1147,6 +1148,7 @@
                         </v-file-input>
                       </validation-provider>
                     </v-col>
+                    -->
                     <!-- Consent -->
                     <v-col cols="12" md="12" sm="12">
                       <v-dialog v-model="dialog" scrollable max-width="600px">

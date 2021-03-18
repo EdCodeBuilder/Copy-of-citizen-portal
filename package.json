@@ -1,6 +1,6 @@
 {
   "name": "portal-contratista",
-  "version": "1.2.0",
+  "version": "1.2.10",
   "description": "Sistema de Información Misional",
   "author": "Daniel Prado",
   "private": true,
@@ -27,6 +27,7 @@
     "deep-merge": "^1.0.0",
     "esri-loader": "^3.0.0",
     "fibers": "^5.0.0",
+    "file-saver": "^2.0.5",
     "jdenticon": "^3.1.0",
     "localforage": "^1.9.0",
     "lodash": "^4.17.20",

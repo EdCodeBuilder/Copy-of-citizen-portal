@@ -57,6 +57,10 @@ export class Contractor extends Model {
     return this.get(Api.END_POINTS.CONTRACTORS_COUNTER(), options)
   }
 
+  types(options = {}) {
+    return this.get(Api.END_POINTS.CONTRACTORS_STATS(), options)
+  }
+
   findByDocument(options = {}) {
     return this.post(Api.END_POINTS.FIND_CONTRACTORS(), options)
   }

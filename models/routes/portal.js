@@ -11,6 +11,7 @@ export default {
   PERMISSIONS: () => `${api}${path}/permissions`,
   CONTRACTORS: () => `${api}${path}/contractors`,
   CONTRACTORS_COUNTER: () => `${api}${path}/counter`,
+  CONTRACTORS_STATS: () => `${api}${path}/stats`,
   FIND_CONTRACTORS: () => `${api}${path}/find-contractor`,
   CONTRACTS: (userId) => `${api}${path}/contractors/${userId}/contracts`,
   THIRD_PARTY: (userId) => `${api}${path}/contractors/third-party/${userId}`,
@@ -21,5 +22,5 @@ export default {
     `${api}${path}/contracts/${contractId}/files`,
   CONTRACT_TYPES: () => `${api}${path}/contract-types`,
   FILE_TYPES: () => `${api}${path}/file-types`,
-  FONTS: () => `${api}${path}/fonts`,
+  SYSTEMS_CERTIFICATION: () => `${api}${path}/peace-and-save`,
 }

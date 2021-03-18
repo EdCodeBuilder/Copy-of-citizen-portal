@@ -3,6 +3,9 @@
     <v-container class="px-0 text-right d-flex align-center">
       <v-toolbar-title class="font-weight-light" v-text="title" />
       <v-spacer />
+      <v-btn text :to="localePath({ name: 'certificates' })">
+        Certificados
+      </v-btn>
       <Language />
       <v-menu left>
         <template #activator="{ on: menu, attrs }">

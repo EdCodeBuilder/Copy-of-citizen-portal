@@ -5,7 +5,6 @@ export class Contract extends Model {
   constructor(
     userId,
     data = {
-      font_type_id: null,
       contract: null,
       transport: false,
       position: null,

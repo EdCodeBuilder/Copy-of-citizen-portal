@@ -1,16 +1,16 @@
 <template>
   <v-container id="dashboard" fluid tag="section">
     <v-row>
-      <v-col class="my-4" cols="12" sm="6" lg="4">
+      <v-col class="my-4" cols="12" sm="6" lg="3">
         <base-material-stats-card
           color="danger"
-          icon="mdi-clipboard-check"
-          title="Total"
-          :value="counters.total"
+          icon="mdi-calendar"
+          title="En Espera"
+          :value="counters.users"
           animated-number
           :progress="finding"
           sub-icon="mdi-ticket-confirmation"
-          :sub-text="counters.total"
+          :sub-text="counters.users"
         >
           <v-tooltip top>
             <template #activator="{ attrs, on }">
@@ -51,17 +51,17 @@
             <v-card max-width="250">
               <v-card-title class="title">
                 <v-icon left>mdi-help-circle-outline</v-icon>
-                Total
+                En Espera
               </v-card-title>
               <v-card-text class="caption">
-                Usuarios Registrados en el sistema
+                Usuarios en espera de modificación de datos
               </v-card-text>
             </v-card>
           </v-menu>
         </base-material-stats-card>
       </v-col>
 
-      <v-col class="my-4" cols="12" sm="6" lg="4">
+      <v-col class="my-4" cols="12" sm="6" lg="3">
         <base-material-stats-card
           color="info"
           icon="mdi-file-cloud-outline"
@@ -121,7 +121,7 @@
         </base-material-stats-card>
       </v-col>
 
-      <v-col class="my-4" cols="12" sm="6" lg="4">
+      <v-col class="my-4" cols="12" sm="6" lg="3">
         <base-material-stats-card
           color="warning"
           icon="mdi-printer"
@@ -180,6 +180,182 @@
           </v-menu>
         </base-material-stats-card>
       </v-col>
+
+      <v-col class="my-4" cols="12" sm="6" lg="3">
+        <base-material-stats-card
+          color="success"
+          icon="mdi-clipboard-check"
+          title="Total"
+          :value="counters.total"
+          animated-number
+          :progress="finding"
+          sub-icon="mdi-ticket-confirmation"
+          :sub-text="counters.total"
+        >
+          <v-tooltip top>
+            <template #activator="{ attrs, on }">
+              <v-btn
+                v-bind="attrs"
+                class="mx-1"
+                color="primary"
+                light
+                icon
+                x-small
+                @click="getCounters"
+                v-on="on"
+              >
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+            </template>
+            <span>{{ $t('buttons.Refresh') }}</span>
+          </v-tooltip>
+          <v-menu>
+            <template #activator="{ on: menu, attrs }">
+              <v-tooltip top>
+                <template #activator="{ on: tooltip }">
+                  <v-btn
+                    v-bind="attrs"
+                    class="mx-1"
+                    color="primary"
+                    light
+                    icon
+                    x-small
+                    v-on="{ ...menu, ...tooltip }"
+                  >
+                    <v-icon>mdi-help-circle-outline</v-icon>
+                  </v-btn>
+                </template>
+                <span>{{ $t('buttons.Help') }}</span>
+              </v-tooltip>
+            </template>
+            <v-card max-width="250">
+              <v-card-title class="title">
+                <v-icon left>mdi-help-circle-outline</v-icon>
+                Total
+              </v-card-title>
+              <v-card-text class="caption">
+                Usuarios Registrados en el sistema
+              </v-card-text>
+            </v-card>
+          </v-menu>
+        </base-material-stats-card>
+      </v-col>
+
+      <v-col cols="12" md="6">
+        <base-material-card hover-reveal color="success">
+          <template #heading>
+            <v-apexchart
+              ref="types"
+              type="bar"
+              height="150"
+              class="mb-n3 v-apexchart-card"
+              :options="types.chartOptions"
+              :series="types.series"
+            />
+          </template>
+          <template #reveal-actions>
+            <v-tooltip top>
+              <template #activator="{ attrs, on }">
+                <v-btn
+                  v-bind="attrs"
+                  :loading="finding"
+                  :disabled="finding"
+                  class="mx-1"
+                  color="info"
+                  light
+                  icon
+                  @click="getByType"
+                  v-on="on"
+                >
+                  <v-icon>mdi-refresh</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t('buttons.Refresh') }}</span>
+            </v-tooltip>
+          </template>
+          <v-card-text>
+            <h1 class="card-title font-weight-light">Tipos de Trámites</h1>
+            <v-row dense>
+              <v-col
+                v-for="(type, i) in types.data.types"
+                :key="i"
+                cols="12"
+                md="6"
+              >
+                <span class="caption font-weight-bold">
+                  {{ `${type.name}: ${type.contracts_count}` }}
+                </span>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-time-ago
+              :loading="finding"
+              :prefix="$t('buttons.Updated')"
+              classes="caption grey--text font-weight-light hidden-sm-and-down"
+              :date-time="types.data.requested_at"
+            />
+          </v-card-actions>
+        </base-material-card>
+      </v-col>
+
+      <v-col cols="12" md="6">
+        <base-material-card hover-reveal color="primary">
+          <template #heading>
+            <v-apexchart
+              ref="certified"
+              type="bar"
+              height="150"
+              class="mb-n3 v-apexchart-card"
+              :options="certified.chartOptions"
+              :series="certified.series"
+            />
+          </template>
+          <template #reveal-actions>
+            <v-tooltip top>
+              <template #activator="{ attrs, on }">
+                <v-btn
+                  v-bind="attrs"
+                  :loading="finding"
+                  :disabled="finding"
+                  class="mx-1"
+                  color="info"
+                  light
+                  icon
+                  @click="getByType"
+                  v-on="on"
+                >
+                  <v-icon>mdi-refresh</v-icon>
+                </v-btn>
+              </template>
+              <span>{{ $t('buttons.Refresh') }}</span>
+            </v-tooltip>
+          </template>
+          <v-card-text>
+            <h1 class="card-title font-weight-light">Certificados ARL</h1>
+            <v-row dense>
+              <v-col cols="12" md="6">
+                <span class="caption font-weight-bold">
+                  {{ `CON ARL: ${certified.data.certified.arl}` }}
+                </span>
+              </v-col>
+              <v-col cols="12" md="6">
+                <span class="caption font-weight-bold">
+                  {{ `SIN ARL: ${certified.data.certified.not_arl}` }}
+                </span>
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions>
+            <v-time-ago
+              :loading="finding"
+              :prefix="$t('buttons.Updated')"
+              classes="caption grey--text font-weight-light hidden-sm-and-down"
+              :date-time="certified.data.requested_at"
+            />
+          </v-card-actions>
+        </base-material-card>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -192,18 +368,152 @@ export default {
   auth: 'auth',
   components: {
     BaseMaterialStatsCard: () => import('@/components/base/MaterialStatsCard'),
+    BaseMaterialCard: () => import('@/components/base/MaterialCard'),
+    VTimeAgo: () => import('@/components/base/TimeAgo'),
   },
-  data: () => ({
+  data: (vm) => ({
     form: new Contractor(),
     finding: false,
     counters: {
       total: 0,
       secop: 0,
       arl: 0,
+      users: 0,
+    },
+    types: {
+      data: {
+        data: {},
+      },
+      series: [
+        {
+          name: 'Cantidad',
+          data: [],
+        },
+      ],
+      chartOptions: {
+        chart: {
+          type: 'bar',
+          foreColor: '#fff',
+          toolbar: {
+            show: true,
+            offsetX: 0,
+            offsetY: 0,
+            tools: {
+              download: true,
+              selection: true,
+              zoom: true,
+              zoomin: true,
+              zoomout: true,
+              pan: true,
+              reset: true,
+            },
+            export: {
+              csv: {
+                filename: 'Tipos de trámites',
+                columnDelimiter: ',',
+                headerCategory: 'NOMBRE',
+                headerValue: 'TOTAL',
+              },
+            },
+            autoSelected: 'zoom',
+          },
+          zoom: {
+            autoScaleYaxis: true,
+          },
+        },
+        fill: {
+          colors: ['#fff'],
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        grid: {
+          show: true,
+          borderColor: '#fff',
+          strokeDashArray: 0,
+          position: 'back',
+        },
+        theme: {
+          mode: 'light',
+        },
+        xaxis: {
+          categories: [],
+          tickPlacement: 'on',
+          labels: {
+            show: false,
+          },
+        },
+      },
+    },
+    certified: {
+      data: {
+        certified: {},
+      },
+      series: [
+        {
+          name: 'Cantidad',
+          data: [],
+        },
+      ],
+      chartOptions: {
+        chart: {
+          type: 'bar',
+          foreColor: '#fff',
+          toolbar: {
+            show: true,
+            offsetX: 0,
+            offsetY: 0,
+            tools: {
+              download: true,
+              selection: true,
+              zoom: true,
+              zoomin: true,
+              zoomout: true,
+              pan: true,
+              reset: true,
+            },
+            export: {
+              csv: {
+                filename: 'Certificados',
+                columnDelimiter: ',',
+                headerCategory: 'NOMBRE',
+                headerValue: 'TOTAL',
+              },
+            },
+            autoSelected: 'zoom',
+          },
+          zoom: {
+            autoScaleYaxis: true,
+          },
+        },
+        fill: {
+          colors: ['#fff'],
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        grid: {
+          show: true,
+          borderColor: '#fff',
+          strokeDashArray: 0,
+          position: 'back',
+        },
+        theme: {
+          mode: 'light',
+        },
+        xaxis: {
+          categories: ['CON ARL', 'SIN ARL'],
+          tickPlacement: 'on',
+          labels: {
+            show: false,
+          },
+        },
+      },
     },
   }),
   fetch() {
     this.getCounters()
+    this.getByType()
   },
   head: () => ({
     title: 'Dashboard',
@@ -215,6 +525,46 @@ export default {
         .count()
         .then((response) => {
           this.counters = response.data
+        })
+        .catch((errors) => {
+          this.$snackbar({ message: errors.message })
+        })
+        .finally(() => this.stop())
+    },
+    getByType() {
+      this.start()
+      this.form
+        .types()
+        .then((response) => {
+          this.types.data = response.data
+          this.types.series = [
+            {
+              data: response.data.types.map((s) => s.contracts_count || 0),
+            },
+          ]
+          if (this.$refs.types) {
+            this.$refs.types.updateOptions({
+              xaxis: {
+                ...this.types.chartOptions.xaxis,
+                categories: response.data.types.map((s) => s.name),
+              },
+            })
+          } else {
+            this.types.chartOptions = {
+              ...this.types.chartOptions,
+              xaxis: {
+                ...this.types.chartOptions.xaxis,
+                categories: response.data.types.map((s) => s.name),
+              },
+            }
+          }
+          this.certified.data = response.data
+          const certified = response.data.certified
+          this.certified.series = [
+            {
+              data: [certified.arl, certified.not_arl],
+            },
+          ]
         })
         .catch((errors) => {
           this.$snackbar({ message: errors.message })

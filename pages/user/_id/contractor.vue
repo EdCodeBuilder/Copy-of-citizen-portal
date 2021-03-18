@@ -396,34 +396,6 @@
                     ></v-select>
                   </validation-provider>
                 </v-col>
-                <!-- Font Type -->
-                <v-col cols="12" md="6" sm="12">
-                  <validation-provider
-                    v-slot="{ errors }"
-                    :rules="contract.validations.input_number_required"
-                    vid="font_type_id"
-                    name="tipo de fuente"
-                  >
-                    <v-select
-                      id="font_type_id"
-                      v-model.number="contract.font_type_id"
-                      name="font_type_id"
-                      item-value="id"
-                      item-text="name"
-                      clearable
-                      :loading="finding"
-                      :readonly="finding"
-                      :error-messages="errors"
-                      min="3"
-                      autocomplete="off"
-                      required="required"
-                      :items="font_types"
-                      prepend-icon="mdi-card-account-details"
-                      menu-props="auto"
-                      label="Tipo de Fuente"
-                    ></v-select>
-                  </validation-provider>
-                </v-col>
                 <!-- Contract -->
                 <v-col cols="12" md="6" sm="12">
                   <validation-provider
@@ -770,34 +742,6 @@
                       menu-props="auto"
                       label="Tipo de Trámite"
                       @change="onChangeContract"
-                    ></v-select>
-                  </validation-provider>
-                </v-col>
-                <!-- Font Type -->
-                <v-col cols="12" md="6" sm="12">
-                  <validation-provider
-                    v-slot="{ errors }"
-                    :rules="contract.validations.input_number_required"
-                    vid="font_type_id"
-                    name="tipo de fuente"
-                  >
-                    <v-select
-                      id="font_type_id"
-                      v-model.number="contract.font_type_id"
-                      name="font_type_id"
-                      item-value="id"
-                      item-text="name"
-                      clearable
-                      :loading="finding"
-                      :readonly="finding"
-                      :error-messages="errors"
-                      min="3"
-                      autocomplete="off"
-                      required="required"
-                      :items="font_types"
-                      prepend-icon="mdi-card-account-details"
-                      menu-props="auto"
-                      label="Tipo de Fuente"
                     ></v-select>
                   </validation-provider>
                 </v-col>
@@ -1608,7 +1552,6 @@ import { FileType } from '~/models/services/portal/FileType'
 import { ContractFile } from '~/models/services/portal/ContractFile'
 import { Permission } from '~/models/services/portal/Permission'
 import { Office } from '~/models/services/portal/Office'
-import { Font } from '~/models/services/portal/Font'
 
 export default {
   name: 'ContractorData',
@@ -1628,8 +1571,6 @@ export default {
     document_types: [],
     contract_type: new ContractType(),
     contract_types: [],
-    font_type: new Font(),
-    font_types: [],
     user: new Contractor(),
     data: [],
     finding: false,
@@ -1672,7 +1613,6 @@ export default {
   fetch() {
     this.getUser()
     this.getDocumentTypes()
-    this.getFontTypes()
     this.contract_type
       .index()
       .then((response) => {
@@ -1703,18 +1643,6 @@ export default {
     },
   },
   methods: {
-    getFontTypes() {
-      this.start()
-      this.font_type
-        .index()
-        .then((response) => {
-          this.font_types = response.data
-        })
-        .catch((errors) => {
-          this.$snackbar({ message: errors.message })
-        })
-        .finally(() => this.stop())
-    },
     getDocumentTypes() {
       this.start()
       this.document_type

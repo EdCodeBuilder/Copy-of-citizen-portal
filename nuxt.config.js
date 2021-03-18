@@ -161,6 +161,7 @@ export default {
   },
   auth: {
     redirect: false,
+    rewriteRedirects: false,
     /*
     redirect: {
       login: '/login',

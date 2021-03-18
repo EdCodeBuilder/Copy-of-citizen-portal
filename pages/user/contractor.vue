@@ -177,34 +177,6 @@
                 ></v-select>
               </validation-provider>
             </v-col>
-            <!-- Font Type -->
-            <v-col cols="12" md="6" sm="12">
-              <validation-provider
-                v-slot="{ errors }"
-                :rules="user.validations.input_number_required"
-                vid="font_type_id"
-                name="tipo de fuente"
-              >
-                <v-select
-                  id="font_type_id"
-                  v-model.number="user.font_type_id"
-                  name="font_type_id"
-                  item-value="id"
-                  item-text="name"
-                  clearable
-                  :loading="finding"
-                  :readonly="finding"
-                  :error-messages="errors"
-                  min="3"
-                  autocomplete="off"
-                  required="required"
-                  :items="font_types"
-                  prepend-icon="mdi-card-account-details"
-                  menu-props="auto"
-                  label="Tipo de Fuente"
-                ></v-select>
-              </validation-provider>
-            </v-col>
             <!-- Contract -->
             <v-col cols="12" md="6" sm="12">
               <validation-provider
@@ -526,7 +498,6 @@
 import { DocumentType } from '~/models/services/portal/DocumentType'
 import { Contractor } from '~/models/services/portal/Contractor'
 import { ContractType } from '~/models/services/portal/ContractType'
-import { Font } from '~/models/services/portal/Font'
 
 export default {
   name: 'ContractorForm',
@@ -543,8 +514,6 @@ export default {
     document_types: [],
     contract_type: new ContractType(),
     contract_types: [],
-    font_type: new Font(),
-    font_types: [],
     user: new Contractor(),
     finding: false,
     start_date: false,
@@ -555,7 +524,6 @@ export default {
   fetch() {
     this.getDocumentTypes()
     this.getContractTypes()
-    this.getFontTypes()
   },
   head: (vm) => ({
     title: vm.$t('titles.Profile'),
@@ -574,18 +542,6 @@ export default {
     this.user.setFormInstance(this.$refs.contractor_form)
   },
   methods: {
-    getFontTypes() {
-      this.start()
-      this.font_type
-        .index()
-        .then((response) => {
-          this.font_types = response.data
-        })
-        .catch((errors) => {
-          this.$snackbar({ message: errors.message })
-        })
-        .finally(() => this.stop())
-    },
     getDocumentTypes() {
       this.start()
       this.document_type

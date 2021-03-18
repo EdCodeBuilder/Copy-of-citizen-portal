@@ -85,6 +85,8 @@ export default {
       'Al cambiar su contraseña, ésta será la misma para Orfeo, Correo, SIM, Red, PC e Intranet',
   },
   inputs: {
+    Name: 'Nombre',
+    Document: 'Número de Documento',
     Username: 'Usuario',
     Password: 'Contraseña',
     PasswordConfirmation: 'Confirmar Contraseña',
