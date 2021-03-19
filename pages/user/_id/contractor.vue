@@ -1492,6 +1492,32 @@
                     />
                   </validation-provider>
                 </v-col>
+                <!-- Phone -->
+                <v-col cols="12" md="6" sm="12">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    :rules="user.validations.input_number_required"
+                    vid="phone"
+                    name="teléfono de contácto"
+                  >
+                    <v-text-field
+                      id="phone"
+                      v-model="user.phone"
+                      name="phone"
+                      :loading="finding"
+                      :readonly="finding"
+                      :error-messages="errors"
+                      color="primary"
+                      label="Teléfono de contácto"
+                      clearable
+                      :counter="12"
+                      :maxlength="12"
+                      autocomplete="off"
+                      required="required"
+                      prepend-icon="mdi-phone"
+                    />
+                  </validation-provider>
+                </v-col>
                 <!-- Notify -->
                 <v-col cols="12" md="6" sm="12">
                   <validation-provider

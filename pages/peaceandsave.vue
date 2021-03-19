@@ -203,7 +203,6 @@ export default {
           )
         })
         .catch((errors) => {
-          console.log(errors)
           this.errors = JSON.parse(Buffer.from(errors).toString('utf8'))
           this.$snackbar({ message: this.errors.message })
         })

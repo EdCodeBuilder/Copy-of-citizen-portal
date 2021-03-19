@@ -8,6 +8,38 @@
           title="Contratistas"
         >
           <v-card-text>
+            <v-row>
+              <v-col cols="12" md="4" sm="12">
+                <v-switch
+                  v-model="filters.doesnt_have_secop"
+                  :loading="finding"
+                  :disabled="finding"
+                  value="true"
+                  label="Pendientes por Secop"
+                  @change="onSearch"
+                />
+              </v-col>
+              <v-col cols="12" md="4" sm="12">
+                <v-switch
+                  v-model="filters.doesnt_have_arl"
+                  :loading="finding"
+                  :disabled="finding"
+                  value="true"
+                  label="Pendientes por ARL"
+                  @change="onSearch"
+                />
+              </v-col>
+              <v-col cols="12" md="4" sm="12">
+                <v-switch
+                  v-model="filters.doesnt_have_data"
+                  :loading="finding"
+                  :disabled="finding"
+                  value="true"
+                  label="Contratistas pendientes por actualizar datos personales"
+                  @change="onSearch"
+                />
+              </v-col>
+            </v-row>
             <v-skeleton-loader
               ref="skeleton"
               :loading="finding"
@@ -449,6 +481,7 @@
 </template>
 
 <script>
+import FileSaver from 'file-saver'
 import { Contractor } from '~/models/services/portal/Contractor'
 import { ContractFile } from '~/models/services/portal/ContractFile'
 import { Permission } from '~/models/services/portal/Permission'
@@ -487,6 +520,11 @@ export default {
     file_dialog: false,
     third_dialog: false,
     mimes: 'application/pdf,image/*',
+    filters: {
+      doesnt_have_arl: null,
+      doesnt_have_secop: null,
+      doesnt_have_data: null,
+    },
   }),
   watch: {
     'pagination.page'() {
@@ -510,10 +548,17 @@ export default {
       this.getData()
     },
     getData() {
+      if (this.$route.query) {
+        this.filters = {
+          ...this.filters,
+          ...this.$route.query,
+        }
+      }
       const params = {
         query: this.search,
         page: this.pagination.page,
         per_page: this.itemsPerPage,
+        ...this.filters,
       }
       this.start()
       this.form
@@ -527,7 +572,10 @@ export default {
         .catch((errors) => {
           this.$snackbar({ message: errors.message })
         })
-        .finally(() => this.stop())
+        .finally(() => {
+          this.$router.push({ path: this.$route.path })
+          this.stop()
+        })
     },
     getColor(value) {
       return value && value > 0 ? 'success' : 'error'
@@ -682,18 +730,21 @@ export default {
     // Excel
     onExcel() {
       this.finding = true
+      const params = {
+        query: this.search,
+        ...this.filters,
+      }
       this.form
         .excel({
-          params: this.form.data(),
-          responseType: 'blob',
+          params,
+          responseType: 'arraybuffer',
         })
         .then((response) => {
-          const fileURL = window.URL.createObjectURL(new Blob([response]))
-          const fileLink = document.createElement('a')
-          fileLink.href = fileURL
-          fileLink.setAttribute('download', 'PORTAL_CONTRATISTA.xlsx')
-          document.body.appendChild(fileLink)
-          fileLink.click()
+          FileSaver.saveAs(new Blob([response]), 'PORTAL_CONTRATISTA.xlsx')
+        })
+        .catch((errors) => {
+          this.errors = JSON.parse(Buffer.from(errors).toString('utf8'))
+          this.$snackbar({ message: this.errors.message })
         })
         .finally(() => {
           this.finding = false

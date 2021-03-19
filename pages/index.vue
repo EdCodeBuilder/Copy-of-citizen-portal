@@ -5,13 +5,37 @@
         <base-material-stats-card
           color="danger"
           icon="mdi-calendar"
-          title="En Espera"
+          title="Sin Datos"
           :value="counters.users"
           animated-number
           :progress="finding"
           sub-icon="mdi-ticket-confirmation"
           :sub-text="counters.users"
         >
+          <v-tooltip top>
+            <template #activator="{ attrs, on }">
+              <v-btn
+                v-bind="attrs"
+                class="mx-1"
+                color="primary"
+                light
+                icon
+                x-small
+                :to="
+                  localePath({
+                    name: 'contractors',
+                    query: {
+                      doesnt_have_data: 'true',
+                    },
+                  })
+                "
+                v-on="on"
+              >
+                <v-icon>mdi-eye</v-icon>
+              </v-btn>
+            </template>
+            <span>{{ $t('buttons.View') }}</span>
+          </v-tooltip>
           <v-tooltip top>
             <template #activator="{ attrs, on }">
               <v-btn
@@ -51,10 +75,10 @@
             <v-card max-width="250">
               <v-card-title class="title">
                 <v-icon left>mdi-help-circle-outline</v-icon>
-                En Espera
+                Sin Datos
               </v-card-title>
               <v-card-text class="caption">
-                Usuarios en espera de modificación de datos
+                Contratistas pendientes de actualizar sus datos personales.
               </v-card-text>
             </v-card>
           </v-menu>
@@ -185,7 +209,7 @@
         <base-material-stats-card
           color="success"
           icon="mdi-clipboard-check"
-          title="Total"
+          title="Contratistas"
           :value="counters.total"
           animated-number
           :progress="finding"
@@ -231,10 +255,10 @@
             <v-card max-width="250">
               <v-card-title class="title">
                 <v-icon left>mdi-help-circle-outline</v-icon>
-                Total
+                Contratistas
               </v-card-title>
               <v-card-text class="caption">
-                Usuarios Registrados en el sistema
+                Contratistas Registrados en el sistema
               </v-card-text>
             </v-card>
           </v-menu>
@@ -295,6 +319,37 @@
               classes="caption grey--text font-weight-light hidden-sm-and-down"
               :date-time="types.data.requested_at"
             />
+            <v-spacer />
+            <v-menu>
+              <template #activator="{ on: menu, attrs }">
+                <v-tooltip top>
+                  <template #activator="{ on: tooltip }">
+                    <v-btn
+                      v-bind="attrs"
+                      class="mx-1"
+                      color="primary"
+                      light
+                      icon
+                      x-small
+                      v-on="{ ...menu, ...tooltip }"
+                    >
+                      <v-icon>mdi-help-circle-outline</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ $t('buttons.Help') }}</span>
+                </v-tooltip>
+              </template>
+              <v-card max-width="250">
+                <v-card-title class="title">
+                  <v-icon left>mdi-help-circle-outline</v-icon>
+                  Tipos de trámites
+                </v-card-title>
+                <v-card-text class="caption">
+                  Sumatoria global de los tipos de trámites, se tienen en cuenta
+                  todos los contratos generados sin importar su vigencia.
+                </v-card-text>
+              </v-card>
+            </v-menu>
           </v-card-actions>
         </base-material-card>
       </v-col>
@@ -340,9 +395,20 @@
                 </span>
               </v-col>
               <v-col cols="12" md="6">
-                <span class="caption font-weight-bold">
+                <v-btn
+                  text
+                  :to="
+                    localePath({
+                      name: 'contractors',
+                      query: {
+                        doesnt_have_arl: 'true',
+                      },
+                    })
+                  "
+                  class="caption font-weight-bold"
+                >
                   {{ `SIN ARL: ${certified.data.certified.not_arl}` }}
-                </span>
+                </v-btn>
               </v-col>
             </v-row>
           </v-card-text>
@@ -353,6 +419,38 @@
               classes="caption grey--text font-weight-light hidden-sm-and-down"
               :date-time="certified.data.requested_at"
             />
+            <v-spacer />
+            <v-menu>
+              <template #activator="{ on: menu, attrs }">
+                <v-tooltip top>
+                  <template #activator="{ on: tooltip }">
+                    <v-btn
+                      v-bind="attrs"
+                      class="mx-1"
+                      color="primary"
+                      light
+                      icon
+                      x-small
+                      v-on="{ ...menu, ...tooltip }"
+                    >
+                      <v-icon>mdi-help-circle-outline</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ $t('buttons.Help') }}</span>
+                </v-tooltip>
+              </template>
+              <v-card max-width="250">
+                <v-card-title class="title">
+                  <v-icon left>mdi-help-circle-outline</v-icon>
+                  Certificados ARL
+                </v-card-title>
+                <v-card-text class="caption">
+                  Sumatoria global de los tipos de trámites, se tienen en cuenta
+                  todos los contratos generados sin importar su vigencia y que
+                  cuentan o no con certificado ARL.
+                </v-card-text>
+              </v-card>
+            </v-menu>
           </v-card-actions>
         </base-material-card>
       </v-col>
