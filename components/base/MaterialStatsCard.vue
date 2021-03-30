@@ -110,6 +110,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    withFormatter: {
+      type: Boolean,
+      default: true,
+    },
     progress: {
       type: Boolean,
       default: false,
@@ -117,13 +121,16 @@ export default {
   },
   methods: {
     nFormatter(num) {
-      if (Math.abs(num) > 999 && Math.abs(num) <= 999999) {
-        return Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + 'K'
+      if (this.withFormatter) {
+        if (Math.abs(num) > 999 && Math.abs(num) <= 999999) {
+          return Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + 'K'
+        }
+        if (Math.abs(num) > 999999) {
+          return Math.sign(num) * (Math.abs(num) / 1000000).toFixed(1) + 'M'
+        }
+        return Math.sign(num) * Math.abs(num)
       }
-      if (Math.abs(num) > 999999) {
-        return Math.sign(num) * (Math.abs(num) / 1000000).toFixed(1) + 'M'
-      }
-      return Math.sign(num) * Math.abs(num)
+      return num
     },
   },
 }

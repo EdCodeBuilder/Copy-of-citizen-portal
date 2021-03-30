@@ -41,7 +41,12 @@
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item
-                    v-if="userIsA('contractors-portal-hiring')"
+                    v-if="
+                      userIsA([
+                        'contractors-portal-hiring',
+                        'contractors-portal-arl',
+                      ])
+                    "
                     @click="onNotifyAgain"
                   >
                     <v-list-item-icon>
@@ -52,7 +57,12 @@
                     </v-list-item-title>
                   </v-list-item>
                   <v-list-item
-                    v-if="userIsA('contractors-portal-hiring')"
+                    v-if="
+                      userIsA([
+                        'contractors-portal-hiring',
+                        'contractors-portal-arl',
+                      ])
+                    "
                     @click="dialog_update_user = true"
                   >
                     <v-list-item-icon>
@@ -1340,7 +1350,7 @@
       </validation-observer>
     </v-dialog>
     <v-dialog
-      v-if="userIsA('contractors-portal-hiring')"
+      v-if="userIsA(['contractors-portal-hiring', 'contractors-portal-arl'])"
       v-model="dialog_update_user"
     >
       <validation-observer ref="contractor_form" v-slot:="{ handleSubmit }">

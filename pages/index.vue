@@ -8,6 +8,7 @@
           title="Sin Datos"
           :value="counters.users"
           animated-number
+          :with-formatter="false"
           :progress="finding"
           sub-icon="mdi-ticket-confirmation"
           :sub-text="counters.users"
@@ -92,6 +93,7 @@
           title="Secop"
           :value="counters.secop"
           animated-number
+          :with-formatter="false"
           :progress="finding"
           sub-icon="mdi-ticket-confirmation"
           :sub-text="counters.secop"
@@ -152,6 +154,7 @@
           title="ARL"
           :value="counters.arl"
           animated-number
+          :with-formatter="false"
           :progress="finding"
           sub-icon="mdi-ticket-confirmation"
           :sub-text="counters.arl"
@@ -212,6 +215,7 @@
           title="Contratistas"
           :value="counters.total"
           animated-number
+          :with-formatter="false"
           :progress="finding"
           sub-icon="mdi-ticket-confirmation"
           :sub-text="counters.total"
