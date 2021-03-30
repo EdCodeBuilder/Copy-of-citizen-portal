@@ -91,7 +91,6 @@ export default {
     Password: 'Contraseña',
     PasswordConfirmation: 'Confirmar Contraseña',
     RememberMe: 'Recordarme',
-    Document: 'Documento',
     Email: 'Correo electrónico',
     EmailConfirmation: 'Confirmar Correo electrónico',
     Captcha: 'Completa el captcha',

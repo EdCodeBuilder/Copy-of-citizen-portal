@@ -1,7 +1,7 @@
 import { Model } from '@/models/Model'
 import { Api } from '@/models/Api'
 
-export class Certification extends Model {
+export class Warehouse extends Model {
   constructor(
     data = {
       name: null,
@@ -13,10 +13,6 @@ export class Certification extends Model {
       virtual_file: null,
     }
   ) {
-    super(Api.END_POINTS.SYSTEMS_CERTIFICATION(), data)
-  }
-
-  validate(options = {}) {
-    return this.post(`${Api.END_POINTS.GENERATE_CERTIFICATION()}`, options)
+    super(Api.END_POINTS.WAREHOUSE_CERTIFICATION(), data)
   }
 }

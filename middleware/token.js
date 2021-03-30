@@ -7,4 +7,7 @@ export default function ({ $auth, route, redirect, app }) {
   if (route.query.payload) {
     return redirect(app.localePath('/contracts'), route.query)
   }
+  if (route.query.validate) {
+    return redirect(app.localePath({ name: 'validate-document' }), route.query)
+  }
 }

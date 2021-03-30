@@ -23,4 +23,6 @@ export default {
   CONTRACT_TYPES: () => `${api}${path}/contract-types`,
   FILE_TYPES: () => `${api}${path}/file-types`,
   SYSTEMS_CERTIFICATION: () => `${api}${path}/peace-and-save`,
+  WAREHOUSE_CERTIFICATION: () => `${api}${path}/warehouse-peace-and-save`,
+  GENERATE_CERTIFICATION: () => `${api}${path}/generate-certificate`,
 }
