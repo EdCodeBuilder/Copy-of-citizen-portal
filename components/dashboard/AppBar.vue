@@ -59,6 +59,7 @@
       offset-y
       origin="top right"
       transition="scale-transition"
+      :close-on-content-click="false"
     >
       <template #activator="{ attrs, on }">
         <v-btn class="ml-2" icon v-bind="attrs" v-on="on">
@@ -70,16 +71,12 @@
           </v-badge>
         </v-btn>
       </template>
-
-      <v-list
-        id="notification"
-        :tile="false"
-        subheader
-        nav
-        dense
+      <v-card
+        class="mx-auto"
         max-width="400"
+        :min-width="$vuetify.breakpoint.mdAndUp ? '400' : undefined"
       >
-        <v-subheader>
+        <v-card-title class="white--text primary">
           Notificaciones
           <v-spacer />
           <v-tooltip bottom>
@@ -87,66 +84,99 @@
               <v-btn
                 icon
                 small
-                color="success"
+                dark
+                :loading="deleting"
+                :disabled="deleting"
+                v-bind="attrs"
+                v-on="on"
+                @click="markAllAsRead"
+              >
+                <v-icon>mdi-check-all</v-icon>
+              </v-btn>
+            </template>
+            <span>Marcar todos como leidos</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template #activator="{ on, attrs }">
+              <v-btn
+                icon
+                small
+                dark
+                :loading="deleting"
+                :disabled="deleting"
                 v-bind="attrs"
                 v-on="on"
                 @click="$fetch"
               >
-                <v-icon small>mdi-refresh</v-icon>
+                <v-icon>mdi-refresh</v-icon>
               </v-btn>
             </template>
             <span>{{ $t('buttons.Refresh') }}</span>
           </v-tooltip>
-        </v-subheader>
-        <div>
-          <app-bar-item
-            v-for="(item, i) in notifications"
-            :key="`item-${i}`"
-            three-line
+        </v-card-title>
+        <v-card-text />
+        <v-virtual-scroll
+          v-if="notifications.length > 0"
+          :items="notifications"
+          :item-height="100"
+          height="300"
+        >
+          <template #default="{ item }">
+            <app-bar-item>
+              <v-list-item-icon class="hidden-sm-and-down">
+                <v-icon :color="!item.read_at ? 'success' : ''">
+                  mdi-bell
+                </v-icon>
+              </v-list-item-icon>
+              <v-list-item-content @click="onReadNotification(item)">
+                <v-list-item-title>
+                  {{ item.data.title }} -
+                  <time-ago :date-time="item.data.created_at" />
+                </v-list-item-title>
+                <v-list-item-subtitle
+                  class="caption"
+                  style="white-space: break-spaces"
+                  v-text="item.data.subject"
+                >
+                </v-list-item-subtitle>
+                <v-list-item-subtitle class="caption" v-text="item.data.user" />
+              </v-list-item-content>
+              <v-list-item-action>
+                <v-tooltip bottom>
+                  <template #activator="{ on, attrs }">
+                    <v-btn
+                      icon
+                      small
+                      color="error"
+                      :loading="deleting"
+                      :disabled="deleting"
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="onDelete(item)"
+                    >
+                      <v-icon small>mdi-close</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>{{ $t('buttons.Delete') }}</span>
+                </v-tooltip>
+              </v-list-item-action>
+            </app-bar-item>
+          </template>
+        </v-virtual-scroll>
+        <v-card-text v-else>
+          <empty-state
+            icon="mdi-bell-off"
+            :size="200"
+            description="No tienes notificaciones"
           >
-            <v-list-item-icon class="hidden-sm-and-down">
-              <v-icon>mdi-bell</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content @click="onReadNotification(item)">
-              <v-list-item-title>
-                {{ item.data.title }} -
-                <time-ago :date-time="item.data.created_at" />
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                <small class="caption">
-                  {{ item.data.subject }}
-                </small>
-              </v-list-item-subtitle>
-              <v-list-item-subtitle class="caption" v-text="item.data.user" />
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-tooltip bottom>
-                <template #activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    small
-                    color="error"
-                    v-bind="attrs"
-                    v-on="on"
-                    @click="onDelete(item)"
-                  >
-                    <v-icon small>mdi-close</v-icon>
-                  </v-btn>
-                </template>
-                <span>{{ $t('buttons.Delete') }}</span>
-              </v-tooltip>
-            </v-list-item-action>
-          </app-bar-item>
-          <v-list-item v-if="notifications.length === 0" dense>
-            <v-list-item-content>
-              <v-list-item-title>No tienes notificaciones</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </div>
-        <v-btn block text small :to="localePath({ name: 'notifications' })">
-          Ver todas las notificaciones
-        </v-btn>
-      </v-list>
+          </empty-state>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn block text small :to="localePath({ name: 'notifications' })">
+            Ver todas las notificaciones
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-menu>
 
     <v-menu
@@ -197,6 +227,7 @@
 
 <script>
 // Components
+import { remove, has } from 'lodash'
 import { VHover, VListItem } from 'vuetify/lib'
 import VOfflineIcon from '@/components/base/VOfflineIcon'
 import TimeAgo from '@/components/base/TimeAgo'
@@ -232,6 +263,7 @@ export default {
     },
     VOfflineIcon,
     TimeAgo,
+    EmptyState: () => import('~/components/base/EmptyState'),
   },
   props: {
     value: {
@@ -241,6 +273,7 @@ export default {
   },
   data: () => ({
     clip: false,
+    deleting: false,
     form: new Notification(),
     notifications: [],
     profile: {
@@ -250,8 +283,12 @@ export default {
     help: process.env.VUE_APP_MANUAL,
   }),
   fetch() {
+    this.deleting = true
     this.form.index().then((response) => {
-      this.notifications = response.data
+      this.deleting = false
+      if (has(response, 'data.data')) {
+        this.notifications = response.data.data
+      }
     })
   },
   computed: {
@@ -337,15 +374,36 @@ export default {
       this.$store.dispatch('app/toggleRightDrawer', true)
     },
     onReadNotification(item) {
+      this.deleting = true
       this.form
         .show(item.id)
         .then(() => this.$fetch)
         .finally(() => {
+          this.deleting = false
           this.$router.push(this.localePath(item.data.url))
         })
     },
+    markAllAsRead() {
+      this.deleting = true
+      this.form
+        .store()
+        .then(() => {
+          this.deleting = false
+        })
+        .finally(() => this.$fetch)
+    },
     onDelete(item) {
-      this.form.destroy(item.id).finally(() => this.$fetch)
+      this.deleting = true
+      this.form
+        .destroy(item.id)
+        .then(() => {
+          this.notifications = remove(
+            this.notifications,
+            (object) => object.id !== item.id
+          )
+          this.deleting = false
+        })
+        .finally(() => this.$fetch)
     },
   },
 }

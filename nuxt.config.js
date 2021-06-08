@@ -52,6 +52,7 @@ export default {
   plugins: [
     { src: '~/plugins/vuex-persist', ssr: false },
     { src: '~/plugins/chartist', ssr: false },
+    { src: '~/plugins/copy', ssr: false },
     { src: '~/plugins/apexcharts', ssr: false },
     { src: '~/plugins/google-maps', ssr: false },
     { src: '~/plugins/tiptap', ssr: false },

@@ -3,8 +3,21 @@
     <v-container class="px-0 text-right d-flex align-center">
       <v-toolbar-title class="font-weight-light" v-text="title" />
       <v-spacer />
-      <v-btn text :to="localePath({ name: 'certificates' })">
-        Certificados
+      <v-btn
+        v-for="(item, i) in items"
+        :key="i"
+        :to="item.to"
+        min-height="48"
+        min-width="40"
+        text
+      >
+        <v-icon
+          :left="$vuetify.breakpoint.mdAndUp"
+          size="20"
+          v-text="item.icon"
+        />
+
+        <span class="hidden-sm-and-down" v-text="item.text" />
       </v-btn>
       <Language />
       <v-menu left>
@@ -38,6 +51,15 @@ export default {
     Language: () => import('~/components/base/Language'),
     DarkLight: () => import('~/components/base/DarkLight'),
   },
+  data: (vm) => ({
+    items: [
+      {
+        icon: 'mdi-file',
+        text: 'Certificados',
+        to: vm.localePath({ name: 'certificates' }),
+      },
+    ],
+  }),
   props: {
     isDark: {
       type: Boolean,

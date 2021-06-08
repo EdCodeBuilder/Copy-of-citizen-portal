@@ -6,6 +6,7 @@ export class Contract extends Model {
     userId,
     data = {
       contract: null,
+      contract_year: null,
       transport: false,
       position: null,
       start_date: null,

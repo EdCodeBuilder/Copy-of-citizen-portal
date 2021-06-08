@@ -204,10 +204,10 @@
               </validation-provider>
             </v-col>
             <!-- Contract -->
-            <v-col cols="12" md="6" sm="12">
+            <v-col cols="12" md="3" sm="6">
               <validation-provider
                 v-slot="{ errors }"
-                :rules="user.validations.input_text_required"
+                :rules="user.validations.input_number_required"
                 vid="contract"
                 name="número de contraro"
               >
@@ -219,15 +219,47 @@
                   :readonly="finding"
                   :error-messages="errors"
                   persistent-hint
-                  hint="Ejemplo: IDRD-CTO-1234-2020"
+                  hint="Ejemplo: 0933"
                   color="primary"
                   label="Número de contrato"
                   clearable
                   counter
-                  :maxlength="user.validations.input_text_required.max"
+                  :maxlength="4"
                   autocomplete="off"
                   required="required"
-                  prepend-icon="mdi-face"
+                  prepend-icon="mdi-numeric"
+                />
+              </validation-provider>
+            </v-col>
+            <!-- Year -->
+            <v-col cols="12" md="3" sm="6">
+              <validation-provider
+                v-slot="{ errors }"
+                :rules="
+                  user.validations.input_number_required_between(2019, 2999)
+                "
+                vid="contract_year"
+                name="año de contraro"
+              >
+                <v-text-field
+                  id="contract_year"
+                  type="number"
+                  v-model="user.contract_year"
+                  name="contract_year"
+                  :loading="finding"
+                  :readonly="finding"
+                  :error-messages="errors"
+                  persistent-hint
+                  :hint="`Ejemplo: ${$moment().year()}`"
+                  color="primary"
+                  label="Año de contrato"
+                  clearable
+                  counter
+                  :min="2019"
+                  :max="2999"
+                  autocomplete="off"
+                  required="required"
+                  prepend-icon="mdi-calendar"
                 />
               </validation-provider>
             </v-col>

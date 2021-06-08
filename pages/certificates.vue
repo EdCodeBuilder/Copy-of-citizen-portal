@@ -97,6 +97,13 @@ export default {
         flex: 6,
         to: { name: 'warehousepeaceandsave' },
       },
+      {
+        title: 'Verificar Certificado',
+        src:
+          'https://images.unsplash.com/photo-1518976024611-28bf4b48222e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1532&q=80',
+        flex: 12,
+        to: { name: 'validate-document' },
+      },
     ],
   }),
 }

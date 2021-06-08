@@ -1,7 +1,7 @@
 <template>
   <v-main id="certificates" class="main main-raised elevation-24">
     <v-row justify="center" align-content="center" class="mx-2">
-      <v-col cols="12" md="8" sm="8" class="mx-auto">
+      <v-col v-show="!success" cols="12" class="mx-auto">
         <v-card flat color="transparent">
           <v-card-text>
             <v-row class="mx-md-2">
@@ -10,7 +10,7 @@
                   info-horizontal
                   icon="mdi-information-outline"
                   icon-color="success"
-                  subtitle="Paz y Salvo del Área de Almacen"
+                  subtitle="Paz y Salvo del Área de Almacén"
                   class="mb-0"
                 >
                   <v-card flat color="transparent" class="mt-0 px-5">
@@ -253,24 +253,44 @@
                 </info-content>
               </v-col>
               <v-col v-if="resource.length > 0" cols="12">
-                Por favor acécerque al área de almacén para realizar la
-                devolución de activos cargados a su nombre.
-                <v-list dense three-line>
-                  <v-list-item v-for="item in resource" :key="item.id">
-                    <v-list-item-avatar>
-                      <v-icon>mdi-text</v-icon>
-                    </v-list-item-avatar>
-                    <v-list-item-content>
-                      <v-list-item-title>{{ item.name }}</v-list-item-title>
-                      <v-list-item-subtitle>
-                        {{ `Placa: ${item.id}` }}
-                      </v-list-item-subtitle>
-                      <v-list-item-subtitle>
-                        {{ `Cantidad: ${item.quantity}` }}
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
+                Actualmente cuenta con {{ total }} activos cargados a su nombre,
+                por favor acérquece al área de almacén o con su supervisor de
+                contrato para realizar la devolución de los mismos.
+                <v-skeleton-loader
+                  ref="skeleton"
+                  :loading="finding"
+                  transition="scale-transition"
+                  type="table"
+                  class="mx-auto"
+                >
+                  <v-data-table
+                    :options.sync="pagination"
+                    :items-per-page.sync="itemsPerPage"
+                    :server-items-length="total"
+                    :headers="headers"
+                    :items="resource"
+                    item-key="id"
+                    :footer-props="{
+                      'items-per-page-options': itemsPerPageArray,
+                    }"
+                  >
+                    <template #top>
+                      <v-toolbar flat color="transparent">
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          class="my-2 hidden-sm-and-down"
+                          color="primary"
+                          @click="onExcel"
+                        >
+                          <v-icon color="white" left dark>
+                            mdi-cloud-download
+                          </v-icon>
+                          Descargar Excel
+                        </v-btn>
+                      </v-toolbar>
+                    </template>
+                  </v-data-table>
+                </v-skeleton-loader>
                 <v-btn
                   outlined
                   block
@@ -287,6 +307,23 @@
           </v-card-text>
         </v-card>
       </v-col>
+      <v-col v-show="success" cols="12" class="mx-auto">
+        <v-empty-state
+          icon="mdi-file"
+          label="Certificado Generado"
+          description="Se ha generado el certificado satisfactoriamente. Por favor revise su carpeta de descargas."
+        >
+          <v-btn
+            color="primary"
+            :loading="finding"
+            :disabled="finding"
+            :to="localePath({ name: 'certificates' })"
+          >
+            <v-icon left dark>mdi-arrow-left</v-icon>
+            Regresar
+          </v-btn>
+        </v-empty-state>
+      </v-col>
     </v-row>
   </v-main>
 </template>
@@ -294,6 +331,7 @@
 <script>
 import FileSaver from 'file-saver'
 import { has } from 'lodash'
+import { Arrow } from '~/plugins/Arrow'
 import { Warehouse } from '~/models/services/portal/Warehouse'
 
 export default {
@@ -308,20 +346,38 @@ export default {
   middleware: ['token'],
   components: {
     InfoContent: () => import('~/components/base/InfoContent'),
+    VEmptyState: () => import('~/components/base/EmptyState'),
   },
   auth: false,
   data: () => ({
+    arrow: new Arrow(window, window.document, 'primary'),
     finding: false,
     form: new Warehouse(),
     errors: {},
     resource: [],
+    success: false,
+    total: 0,
+    pagination: {},
+    itemsPerPage: 10,
+    itemsPerPageArray: [10],
+    headers: [],
   }),
+  watch: {
+    'pagination.page'() {
+      return this.onSubmit()
+    },
+  },
   methods: {
     onSubmit() {
       this.finding = true
       this.form.setFormInstance(this.$refs.warehouse)
+      const params = {
+        page: this.pagination.page,
+        per_page: this.itemsPerPage,
+      }
       this.form
         .store({
+          params,
           responseType: 'arraybuffer',
           headers: {
             'Content-Type': 'application/json',
@@ -331,17 +387,51 @@ export default {
         .then((response) => {
           FileSaver.saveAs(
             new Blob([response], { type: 'application/pdf' }),
-            'PAZ_Y_SALVO.pdf'
+            'PAZ_Y_SALVO_ALMACEN.pdf'
           )
+        })
+        .then(() => {
+          this.success = true
+          this.arrow.show(6000)
         })
         .catch((errors) => {
           const data = JSON.parse(Buffer.from(errors).toString('utf8'))
           if (has(data, 'message.data')) {
-            this.resource = data.message.data
+            this.resource = data.message.data.map((d, i) => {
+              return {
+                ...d,
+                consecutive:
+                  (this.pagination.page - 1) * this.itemsPerPage + (i + 1),
+              }
+            })
+            this.total = data.message.meta.total
+            this.headers = data.message.details.headers
           } else {
             this.errors = data
             this.$snackbar({ message: this.errors.message })
           }
+        })
+        .finally(() => {
+          this.finding = false
+        })
+    },
+    onExcel() {
+      this.finding = true
+      this.form.resetOnlyWhenUpdate = false
+      this.form
+        .excel({
+          responseType: 'arraybuffer',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then((response) => {
+          FileSaver.saveAs(new Blob([response]), 'INVENTARIO_ALMACEN.xlsx')
+          this.arrow.show(6000)
+        })
+        .catch((errors) => {
+          this.errors = JSON.parse(Buffer.from(errors).toString('utf8'))
+          this.$snackbar({ message: this.errors.message })
         })
         .finally(() => {
           this.finding = false
@@ -354,7 +444,7 @@ export default {
     },
     years() {
       const years = []
-      for (let i = this.$moment().year(); i >= 1900; i--) {
+      for (let i = this.$moment().add(1, 'year').year(); i >= 2019; i--) {
         years.push(i)
       }
       return years

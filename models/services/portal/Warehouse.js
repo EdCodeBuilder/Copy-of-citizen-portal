@@ -15,4 +15,8 @@ export class Warehouse extends Model {
   ) {
     super(Api.END_POINTS.WAREHOUSE_CERTIFICATION(), data)
   }
+
+  excel(options = {}) {
+    return this.post(Api.END_POINTS.WAREHOUSE_EXCEL(), options)
+  }
 }

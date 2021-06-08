@@ -48,8 +48,7 @@ export default {
     UpdateNotification: () => import('@/components/base/UpdateAvailable'),
   },
   data: () => ({
-    bg:
-      'https://demos.creative-tim.com/vue-material-kit-pro/img/vue-mk-header.f24b2888.jpg',
+    bg: require('@/static/bg.jpg'),
     duration: 300,
     offset: 0,
     easing: 'easeInOutCubic',

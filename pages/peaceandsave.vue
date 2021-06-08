@@ -25,7 +25,7 @@
                     <v-tabs-items v-model="tab" class="pt-12 transparent">
                       <v-tab-item>
                         <v-card flat color="transparent" class="mt-0 px-5">
-                          <v-card-text>
+                          <v-card-text v-show="!success">
                             <v-banner
                               v-if="errors.message"
                               color="error"
@@ -36,9 +36,24 @@
                               </v-avatar>
                               {{ errors.message }}
                               <v-divider class="my-4" />
-                              <template v-if="errors.details">
+                              <template
+                                v-if="typeof errors.details === 'string'"
+                              >
                                 {{ errors.details }}
                                 <v-divider class="my-4" />
+                              </template>
+                              <template
+                                v-if="typeof errors.details === 'object'"
+                              >
+                                <p>
+                                  Carpetas y cantidad de radicados por procesar
+                                </p>
+                                <ul
+                                  v-for="(f, i) in errors.details.folders"
+                                  :key="i"
+                                >
+                                  <li>{{ `${f.folder}: ${f.filed_count}` }}</li>
+                                </ul>
                               </template>
                               <ul v-for="(k, i) in errorsKeys" :key="i">
                                 <li
@@ -268,11 +283,28 @@
                               </v-form>
                             </validation-observer>
                           </v-card-text>
+                          <v-card-text v-show="success">
+                            <v-empty-state
+                              icon="mdi-file"
+                              label="Certificado Generado"
+                              description="Se ha generado el certificado satisfactoriamente. Por favor revise su carpeta de descargas."
+                            >
+                              <v-btn
+                                color="primary"
+                                :loading="finding"
+                                :disabled="finding"
+                                :to="localePath({ name: 'certificates' })"
+                              >
+                                <v-icon left dark>mdi-arrow-left</v-icon>
+                                Regresar
+                              </v-btn>
+                            </v-empty-state>
+                          </v-card-text>
                         </v-card>
                       </v-tab-item>
                       <v-tab-item>
                         <v-card flat color="transparent" class="mt-0">
-                          <v-card-text>
+                          <v-card-text v-show="!successCons">
                             <p class="body-2 font-weight-light">
                               Puede realizar la consulta por número de documento
                               y número de contrato o directamente por el código
@@ -411,8 +443,7 @@
                                       :rules="{
                                         required:
                                           !consult.contract && !consult.year,
-                                        min: 9,
-                                        max: 9,
+                                        max: 15,
                                       }"
                                       vid="token"
                                       name="código de verificación"
@@ -429,7 +460,7 @@
                                         label="Código de verificación"
                                         clearable
                                         counter
-                                        :maxlength="9"
+                                        :maxlength="15"
                                         :required="
                                           !consult.contract && !consult.year
                                         "
@@ -464,6 +495,23 @@
                               </v-form>
                             </validation-observer>
                           </v-card-text>
+                          <v-card-text v-show="successCons">
+                            <v-empty-state
+                              icon="mdi-file"
+                              label="Certificado Generado"
+                              description="Se ha generado el certificado satisfactoriamente. Por favor revise su carpeta de descargas."
+                            >
+                              <v-btn
+                                color="primary"
+                                :loading="finding"
+                                :disabled="finding"
+                                :to="localePath({ name: 'certificates' })"
+                              >
+                                <v-icon left dark>mdi-arrow-left</v-icon>
+                                Regresar
+                              </v-btn>
+                            </v-empty-state>
+                          </v-card-text>
                         </v-card>
                       </v-tab-item>
                     </v-tabs-items>
@@ -480,6 +528,7 @@
 
 <script>
 import FileSaver from 'file-saver'
+import { Arrow } from '~/plugins/Arrow'
 import { Certification } from '~/models/services/portal/Certification'
 
 export default {
@@ -495,10 +544,14 @@ export default {
   components: {
     InfoContent: () => import('~/components/base/InfoContent'),
     VMaterialTabs: () => import('~/components/base/MaterialTabs'),
+    VEmptyState: () => import('~/components/base/EmptyState'),
   },
   auth: false,
   data: () => ({
+    arrow: new Arrow(window, window.document, 'primary'),
     finding: false,
+    success: false,
+    successCons: false,
     form: new Certification(),
     consult: new Certification(),
     errors: {},
@@ -535,8 +588,12 @@ export default {
         .then((response) => {
           FileSaver.saveAs(
             new Blob([response], { type: 'application/pdf' }),
-            'PAZ_Y_SALVO.pdf'
+            'PAZ_Y_SALVO_SISTEMAS.pdf'
           )
+        })
+        .then(() => {
+          this.success = true
+          this.arrow.show(6000)
         })
         .catch((errors) => {
           this.errors = JSON.parse(Buffer.from(errors).toString('utf8'))
@@ -563,6 +620,10 @@ export default {
             'PAZ_Y_SALVO.pdf'
           )
         })
+        .then(() => {
+          this.successCons = true
+          this.arrow.show(6000)
+        })
         .catch((errors) => {
           this.errorsConsult = JSON.parse(Buffer.from(errors).toString('utf8'))
           this.$snackbar({ message: this.errorsConsult.message })
@@ -583,7 +644,7 @@ export default {
     },
     years() {
       const years = []
-      for (let i = this.$moment().year(); i >= 1900; i--) {
+      for (let i = this.$moment().add(1, 'year').year(); i >= 2019; i--) {
         years.push(i)
       }
       return years

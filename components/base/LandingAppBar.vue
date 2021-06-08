@@ -66,14 +66,14 @@ export default {
     color: 'transparent',
     items: [
       {
-        icon: 'mdi-fingerprint',
-        text: 'Iniciar Sesión',
-        to: vm.localePath({ name: 'login' }),
-      },
-      {
         icon: 'mdi-file',
         text: 'Certificados',
         to: vm.localePath({ name: 'certificates' }),
+      },
+      {
+        icon: 'mdi-fingerprint',
+        text: 'Iniciar Sesión',
+        to: vm.localePath({ name: 'login' }),
       },
     ],
   }),

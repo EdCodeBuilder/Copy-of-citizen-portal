@@ -14,14 +14,29 @@
                   class="mb-0"
                 >
                   <v-card-text>
-                    <v-btn
-                      :disabled="finding || user.id"
-                      :loading="finding"
-                      color="primary"
-                      @click="onSubmit"
-                    >
-                      Validar Token {{ $route.query.validate }}
-                    </v-btn>
+                    <validation-observer ref="user_update" v-slot="{ handleSubmit }">
+                      <v-form @submit.prevent="handleSubmit(onSubmit)">
+                        <validation-provider
+                          v-slot="{ errors }"
+                          :rules="form.validations.required"
+                          vid="token"
+                          name="token de verificación"
+                        >
+                          <v-text-field
+                            v-model="token"
+                            label="Token de verificación"
+                          />
+                        </validation-provider>
+                        <v-btn
+                          :disabled="finding || user.id"
+                          :loading="finding"
+                          color="primary"
+                          type="submit"
+                        >
+                          Validar Token {{ token }}
+                        </v-btn>
+                      </v-form>
+                    </validation-observer>
                   </v-card-text>
                   <v-card-text v-if="user.id">
                     <v-banner>
@@ -81,12 +96,18 @@ export default {
     form: new Certification(),
     user: {},
     errors: {},
+    token: null,
   }),
+  mounted() {
+    if (this.$route.query.validate) {
+      this.token = this.$route.query.validate
+    }
+  },
   methods: {
     onSubmit() {
       this.finding = true
       this.form
-        .show(this.$route.query.validate)
+        .show(this.token)
         .then((response) => {
           this.user = response.data
         })

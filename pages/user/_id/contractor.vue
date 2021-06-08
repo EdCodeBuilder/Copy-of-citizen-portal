@@ -71,6 +71,22 @@
                     <v-list-item-title>Modificar Contratista</v-list-item-title>
                   </v-list-item>
                   <v-list-item
+                    v-if="
+                      userIsA([
+                        'contractors-portal-hiring',
+                        'contractors-portal-arl',
+                      ])
+                    "
+                    @click="qr_dialog = true"
+                  >
+                    <v-list-item-icon>
+                      <v-icon>mdi-link</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-title>
+                      Enviar Enlace Manualmente
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item
                     v-if="userIsA('contractors-portal-hiring')"
                     @click="dialog = true"
                   >
@@ -407,10 +423,10 @@
                   </validation-provider>
                 </v-col>
                 <!-- Contract -->
-                <v-col cols="12" md="6" sm="12">
+                <v-col cols="12" md="3" sm="6">
                   <validation-provider
                     v-slot="{ errors }"
-                    :rules="contract.validations.input_text_required"
+                    :rules="contract.validations.input_number_required"
                     vid="contract"
                     name="número de contraro"
                   >
@@ -422,15 +438,50 @@
                       :readonly="finding"
                       :error-messages="errors"
                       persistent-hint
-                      hint="Ejemplo: IDRD-CTO-1234-2020"
+                      hint="Ejemplo: 0933"
                       color="primary"
                       label="Número de contrato"
                       clearable
                       counter
-                      :maxlength="contract.validations.input_text_required.max"
+                      :maxlength="4"
                       autocomplete="off"
                       required="required"
-                      prepend-icon="mdi-face"
+                      prepend-icon="mdi-numeric"
+                    />
+                  </validation-provider>
+                </v-col>
+                <!-- Year -->
+                <v-col cols="12" md="3" sm="6">
+                  <validation-provider
+                    v-slot="{ errors }"
+                    :rules="
+                      contract.validations.input_number_required_between(
+                        2019,
+                        2999
+                      )
+                    "
+                    vid="contract_year"
+                    name="año de contraro"
+                  >
+                    <v-text-field
+                      id="contract_year"
+                      type="number"
+                      v-model="contract.contract_year"
+                      name="contract_year"
+                      :loading="finding"
+                      :readonly="finding"
+                      :error-messages="errors"
+                      persistent-hint
+                      :hint="`Ejemplo: ${$moment().year()}`"
+                      color="primary"
+                      label="Año de contrato"
+                      clearable
+                      counter
+                      :min="2019"
+                      :max="2999"
+                      autocomplete="off"
+                      required="required"
+                      prepend-icon="mdi-calendar"
                     />
                   </validation-provider>
                 </v-col>
@@ -1573,13 +1624,99 @@
         </v-form>
       </validation-observer>
     </v-dialog>
+    <v-dialog
+      v-if="userIsA(['contractors-portal-hiring', 'contractors-portal-arl'])"
+      max-width="600"
+      v-model="qr_dialog"
+    >
+      <v-card flat>
+        <v-card-title>
+          Portal Contratista - Enlaces
+          <v-spacer />
+          <v-btn icon @click="qr_dialog = false">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <v-row dense>
+            <v-col cols="12">
+              <p>
+                Puede copiar este enlace para enviar al contratista si se
+                presenta algún inconveniente con el correo electrónico o envíar
+                a través de WhatsApp si la opción está disponible.
+              </p>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                prepend-icon="mdi-link"
+                label="Enlace de modificación"
+                :value="user.modifiable_link"
+                readonly
+              >
+                <template #append-outer>
+                  <v-tooltip top>
+                    <template #activator="{ on: tooltip }">
+                      <v-btn
+                        small
+                        fab
+                        color="primary"
+                        v-on="tooltip"
+                        @click="onCopy(user.modifiable_link)"
+                      >
+                        <v-icon>mdi-content-copy</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Copiar al portapeles</span>
+                  </v-tooltip>
+                  <v-tooltip v-if="!!user.whatsapp_link" top>
+                    <template #activator="{ on: tooltip }">
+                      <v-btn
+                        fab
+                        small
+                        color="success"
+                        class="mx-1"
+                        target="_blank"
+                        v-on="tooltip"
+                        :href="user.whatsapp_link"
+                      >
+                        <v-icon>mdi-whatsapp</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Enviar por WhatsApp</span>
+                  </v-tooltip>
+                </template>
+              </v-text-field>
+            </v-col>
+            <template v-if="!!user.whatsapp_link">
+              <v-col cols="12">
+                <p>
+                  También puede escanear desde un dispositivo móvil el código QR
+                  que se muestra a continuación para enviar el enlace por
+                  WhatsApp
+                </p>
+              </v-col>
+              <v-col
+                cols="12"
+                class="align-content-center align-items-center align-self-center justify-content-center text-center"
+              >
+                <vue-qrcode :value="user.whatsapp_link" />
+              </v-col>
+            </template>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-check-dialog ref="confirmDialog">
       {{ $t('confirm.delete') }}
     </v-check-dialog>
+    <v-snackbar v-model="copied" bottom>
+      Se ha copiado el enlace al portapales
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
+import VueQrcode from 'vue-qrcode'
 import { Contractor } from '~/models/services/portal/Contractor'
 import { DocumentType } from '~/models/services/portal/DocumentType'
 import { Contract } from '~/models/services/portal/Contract'
@@ -1593,6 +1730,7 @@ export default {
   name: 'ContractorData',
   auth: 'auth',
   components: {
+    VueQrcode,
     BaseMaterialCard: () => import('~/components/base/MaterialCard'),
     TimeAgo: () => import('~/components/base/TimeAgo'),
     VCheckDialog: () => import('@/components/base/VCheckDialog'),
@@ -1611,6 +1749,8 @@ export default {
     data: [],
     finding: false,
     requested_at: null,
+    copied: false,
+    qr_dialog: false,
     dialog_update: false,
     dialog_update_user: false,
     dialog: false,
@@ -1896,6 +2036,13 @@ export default {
           })
       }
     },
+    // Copy
+    onCopy(url) {
+      const container = document.querySelector('.v-dialog')
+      this.$copyText(url, container).then(() => {
+        this.copied = true
+      })
+    },
     // Loading
     start() {
       this.finding = true
@@ -1928,8 +2075,8 @@ export default {
         const can = this.permissions.find((p) => p.name === permission)
         return (can && can.can) || (admin && admin.can)
       }
-      if (permission && typeof Array.isArray(permission)) {
-        permission.push(['contractors-portal-super-admin'])
+      if (permission && Array.isArray(permission)) {
+        permission.push('contractors-portal-super-admin')
         const flag = this.permissions.map((perm) => {
           return permission.includes(perm.name) && perm.can
         })

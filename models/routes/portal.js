@@ -24,5 +24,8 @@ export default {
   FILE_TYPES: () => `${api}${path}/file-types`,
   SYSTEMS_CERTIFICATION: () => `${api}${path}/peace-and-save`,
   WAREHOUSE_CERTIFICATION: () => `${api}${path}/warehouse-peace-and-save`,
+  WAREHOUSE_EXCEL: () => `${api}${path}/warehouse-peace-and-save/excel`,
   GENERATE_CERTIFICATION: () => `${api}${path}/generate-certificate`,
+  CAREERS: (levelId) => `${api}${path}/academic-level/${levelId}/careers`,
+  LEVELS: () => `${api}${path}/academic-level`,
 }
