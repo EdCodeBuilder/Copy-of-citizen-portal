@@ -25,6 +25,12 @@ export default {
   SYSTEMS_CERTIFICATION: () => `${api}${path}/peace-and-save`,
   WAREHOUSE_CERTIFICATION: () => `${api}${path}/warehouse-peace-and-save`,
   WAREHOUSE_EXCEL: () => `${api}${path}/warehouse-peace-and-save/excel`,
+  WAREHOUSE_NOTIFICATION: () =>
+    `${api}${path}/warehouse-peace-and-save/notification`,
+  WAREHOUSE_DATA: () =>
+    `${api}${path}/warehouse-peace-and-save/more-data`,
+  WAREHOUSE_VALIDATE_CODE: (code) =>
+    `${api}${path}/warehouse-peace-and-save/validate-code/${code}`,
   GENERATE_CERTIFICATION: () => `${api}${path}/generate-certificate`,
   CAREERS: (levelId) => `${api}${path}/academic-level/${levelId}/careers`,
   LEVELS: () => `${api}${path}/academic-level`,

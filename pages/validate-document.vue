@@ -14,7 +14,10 @@
                   class="mb-0"
                 >
                   <v-card-text>
-                    <validation-observer ref="user_update" v-slot="{ handleSubmit }">
+                    <validation-observer
+                      ref="user_update"
+                      v-slot="{ handleSubmit }"
+                    >
                       <v-form @submit.prevent="handleSubmit(onSubmit)">
                         <validation-provider
                           v-slot="{ errors }"
@@ -24,6 +27,7 @@
                         >
                           <v-text-field
                             v-model="token"
+                            :error-messages="errors"
                             label="Token de verificación"
                           />
                         </validation-provider>

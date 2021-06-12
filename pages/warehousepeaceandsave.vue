@@ -14,7 +14,7 @@
                   class="mb-0"
                 >
                   <v-card flat color="transparent" class="mt-0 px-5">
-                    <v-card-text v-if="resource.length === 0">
+                    <v-card-text v-if="elements === 0">
                       <v-banner
                         v-if="errors.message"
                         color="error"
@@ -49,68 +49,6 @@
                       >
                         <v-form @submit.prevent="handleSubmit(onSubmit)">
                           <v-row dense>
-                            <!-- Name -->
-                            <v-col cols="12" md="6" sm="12">
-                              <validation-provider
-                                v-slot="{ errors }"
-                                :rules="
-                                  form.validations.input_alpha_spaces_required
-                                "
-                                vid="name"
-                                name="nombre"
-                              >
-                                <v-text-field
-                                  id="name"
-                                  v-model="form.name"
-                                  name="name"
-                                  :loading="finding"
-                                  :readonly="finding"
-                                  :error-messages="errors"
-                                  color="primary"
-                                  label="Nombres"
-                                  clearable
-                                  counter
-                                  :maxlength="
-                                    form.validations.input_alpha_spaces_required
-                                      .max
-                                  "
-                                  autocomplete="off"
-                                  required="required"
-                                  prepend-icon="mdi-face"
-                                />
-                              </validation-provider>
-                            </v-col>
-                            <!-- Surname -->
-                            <v-col cols="12" md="6" sm="12">
-                              <validation-provider
-                                v-slot="{ errors }"
-                                :rules="
-                                  form.validations.input_alpha_spaces_required
-                                "
-                                vid="surname"
-                                name="apellidos"
-                              >
-                                <v-text-field
-                                  id="surname"
-                                  v-model="form.surname"
-                                  name="surname"
-                                  :loading="finding"
-                                  :readonly="finding"
-                                  :error-messages="errors"
-                                  color="primary"
-                                  label="Apellidos"
-                                  clearable
-                                  counter
-                                  :maxlength="
-                                    form.validations.input_alpha_spaces_required
-                                      .max
-                                  "
-                                  autocomplete="off"
-                                  required="required"
-                                  prepend-icon="mdi-face"
-                                />
-                              </validation-provider>
-                            </v-col>
                             <!-- Document -->
                             <v-col cols="12">
                               <validation-provider
@@ -196,33 +134,6 @@
                                 />
                               </validation-provider>
                             </v-col>
-                            <!-- Virtual File -->
-                            <v-col cols="12">
-                              <validation-provider
-                                v-slot="{ errors }"
-                                :rules="form.validations.input_text"
-                                vid="virtual_file"
-                                name="expediente virtual"
-                              >
-                                <v-text-field
-                                  id="virtual_file"
-                                  v-model="form.virtual_file"
-                                  name="virtual_file"
-                                  :loading="finding"
-                                  :readonly="finding"
-                                  :error-messages="errors"
-                                  persistent-hint
-                                  hint="Ejemplo: E123456789075"
-                                  color="primary"
-                                  label="Expediente Virtual (Opcional)"
-                                  clearable
-                                  counter
-                                  :maxlength="form.validations.input_text.max"
-                                  autocomplete="off"
-                                  prepend-icon="mdi-numeric"
-                                />
-                              </validation-provider>
-                            </v-col>
                             <!-- Create User -->
                             <v-col cols="12" class="text-right">
                               <v-btn
@@ -252,56 +163,101 @@
                   </v-card>
                 </info-content>
               </v-col>
-              <v-col v-if="resource.length > 0" cols="12">
-                Actualmente cuenta con {{ total }} activos cargados a su nombre,
-                por favor acérquece al área de almacén o con su supervisor de
-                contrato para realizar la devolución de los mismos.
-                <v-skeleton-loader
-                  ref="skeleton"
-                  :loading="finding"
-                  transition="scale-transition"
-                  type="table"
-                  class="mx-auto"
-                >
-                  <v-data-table
-                    :options.sync="pagination"
-                    :items-per-page.sync="itemsPerPage"
-                    :server-items-length="total"
-                    :headers="headers"
-                    :items="resource"
-                    item-key="id"
-                    :footer-props="{
-                      'items-per-page-options': itemsPerPageArray,
-                    }"
-                  >
-                    <template #top>
-                      <v-toolbar flat color="transparent">
-                        <v-spacer></v-spacer>
+              <v-col v-if="elements > 0" cols="12">
+                <v-card v-show="!email" flat class="mx-auto">
+                  <v-card-text>
+                    <v-row align="center">
+                      <v-col cols="12">
+                        <h2 class="text-h2 text-center">
+                          Actualmente cuenta con
+                        </h2>
+                        <h2 class="display-serif-4 text-center">
+                          {{ elements }}
+                        </h2>
+                        <h3 class="text-center">activos a cargo</h3>
+                      </v-col>
+                      <v-col cols="12">
+                        <p class="text-center">
+                          Si desea ver a detalle información de los activos o
+                          descargar el formato traslados de clic en el botón
+                          "Consultar Reporte"
+                        </p>
+                      </v-col>
+                      <v-col cols="12" class="text-center">
                         <v-btn
-                          class="my-2 hidden-sm-and-down"
+                          outlined
                           color="primary"
-                          @click="onExcel"
+                          :loading="finding"
+                          :disabled="finding"
+                          @click="resource = []"
                         >
-                          <v-icon color="white" left dark>
-                            mdi-cloud-download
-                          </v-icon>
-                          Descargar Excel
+                          Regresar
                         </v-btn>
-                      </v-toolbar>
-                    </template>
-                  </v-data-table>
-                </v-skeleton-loader>
-                <v-btn
-                  outlined
-                  block
-                  color="primary"
-                  :loading="finding"
-                  :disabled="finding"
-                  @click="resource = []"
-                >
-                  <v-icon left dark>mdi-arrow-left</v-icon>
-                  Regresar
-                </v-btn>
+                        <v-btn
+                          color="primary"
+                          :loading="finding"
+                          :disabled="finding"
+                          @click="onNotify"
+                        >
+                          Consultar Reporte
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-card>
+                <v-card v-show="!!email" flat class="m-auto">
+                  <v-card-text>
+                    <v-empty-state
+                      v-if="resource.length === 0"
+                      icon="mdi-email"
+                      label="Código de Verificación"
+                      :description="`Hemos enviado un código de verificación al correo ${email}`"
+                    >
+                      <v-verification-input
+                        :loading="finding"
+                        :disabled="finding"
+                        required
+                        @complete="onValidate"
+                      />
+                    </v-empty-state>
+                    <v-skeleton-loader
+                      v-else
+                      ref="skeleton"
+                      :loading="finding"
+                      transition="scale-transition"
+                      type="table"
+                      class="mx-auto"
+                    >
+                      <v-data-table
+                        :options.sync="pagination"
+                        :items-per-page.sync="itemsPerPage"
+                        :server-items-length="total"
+                        :headers="headers"
+                        :items="resource"
+                        item-key="id"
+                        :footer-props="{
+                          'items-per-page-options': itemsPerPageArray,
+                        }"
+                      >
+                        <template #top>
+                          <v-toolbar flat color="transparent">
+                            <v-spacer></v-spacer>
+                            <v-btn
+                              class="my-2 hidden-sm-and-down"
+                              color="primary"
+                              @click="onExcel"
+                            >
+                              <v-icon color="white" left dark>
+                                mdi-cloud-download
+                              </v-icon>
+                              Descargar Excel
+                            </v-btn>
+                          </v-toolbar>
+                        </template>
+                      </v-data-table>
+                    </v-skeleton-loader>
+                  </v-card-text>
+                </v-card>
               </v-col>
             </v-row>
           </v-card-text>
@@ -347,12 +303,15 @@ export default {
   components: {
     InfoContent: () => import('~/components/base/InfoContent'),
     VEmptyState: () => import('~/components/base/EmptyState'),
+    VVerificationInput: () => import('~/components/base/VVerificationInput'),
   },
   auth: false,
   data: () => ({
     arrow: new Arrow(window, window.document, 'primary'),
     finding: false,
     form: new Warehouse(),
+    email: null,
+    elements: 0,
     errors: {},
     resource: [],
     success: false,
@@ -361,23 +320,19 @@ export default {
     itemsPerPage: 10,
     itemsPerPageArray: [10],
     headers: [],
+    code: null,
   }),
   watch: {
     'pagination.page'() {
-      return this.onSubmit()
+      return this.onMoreData()
     },
   },
   methods: {
     onSubmit() {
       this.finding = true
       this.form.setFormInstance(this.$refs.warehouse)
-      const params = {
-        page: this.pagination.page,
-        per_page: this.itemsPerPage,
-      }
       this.form
         .store({
-          params,
           responseType: 'arraybuffer',
           headers: {
             'Content-Type': 'application/json',
@@ -397,19 +352,84 @@ export default {
         .catch((errors) => {
           const data = JSON.parse(Buffer.from(errors).toString('utf8'))
           if (has(data, 'message.data')) {
-            this.resource = data.message.data.map((d, i) => {
-              return {
-                ...d,
-                consecutive:
-                  (this.pagination.page - 1) * this.itemsPerPage + (i + 1),
-              }
-            })
-            this.total = data.message.meta.total
-            this.headers = data.message.details.headers
+            this.elements = data.message.data
           } else {
             this.errors = data
             this.$snackbar({ message: this.errors.message })
           }
+        })
+        .finally(() => {
+          this.finding = false
+        })
+    },
+    onNotify() {
+      this.finding = true
+      this.form.resetOnlyWhenUpdate = false
+      this.form
+        .notification()
+        .then((response) => {
+          this.email = response.data
+        })
+        .catch((errors) => {
+          this.errors = errors
+          this.$snackbar({ message: errors.message })
+        })
+        .finally(() => {
+          this.finding = false
+        })
+    },
+    onValidate(code) {
+      this.code = code
+      this.finding = true
+      this.form.resetOnlyWhenUpdate = false
+      const params = {
+        page: this.pagination.page,
+        per_page: this.itemsPerPage,
+      }
+      this.form
+        .validation(code, { params })
+        .then((response) => {
+          this.resource = response.data.data.map((d, i) => {
+            return {
+              ...d,
+              consecutive:
+                (this.pagination.page - 1) * this.itemsPerPage + (i + 1),
+            }
+          })
+          this.total = response.data.meta.total
+          this.headers = response.data.details.headers
+        })
+        .catch((errors) => {
+          this.errors = errors
+          this.$snackbar({ message: errors.message })
+        })
+        .finally(() => {
+          this.finding = false
+        })
+    },
+    onMoreData() {
+      this.finding = true
+      this.form.resetOnlyWhenUpdate = false
+      const params = {
+        page: this.pagination.page,
+        per_page: this.itemsPerPage,
+      }
+      this.form
+        .more({ params })
+        .then((response) => {
+          this.resource = response.data.data.map((d, i) => {
+            return {
+              ...d,
+              consecutive:
+                (this.pagination.page - 1) * this.itemsPerPage + (i + 1),
+            }
+          })
+          this.total = response.data.meta.total
+          this.headers = response.data.details.headers
+        })
+        .catch((errors) => {
+          this.errors = errors
+          this.$snackbar({ message: errors.message })
         })
         .finally(() => {
           this.finding = false
