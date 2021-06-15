@@ -213,12 +213,42 @@
                       label="Código de Verificación"
                       :description="`Hemos enviado un código de verificación al correo ${email}`"
                     >
-                      <v-verification-input
-                        :loading="finding"
-                        :disabled="finding"
-                        required
-                        @complete="onValidate"
-                      />
+                      <v-card flat color="transparent">
+                        <v-card-text>
+                          <v-verification-input
+                            title="Digite el código recibido"
+                            :loading="finding"
+                            :disabled="finding"
+                            required
+                            @complete="onValidate"
+                          />
+                        </v-card-text>
+                        <v-card-text>
+                          <small>
+                            Verifique en la carpeta de Entrada, Spam o No
+                            Deseados de su correo electrónico, de lo contrario
+                            intente reenviar un código nuevamente. Si no recibe
+                            ninguna notificación o no conoce el correo
+                            electrónico asociado a su número de documento por
+                            favor envíe un correo a
+                            <a
+                              href="mailto:soporte@idrd.gov.co?subject='Portal Contratista: Solicitud de Código de Verificación - Paz y Salvo'"
+                            >
+                              soporte@idrd.gov.co
+                            </a>
+                          </small>
+                          <v-timer ref="timer" :secs="60" @onFinish="onOk" />
+                          <v-btn
+                            class="my-1"
+                            color="primary"
+                            :loading="finding"
+                            :disabled="finding || disableResend"
+                            @click="onNotify"
+                          >
+                            Reenviar Código
+                          </v-btn>
+                        </v-card-text>
+                      </v-card>
                     </v-empty-state>
                     <v-skeleton-loader
                       v-else
@@ -250,7 +280,17 @@
                               <v-icon color="white" left dark>
                                 mdi-cloud-download
                               </v-icon>
-                              Descargar Excel
+                              Formato de traslados
+                            </v-btn>
+                            <v-btn
+                              icon
+                              class="my-2 hidden-md-and-up"
+                              color="primary"
+                              @click="onExcel"
+                            >
+                              <v-icon color="white" left dark>
+                                mdi-cloud-download
+                              </v-icon>
                             </v-btn>
                           </v-toolbar>
                         </template>
@@ -304,6 +344,7 @@ export default {
     InfoContent: () => import('~/components/base/InfoContent'),
     VEmptyState: () => import('~/components/base/EmptyState'),
     VVerificationInput: () => import('~/components/base/VVerificationInput'),
+    VTimer: () => import('~/components/base/Timer'),
   },
   auth: false,
   data: () => ({
@@ -321,6 +362,7 @@ export default {
     itemsPerPageArray: [10],
     headers: [],
     code: null,
+    disableResend: true,
   }),
   watch: {
     'pagination.page'() {
@@ -328,6 +370,9 @@ export default {
     },
   },
   methods: {
+    onOk() {
+      this.disableResend = false
+    },
     onSubmit() {
       this.finding = true
       this.form.setFormInstance(this.$refs.warehouse)
@@ -364,11 +409,15 @@ export default {
     },
     onNotify() {
       this.finding = true
+      this.disableResend = true
       this.form.resetOnlyWhenUpdate = false
       this.form
         .notification()
         .then((response) => {
           this.email = response.data
+        })
+        .then(() => {
+          this.$refs.timer.start()
         })
         .catch((errors) => {
           this.errors = errors

@@ -6,7 +6,7 @@
     }"
     v-bind:style="{ width: `${fields * fieldWidth}px` }"
   >
-    <p class="title" v-if="title">{{ title }}</p>
+    <p class="title my-2" v-if="title">{{ title }}</p>
     <div class="react-code-input">
       <template v-for="(v, index) in values">
         <input
