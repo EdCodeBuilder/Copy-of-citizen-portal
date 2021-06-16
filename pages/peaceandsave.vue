@@ -26,262 +26,271 @@
                       <v-tab-item>
                         <v-card flat color="transparent" class="mt-0 px-5">
                           <v-card-text v-show="!success">
-                            <v-banner
-                              v-if="errors.message"
-                              color="error"
-                              class="white--text"
-                            >
-                              <v-avatar slot="icon" color="white" size="40">
-                                <v-icon color="error">mdi-alert</v-icon>
-                              </v-avatar>
-                              {{ errors.message }}
-                              <v-divider class="my-4" />
-                              <template
-                                v-if="typeof errors.details === 'string'"
+                            <template v-if="folders.length === 0">
+                              <v-banner
+                                v-if="errors.message"
+                                color="error"
+                                class="white--text"
                               >
-                                {{ errors.details }}
+                                <v-avatar slot="icon" color="white" size="40">
+                                  <v-icon color="error">mdi-alert</v-icon>
+                                </v-avatar>
+                                {{ errors.message }}
                                 <v-divider class="my-4" />
-                              </template>
-                              <template
-                                v-if="typeof errors.details === 'object'"
-                              >
-                                <p>
-                                  Carpetas y cantidad de radicados por procesar
-                                </p>
-                                <ul
-                                  v-for="(f, i) in errors.details.folders"
-                                  :key="i"
+                                <template
+                                  v-if="typeof errors.details === 'string'"
                                 >
-                                  <li>{{ `${f.folder}: ${f.filed_count}` }}</li>
+                                  {{ errors.details }}
+                                  <v-divider class="my-4" />
+                                </template>
+                                <!--
+                                <template
+                                  v-if="typeof errors.details === 'object'"
+                                >
+                                  <p>
+                                    Carpetas y cantidad de radicados por procesar
+                                  </p>
+                                  <ul
+                                    v-for="(f, i) in errors.details.folders"
+                                    :key="i"
+                                  >
+                                    <li>{{ `${f.folder}: ${f.filed_count}` }}</li>
+                                  </ul>
+                                </template>
+                                -->
+                                <ul v-for="(k, i) in errorsKeys" :key="i">
+                                  <li
+                                    v-for="(val, j) in errors.errors[k]"
+                                    :key="`i-${j}`"
+                                  >
+                                    {{ val }}
+                                  </li>
                                 </ul>
-                              </template>
-                              <ul v-for="(k, i) in errorsKeys" :key="i">
-                                <li
-                                  v-for="(val, j) in errors.errors[k]"
-                                  :key="`i-${j}`"
+                                <template #actions>
+                                  <v-btn icon @click="errors = {}">
+                                    <v-icon dark>mdi-close</v-icon>
+                                  </v-btn>
+                                </template>
+                              </v-banner>
+                              <validation-observer
+                                ref="peace"
+                                v-slot="{ handleSubmit }"
+                              >
+                                <v-form
+                                  @submit.prevent="handleSubmit(onSubmit)"
                                 >
-                                  {{ val }}
-                                </li>
-                              </ul>
-                              <template #actions>
-                                <v-btn icon @click="errors = {}">
-                                  <v-icon dark>mdi-close</v-icon>
-                                </v-btn>
-                              </template>
-                            </v-banner>
-                            <validation-observer
-                              ref="peace"
-                              v-slot="{ handleSubmit }"
-                            >
-                              <v-form @submit.prevent="handleSubmit(onSubmit)">
-                                <v-row dense>
-                                  <!-- Name -->
-                                  <v-col cols="12" md="6" sm="12">
-                                    <validation-provider
-                                      v-slot="{ errors }"
-                                      :rules="
-                                        form.validations
-                                          .input_alpha_spaces_required
-                                      "
-                                      vid="name"
-                                      name="nombre"
-                                    >
-                                      <v-text-field
-                                        id="name"
-                                        v-model="form.name"
-                                        name="name"
-                                        :loading="finding"
-                                        :readonly="finding"
-                                        :error-messages="errors"
-                                        color="primary"
-                                        label="Nombres"
-                                        clearable
-                                        counter
-                                        :maxlength="
+                                  <v-row dense>
+                                    <!-- Document -->
+                                    <v-col cols="12">
+                                      <validation-provider
+                                        v-slot="{ errors }"
+                                        :rules="
                                           form.validations
-                                            .input_alpha_spaces_required.max
+                                            .input_document_required
                                         "
-                                        autocomplete="off"
-                                        required="required"
-                                        prepend-icon="mdi-face"
-                                      />
-                                    </validation-provider>
-                                  </v-col>
-                                  <!-- Surname -->
-                                  <v-col cols="12" md="6" sm="12">
-                                    <validation-provider
-                                      v-slot="{ errors }"
-                                      :rules="
-                                        form.validations
-                                          .input_alpha_spaces_required
-                                      "
-                                      vid="surname"
-                                      name="apellidos"
-                                    >
-                                      <v-text-field
-                                        id="surname"
-                                        v-model="form.surname"
-                                        name="surname"
-                                        :loading="finding"
-                                        :readonly="finding"
-                                        :error-messages="errors"
-                                        color="primary"
-                                        label="Apellidos"
-                                        clearable
-                                        counter
-                                        :maxlength="
-                                          form.validations
-                                            .input_alpha_spaces_required.max
+                                        vid="document"
+                                        :name="$t('inputs.Document')"
+                                      >
+                                        <v-text-field
+                                          id="document"
+                                          v-model.number="form.document"
+                                          name="document"
+                                          :loading="finding"
+                                          :readonly="finding"
+                                          :error-messages="errors"
+                                          color="primary"
+                                          label="Número de Documento"
+                                          clearable
+                                          counter
+                                          :maxlength="12"
+                                          autocomplete="off"
+                                          required="required"
+                                          prepend-icon="mdi-numeric"
+                                        />
+                                      </validation-provider>
+                                    </v-col>
+                                    <!-- Contract -->
+                                    <v-col cols="12" md="6">
+                                      <validation-provider
+                                        v-slot="{ errors }"
+                                        :rules="
+                                          form.validations.input_number_required
                                         "
-                                        autocomplete="off"
-                                        required="required"
-                                        prepend-icon="mdi-face"
-                                      />
-                                    </validation-provider>
-                                  </v-col>
-                                  <!-- Document -->
-                                  <v-col cols="12">
-                                    <validation-provider
-                                      v-slot="{ errors }"
-                                      :rules="
-                                        form.validations.input_document_required
-                                      "
-                                      vid="document"
-                                      :name="$t('inputs.Document')"
-                                    >
-                                      <v-text-field
-                                        id="document"
-                                        v-model.number="form.document"
-                                        name="document"
-                                        :loading="finding"
-                                        :readonly="finding"
-                                        :error-messages="errors"
-                                        color="primary"
-                                        label="Número de Documento"
-                                        clearable
-                                        counter
-                                        :maxlength="12"
-                                        autocomplete="off"
-                                        required="required"
-                                        prepend-icon="mdi-numeric"
-                                      />
-                                    </validation-provider>
-                                  </v-col>
-                                  <!-- Contract -->
-                                  <v-col cols="12" md="6">
-                                    <validation-provider
-                                      v-slot="{ errors }"
-                                      :rules="
-                                        form.validations.input_number_required
-                                      "
-                                      vid="contract"
-                                      name="número de contrato"
-                                    >
-                                      <v-text-field
-                                        id="contract"
-                                        v-model="form.contract"
-                                        name="contract"
-                                        :loading="finding"
-                                        :readonly="finding"
-                                        :error-messages="errors"
-                                        persistent-hint
-                                        hint="Ejemplo: 0933"
-                                        color="primary"
-                                        label="Número de contrato"
-                                        clearable
-                                        counter
-                                        :maxlength="4"
-                                        autocomplete="off"
-                                        required="required"
-                                        prepend-icon="mdi-file"
-                                      />
-                                    </validation-provider>
-                                  </v-col>
-                                  <!-- Year -->
-                                  <v-col cols="12" md="6">
-                                    <validation-provider
-                                      v-slot="{ errors }"
-                                      :rules="
-                                        form.validations.input_text_required
-                                      "
-                                      vid="contract"
-                                      name="año de contrato"
-                                    >
-                                      <v-autocomplete
-                                        id="contract"
-                                        v-model="form.year"
-                                        name="contract"
-                                        :loading="finding"
-                                        :readonly="finding"
-                                        :error-messages="errors"
-                                        persistent-hint
-                                        :items="years"
-                                        :hint="`Ejemplo: ${$moment().year()}`"
-                                        color="primary"
-                                        label="Año de contrato"
-                                        clearable
-                                        counter
-                                        :maxlength="4"
-                                        autocomplete="off"
-                                        required="required"
-                                        prepend-icon="mdi-file"
-                                      />
-                                    </validation-provider>
-                                  </v-col>
-                                  <!-- Virtual File -->
-                                  <v-col cols="12">
-                                    <validation-provider
-                                      v-slot="{ errors }"
-                                      :rules="form.validations.input_text"
-                                      vid="virtual_file"
-                                      name="expediente virtual"
-                                    >
-                                      <v-text-field
-                                        id="virtual_file"
-                                        v-model="form.virtual_file"
-                                        name="virtual_file"
-                                        :loading="finding"
-                                        :readonly="finding"
-                                        :error-messages="errors"
-                                        persistent-hint
-                                        hint="Ejemplo: E123456789075"
-                                        color="primary"
-                                        label="Expediente Virtual (Opcional)"
-                                        clearable
-                                        counter
-                                        :maxlength="
-                                          form.validations.input_text.max
+                                        vid="contract"
+                                        name="número de contrato"
+                                      >
+                                        <v-text-field
+                                          id="contract"
+                                          v-model="form.contract"
+                                          name="contract"
+                                          :loading="finding"
+                                          :readonly="finding"
+                                          :error-messages="errors"
+                                          persistent-hint
+                                          hint="Ejemplo: 0933"
+                                          color="primary"
+                                          label="Número de contrato"
+                                          clearable
+                                          counter
+                                          :maxlength="4"
+                                          autocomplete="off"
+                                          required="required"
+                                          prepend-icon="mdi-file"
+                                        />
+                                      </validation-provider>
+                                    </v-col>
+                                    <!-- Year -->
+                                    <v-col cols="12" md="6">
+                                      <validation-provider
+                                        v-slot="{ errors }"
+                                        :rules="
+                                          form.validations.input_text_required
                                         "
-                                        autocomplete="off"
-                                        prepend-icon="mdi-numeric"
-                                      />
-                                    </validation-provider>
-                                  </v-col>
-                                  <!-- Create User -->
-                                  <v-col cols="12" class="text-right">
-                                    <v-btn
-                                      outlined
-                                      color="primary"
-                                      :loading="finding"
-                                      :disabled="finding"
-                                      :to="localePath({ name: 'certificates' })"
-                                    >
-                                      <v-icon left dark>mdi-arrow-left</v-icon>
-                                      Regresar
-                                    </v-btn>
-                                    <v-btn
-                                      color="primary"
-                                      :loading="finding"
-                                      :disabled="finding"
-                                      type="submit"
-                                    >
-                                      <v-icon left dark>mdi-send</v-icon>
-                                      Generar Paz y Salvo
-                                    </v-btn>
-                                  </v-col>
-                                </v-row>
-                              </v-form>
-                            </validation-observer>
+                                        vid="contract"
+                                        name="año de contrato"
+                                      >
+                                        <v-autocomplete
+                                          id="contract"
+                                          v-model="form.year"
+                                          name="contract"
+                                          :loading="finding"
+                                          :readonly="finding"
+                                          :error-messages="errors"
+                                          persistent-hint
+                                          :items="years"
+                                          :hint="`Ejemplo: ${$moment().year()}`"
+                                          color="primary"
+                                          label="Año de contrato"
+                                          clearable
+                                          counter
+                                          :maxlength="4"
+                                          autocomplete="off"
+                                          required="required"
+                                          prepend-icon="mdi-file"
+                                        />
+                                      </validation-provider>
+                                    </v-col>
+                                    <!-- Virtual File -->
+                                    <v-col cols="12">
+                                      <validation-provider
+                                        v-slot="{ errors }"
+                                        :rules="form.validations.input_text"
+                                        vid="virtual_file"
+                                        name="expediente virtual"
+                                      >
+                                        <v-text-field
+                                          id="virtual_file"
+                                          v-model="form.virtual_file"
+                                          name="virtual_file"
+                                          :loading="finding"
+                                          :readonly="finding"
+                                          :error-messages="errors"
+                                          persistent-hint
+                                          hint="Ejemplo: 123456789075E"
+                                          color="primary"
+                                          label="Expediente Virtual (Opcional)"
+                                          clearable
+                                          counter
+                                          :maxlength="
+                                            form.validations.input_text.max
+                                          "
+                                          autocomplete="off"
+                                          prepend-icon="mdi-numeric"
+                                        />
+                                      </validation-provider>
+                                    </v-col>
+                                    <!-- Create User -->
+                                    <v-col cols="12" class="text-right">
+                                      <v-btn
+                                        outlined
+                                        color="primary"
+                                        :loading="finding"
+                                        :disabled="finding"
+                                        :to="
+                                          localePath({ name: 'certificates' })
+                                        "
+                                      >
+                                        <v-icon left dark>
+                                          mdi-arrow-left
+                                        </v-icon>
+                                        Regresar
+                                      </v-btn>
+                                      <v-btn
+                                        color="primary"
+                                        :loading="finding"
+                                        :disabled="finding"
+                                        type="submit"
+                                      >
+                                        <v-icon left dark>mdi-send</v-icon>
+                                        Generar Paz y Salvo
+                                      </v-btn>
+                                    </v-col>
+                                  </v-row>
+                                </v-form>
+                              </validation-observer>
+                            </template>
+                            <template v-else>
+                              <v-row align="center">
+                                <v-col cols="12">
+                                  <h2 class="text-h2 text-center">
+                                    Actualmente cuenta con
+                                  </h2>
+                                  <h2 class="display-serif-4 text-center">
+                                    {{ errors.details.total }}
+                                  </h2>
+                                  <h3 class="text-center">
+                                    radicado(s) sin procesar
+                                  </h3>
+                                </v-col>
+                                <v-col cols="12">
+                                  <v-card
+                                    class="mx-auto"
+                                    max-width="300"
+                                    flat
+                                    color="transparent"
+                                  >
+                                    <v-list subheader>
+                                      <v-subheader>
+                                        Por favor revise las siguientes carpetas
+                                      </v-subheader>
+                                      <v-list-item
+                                        v-for="(folder, i) in folders"
+                                        :key="i"
+                                      >
+                                        <v-list-item-avatar>
+                                          <v-icon class="grey lighten-1" dark>
+                                            mdi-folder
+                                          </v-icon>
+                                        </v-list-item-avatar>
+                                        <v-list-item-content>
+                                          <v-list-item-title
+                                            v-text="folder.folder"
+                                          />
+                                        </v-list-item-content>
+                                        <v-list-item-action>
+                                          <v-btn fab x-small color="red">
+                                            <span class="display-serif-1">
+                                              {{ folder.filed_count }}
+                                            </span>
+                                          </v-btn>
+                                        </v-list-item-action>
+                                      </v-list-item>
+                                    </v-list>
+                                  </v-card>
+                                </v-col>
+                                <v-col cols="12" class="text-center">
+                                  <v-btn
+                                    outlined
+                                    color="primary"
+                                    :loading="finding"
+                                    :disabled="finding"
+                                    @click="folders = []"
+                                  >
+                                    Regresar
+                                  </v-btn>
+                                </v-col>
+                              </v-row>
+                            </template>
                           </v-card-text>
                           <v-card-text v-show="success">
                             <v-empty-state
@@ -528,6 +537,7 @@
 
 <script>
 import FileSaver from 'file-saver'
+import { has } from 'lodash'
 import { Arrow } from '~/plugins/Arrow'
 import { Certification } from '~/models/services/portal/Certification'
 
@@ -565,6 +575,7 @@ export default {
         text: 'Consultar Paz y Salvo',
       },
     ],
+    folders: [],
   }),
   mounted() {
     this.$vuetify.goTo('#certificates', {
@@ -597,6 +608,9 @@ export default {
         })
         .catch((errors) => {
           this.errors = JSON.parse(Buffer.from(errors).toString('utf8'))
+          if (has(this.errors, 'details.folders')) {
+            this.folders = this.errors.details.folders
+          }
           this.$snackbar({ message: this.errors.message })
         })
         .finally(() => {

@@ -134,6 +134,35 @@
                                 />
                               </validation-provider>
                             </v-col>
+                            <!-- Virtual File -->
+                            <v-col cols="12">
+                              <validation-provider
+                                v-slot="{ errors }"
+                                :rules="form.validations.input_text"
+                                vid="virtual_file"
+                                name="expediente virtual"
+                              >
+                                <v-text-field
+                                  id="virtual_file"
+                                  v-model="form.virtual_file"
+                                  name="virtual_file"
+                                  :loading="finding"
+                                  :readonly="finding"
+                                  :error-messages="errors"
+                                  persistent-hint
+                                  hint="Ejemplo: 123456789075E"
+                                  color="primary"
+                                  label="Expediente Virtual (Opcional)"
+                                  clearable
+                                  counter
+                                  :maxlength="
+                                    form.validations.input_text.max
+                                  "
+                                  autocomplete="off"
+                                  prepend-icon="mdi-numeric"
+                                />
+                              </validation-provider>
+                            </v-col>
                             <!-- Create User -->
                             <v-col cols="12" class="text-right">
                               <v-btn

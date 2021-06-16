@@ -47,9 +47,7 @@
                       <v-icon slot="icon" color="success" size="36">
                         mdi-check-circle
                       </v-icon>
-                      {{
-                        `Este documento fue emitido a nombre de ${user.name} identificado con el número de documento ${user.document} para el contrato ${user.contract}.`
-                      }}
+                      {{ user.message }}
                       <template #actions>
                         <v-btn color="primary" text @click="user = {}">
                           Ok

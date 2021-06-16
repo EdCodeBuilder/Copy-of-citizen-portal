@@ -41,9 +41,8 @@
                               :to="card.to ? localePath(card.to) : undefined"
                               :href="card.href"
                               :target="card.href ? '_blank' : undefined"
-                            >
-                              Ir
-                            </v-btn>
+                              v-text="card.btnText"
+                            />
                           </v-card-actions>
                         </v-card>
                       </v-col>
@@ -77,10 +76,11 @@ export default {
   data: () => ({
     cards: [
       {
-        title: 'Certificado Laboral',
+        title: 'Certificado de Contratistas',
         src:
           'https://images.unsplash.com/photo-1589330694653-ded6df03f754?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1089&q=80',
         flex: 12,
+        btnText: 'Generar',
         href: 'https://www.idrd.gov.co/SIM/CertificacionContratos/generador',
       },
       {
@@ -88,13 +88,15 @@ export default {
         src:
           'https://images.unsplash.com/photo-1560264280-88b68371db39?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
         flex: 6,
+        btnText: 'Generar',
         to: { name: 'peaceandsave' },
       },
       {
-        title: 'Paz y Salvo Almacen',
+        title: 'Paz y Salvo Almacén',
         src:
           'https://images.unsplash.com/photo-1553413077-190dd305871c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
         flex: 6,
+        btnText: 'Generar',
         to: { name: 'warehousepeaceandsave' },
       },
       {
@@ -102,6 +104,7 @@ export default {
         src:
           'https://images.unsplash.com/photo-1518976024611-28bf4b48222e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1532&q=80',
         flex: 12,
+        btnText: 'Validar',
         to: { name: 'validate-document' },
       },
     ],
