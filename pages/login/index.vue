@@ -69,6 +69,7 @@
                     <template #label>
                       {{ $t('inputs.RememberMe') }}
                       <v-spacer></v-spacer>
+                      <!--
                       <nuxt-link
                         :to="localePath('/password/forgot')"
                         class="primary--text caption hidden-sm-and-down"
@@ -89,6 +90,7 @@
                         </template>
                         <span>{{ $t('texts.ForgotPassword') }}</span>
                       </v-tooltip>
+                      -->
                     </template>
                   </v-checkbox>
                   <v-card-actions>
@@ -113,6 +115,20 @@
         </validation-observer>
       </v-card>
     </v-slide-y-transition>
+    <v-dialog v-model="dialog" max-width="500">
+      <v-card flat>
+        <v-card-title>
+          <v-icon class="text-center" color="amber" large>mdi-alert</v-icon>
+        </v-card-title>
+        <v-card-text>
+          <p>Acceso para funcionarios con premisos al Portal Contratista</p>
+        </v-card-text>
+        <v-card-actions class="text-right">
+          <v-spacer />
+          <v-btn outlined color="primary" @click="dialog = !dialog">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 
@@ -137,6 +153,7 @@ export default {
   auth: 'guest',
   middleware: ['token'],
   data: () => ({
+    dialog: false,
     show: false,
     loading: false,
     form: {
@@ -159,6 +176,10 @@ export default {
       autoplay: true,
       animationData: office.default,
     })
+    const that = this
+    setTimeout(function () {
+      that.dialog = true
+    }, 500)
   },
   methods: {
     onSubmit() {
