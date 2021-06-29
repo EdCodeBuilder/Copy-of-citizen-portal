@@ -121,7 +121,7 @@
           <v-icon class="text-center" color="amber" large>mdi-alert</v-icon>
         </v-card-title>
         <v-card-text>
-          <p>Acceso para funcionarios con premisos al Portal Contratista</p>
+          <p>Acceso para funcionarios con permisos al Portal Contratista</p>
         </v-card-text>
         <v-card-actions class="text-right">
           <v-spacer />
