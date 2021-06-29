@@ -1699,7 +1699,7 @@
                 cols="12"
                 class="align-content-center align-items-center align-self-center justify-content-center text-center"
               >
-                <vue-qrcode :value="user.whatsapp_link" />
+                <vue-qrcode :width="300" :value="user.whatsapp_link" />
               </v-col>
             </template>
           </v-row>

@@ -155,9 +155,7 @@
                                   label="Expediente Virtual (Opcional)"
                                   clearable
                                   counter
-                                  :maxlength="
-                                    form.validations.input_text.max
-                                  "
+                                  :maxlength="form.validations.input_text.max"
                                   autocomplete="off"
                                   prepend-icon="mdi-numeric"
                                 />
@@ -218,7 +216,7 @@
                           color="primary"
                           :loading="finding"
                           :disabled="finding"
-                          @click="resource = []"
+                          @click="elements = 0"
                         >
                           Regresar
                         </v-btn>
