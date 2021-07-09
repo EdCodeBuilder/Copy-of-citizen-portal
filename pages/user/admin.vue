@@ -18,6 +18,7 @@
                     :loading="finding"
                     v-model="form.username"
                     :search-input.sync="search_user"
+                    :filter="customFilter"
                     :error-messages="errors"
                     hint="Realice la búqueda por nombre de usuario, luego selecciónelo para mostrar los roles disponbles para asignar."
                     persistent-hint
@@ -202,6 +203,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { Admin } from '~/models/services/portal/Admin'
 
 export default {
@@ -304,6 +306,14 @@ export default {
       } else {
         this.$snackbar({ message: 'Selecciona un rol para continuar.' })
       }
+    },
+    customFilter(item, queryText, itemText) {
+      const text = _.toLower(queryText)
+      return _.filter(item, function (object) {
+        return _(object).some(function (string) {
+          return _(string).toLower().includes(text)
+        })
+      })
     },
     // Loading
     start() {

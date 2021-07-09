@@ -16,7 +16,6 @@
           size="20"
           v-text="item.icon"
         />
-
         <span class="hidden-sm-and-down" v-text="item.text" />
       </v-btn>
       <Language />

@@ -135,7 +135,7 @@
 <router lang="yaml">
 path: /login
 meta:
-title: Login
+  title: Login
 </router>
 
 <script>
