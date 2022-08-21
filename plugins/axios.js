@@ -1,6 +1,6 @@
 import { setClient } from '@/models/client'
 
-export default ({ app, $axios, redirect, error }) => {
+export default ({ app, $axios, redirect, error, store }) => {
   $axios.setHeader('X-Localization', app.i18n.locale)
   $axios.setHeader('X-Requested-With', 'XMLHttpRequest')
   $axios.setHeader('Accept', 'application/json')
@@ -23,14 +23,20 @@ export default ({ app, $axios, redirect, error }) => {
         // eslint-disable-next-line
         console.log(errors.response)
         if (app.$auth.loggedIn) {
-          app.$auth
-            .logout()
-            .finally(() => redirect(`/${app.i18n.locale}/login`))
+          app.$auth.logout().finally(() => {
+            redirect(app.localePath({ name: 'login' }))
+            store.dispatch('app/unsetMenuDrawer')
+            store.dispatch('app/unsetBouncer')
+          })
         } else {
-          redirect(`/${app.i18n.locale}/login`)
+          redirect(app.localePath({ name: 'login' }))
+          store.dispatch('app/unsetMenuDrawer')
+          store.dispatch('app/unsetBouncer')
         }
       }
-      if (![401, 422, 429, 404, 419].includes(errors.response.status)) {
+      if (
+        ![401, 403, 422, 429, 404, 419, 504].includes(errors.response.status)
+      ) {
         // eslint-disable-next-line
         console.log(errors.response)
         error({
@@ -38,12 +44,21 @@ export default ({ app, $axios, redirect, error }) => {
           message: errors.response.data.message,
         })
       }
+      if ([504].includes(errors.response.status)) {
+        // eslint-disable-next-line
+        console.log(errors.response)
+        error({
+          statusCode: errors.response.status,
+          message:
+            'El servidor S.I.M. ha tardado en responder a tu solicitud, es posible que se estén realizando muchas solicitudes en este momento y el servidor esté congestionado. Intenta nuevamente en unos instantes y si el problema persiste, comunícate con soporte.',
+        })
+      }
     } else if (errors.request) {
       // The request was made but no response was received
       // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
       // http.ClientRequest in node.js
       if (process.env.NODE_ENV === 'production') {
-        redirect(`/${app.i18n.locale}/login`)
+        redirect(app.localePath({ name: 'login' }))
       }
       if (process.env.NODE_ENV !== 'production') {
         // eslint-disable-next-line

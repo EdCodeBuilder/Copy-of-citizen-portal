@@ -48,6 +48,12 @@ export default {
     min: 3,
     max: 30,
   },
+  input_alpha_dash_required_perms: {
+    required: true,
+    alpha_dash: true,
+    min: 3,
+    max: 191,
+  },
   input_alpha_dots_required: {
     required: true,
     alpha_dots: true,

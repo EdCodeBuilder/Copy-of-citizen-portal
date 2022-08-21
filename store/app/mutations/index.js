@@ -1,4 +1,10 @@
+// Utilities
+import { make } from 'vuex-pathify'
+import Bouncer from '~/utils/Bouncer'
+import state from '~/store/app/state'
+
 const mutations = {
+  ...make.mutations(state),
   SET_LANG(state, locale) {
     if (state.locales.includes(locale)) {
       state.locale = locale
@@ -81,6 +87,16 @@ const mutations = {
   },
   UNSET_PERMISSIONS(state) {
     state.permissions = []
+  },
+  SET_BOUNCER(state, payload) {
+    state.bouncer = new Bouncer(payload)
+  },
+  UNSET_BOUNCER(state) {
+    state.bouncer = new Bouncer({
+      id: null,
+      roles: [],
+      abilities: [],
+    })
   },
 }
 

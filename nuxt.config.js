@@ -1,6 +1,9 @@
 export default {
   ssr: false,
   dev: process.env.NODE_ENV !== 'production',
+  server: {
+    host: '0.0.0.0' // default: localhost
+  },
   env: {
     baseURL: process.env.VUE_APP_BASE_URL
   },
@@ -21,7 +24,7 @@ export default {
       { name: 'msapplication-TileColor', content: '#594d95' },
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: `/portal-contratista-dev/favicon.ico` },
+      { rel: 'icon', type: 'image/x-icon', href: `${process.env.VUE_APP_PUBLIC_PATH}/favicon.ico` },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900' },
       { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto+Slab:100,200,300,400,500,600,700,800,900&display=swap' }
     ],
@@ -45,6 +48,7 @@ export default {
    */
   css: [
     '~/assets/main.sass',
+    'vue-json-pretty/lib/styles.css',
   ],
   /*
    ** Plugins to load before mounting the App
@@ -52,10 +56,13 @@ export default {
   plugins: [
     { src: '~/plugins/vuex-persist', ssr: false },
     { src: '~/plugins/chartist', ssr: false },
+    { src: '~/plugins/copy', ssr: false },
     { src: '~/plugins/apexcharts', ssr: false },
     { src: '~/plugins/google-maps', ssr: false },
     { src: '~/plugins/tiptap', ssr: false },
     { src: '~/plugins/consent', ssr: false },
+    { src: '~/plugins/youtube', ssr: false },
+    { src: '~/plugins/json-pretty' },
     { src: '~/plugins/vee-validate' },
     { src: '~/plugins/i18n' },
     { src: '~/plugins/string' },
@@ -126,10 +133,12 @@ export default {
   pwa: {
     meta: {
       name: process.env.VUE_APP_MANIFIEST_TITLE,
-      author: 'Instituto Distrital de Recreación y Deporte',
+      author: process.env.VUE_APP_AUTHOR,
       description: process.env.VUE_APP_DESCRIPTION,
       mobileAppIOS: true,
-      nativeUI: true,
+      nativeUI: false,
+      appleStatusBarStyle: 'default', // default - black - black-translucent
+      lang: 'es',
     },
     manifest: {
       name: process.env.VUE_APP_MANIFIEST_TITLE,
@@ -137,7 +146,7 @@ export default {
       description: process.env.VUE_APP_DESCRIPTION,
       theme_color: '#ffffff',
       lang: 'es',
-      start_url: `${process.env.VUE_APP_PUBLIC_PATH}/es/login/?standalone=true`,
+      start_url: `${process.env.VUE_APP_PUBLIC_PATH}/es/iniciar-sesion?standalone=true`,
     },
   },
   /*
@@ -190,7 +199,7 @@ export default {
         },
         endpoints: {
           login: {
-            url: '/api/contractors-portal/login',
+            url: `/${process.env.VUE_APP_API_PREFIX}/login`,
             method: 'post',
             propertyName: 'access_token'
           },

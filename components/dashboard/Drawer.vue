@@ -24,9 +24,9 @@
             class="text-uppercase font-weight-regular display-2"
           >
             <div :class="$vuetify.rtl ? 'ml-3' : 'mr-3'" class="logo-mini">
-              PC
+              {{ miniText }}
             </div>
-            <div class="logo-normal">PORTAL CONTRATISTA</div>
+            <div class="logo-normal">{{ completeText }}</div>
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
@@ -159,6 +159,12 @@ export default {
         ],
       }
     },
+    miniText() {
+      return process.env.VUE_APP_DRAWER_MINI
+    },
+    completeText() {
+      return process.env.VUE_APP_DRAWER
+    },
   },
   watch: {
     '$vuetify.breakpoint.smAndDown'(val) {
@@ -184,7 +190,11 @@ export default {
             message: errors.response ? errors.response.data.message : errors,
           })
         })
-        .finally(() => this.$router.push(this.localePath('/login')))
+        .finally(() => {
+          this.$router.push(this.localePath({ name: 'login' }))
+          this.$store.dispatch('app/unsetMenuDrawer')
+          this.$store.dispatch('app/unsetBouncer')
+        })
     },
   },
 }

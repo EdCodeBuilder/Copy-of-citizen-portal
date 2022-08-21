@@ -53,6 +53,11 @@
   </v-container>
 </template>
 
+<router lang="yaml">
+meta:
+  title: Error
+</router>
+
 <script>
 import lottie from 'lottie-web/build/player/lottie'
 import * as error404 from '~/static/lottie/404.json'

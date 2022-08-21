@@ -17,6 +17,15 @@ export default function ({ app }) {
   extend('alpha_dots', (value) => {
     return (alphaDots[app.i18n.locale] || alphaDots.es).test(value)
   })
+  extend('url', (value) => {
+    let url = null
+    try {
+      url = new URL(value)
+    } catch (_) {
+      return false
+    }
+    return ['http:', 'https:'].includes(url.protocol)
+  })
   extend('date_format', {
     validate(value, { format }) {
       return app.$moment(value, format, true).isValid()

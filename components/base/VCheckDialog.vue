@@ -2,26 +2,27 @@
   <v-dialog
     v-model="model"
     v-bind="$attrs"
-    max-width="300"
+    :max-width="width"
     @click:outside="onCancel"
   >
     <v-card>
       <v-toolbar dark :color="toolbarColor">
         <v-toolbar-title v-text="header" />
         <v-spacer />
-        <v-btn icon dark @click="onClose">
+        <slot name="toolbar-buttons" />
+        <v-btn :aria-label="$t('buttons.Close')" icon dark @click="onClose">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-toolbar>
       <v-card-text class="mt-3">
         <slot />
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions v-if="showBtn">
         <v-spacer />
-        <v-btn text color="error" @click="onCancel">
+        <v-btn :aria-label="cancelBtn" text color="error" @click="onCancel">
           {{ cancelBtn }}
         </v-btn>
-        <v-btn text color="success" @click="onOk">
+        <v-btn :aria-label="okBtn" text color="success" @click="onOk">
           {{ okBtn }}
         </v-btn>
       </v-card-actions>
@@ -37,7 +38,15 @@ export default {
       type: String,
       default: 'error',
     },
+    width: {
+      type: [Number, String],
+      default: '300',
+    },
     useTrans: {
+      type: Boolean,
+      default: true,
+    },
+    showBtn: {
       type: Boolean,
       default: true,
     },
@@ -64,10 +73,14 @@ export default {
       return this.useTrans ? this.$t(this.title) : this.title
     },
     okBtn() {
-      return this.useTrans ? this.$t(this.okBtnText) : this.okBtnText
+      return this.okBtnText.includes('.')
+        ? this.$t(this.okBtnText)
+        : this.okBtnText
     },
     cancelBtn() {
-      return this.useTrans ? this.$t(this.cancelBtnText) : this.cancelBtnText
+      return this.cancelBtnText.includes('.')
+        ? this.$t(this.cancelBtnText)
+        : this.cancelBtnText
     },
   },
   methods: {
@@ -78,17 +91,21 @@ export default {
         this.reject = reject
       })
     },
-    onClose() {
-      this.reject(false)
+    close() {
       this.model = false
+      return this.reject && this.reject(false)
+    },
+    onClose() {
+      this.model = false
+      return this.reject && this.reject(false)
     },
     onCancel() {
-      this.reject(false)
       this.model = false
+      return this.reject && this.reject(false)
     },
     onOk() {
-      this.resolve(true)
       this.model = false
+      return this.resolve && this.resolve(true)
     },
   },
 }

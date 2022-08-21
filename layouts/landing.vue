@@ -6,13 +6,8 @@
         <v-container class="fill-height justify-center" tag="section">
           <v-row align="center" class="text-center" justify="center">
             <v-col class="mb-10">
-              <v-landing-heading>
-                Portal
-                <v-badge content="DEV" tile light>Contratista</v-badge>
-              </v-landing-heading>
-              <v-landing-subheading>
-                Servicio de Certificados y Paz y Salvo del IDRD
-              </v-landing-subheading>
+              <v-landing-heading v-text="title" />
+              <v-landing-subheading v-text="author" />
               <v-btn
                 outlined
                 icon
@@ -48,8 +43,7 @@ export default {
     UpdateNotification: () => import('@/components/base/UpdateAvailable'),
   },
   data: () => ({
-    bg:
-      'https://demos.creative-tim.com/vue-material-kit-pro/img/vue-mk-header.f24b2888.jpg',
+    bg: require('@/static/login.jpg'),
     duration: 300,
     offset: 0,
     easing: 'easeInOutCubic',
@@ -62,6 +56,12 @@ export default {
         offset: this.offset,
         easing: this.easing,
       }
+    },
+    title() {
+      return process.env.VUE_APP_DRAWER
+    },
+    author() {
+      return process.env.VUE_APP_AUTHOR
     },
   },
 }

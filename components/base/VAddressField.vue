@@ -26,7 +26,6 @@
           <v-text-field
             v-model="address"
             readonly
-            clearable
             prepend-icon="mdi-dots-horizontal"
             :label="$t('addressDialog.input')"
             append-outer-icon="mdi-backspace"
@@ -95,7 +94,7 @@
           <h2 class="title mb-2">
             {{ $t('addressDialog.frequentNom') }}
             <v-btn small text outlined @click="all_types = !all_types">
-              {{ $t(`buttons.${all_types ? 'ViewMore' : 'ViewLess'}`) }}
+              {{ $t(`buttons.${all_types ? 'ViewLess' : 'ViewMore'}`) }}
             </v-btn>
           </h2>
           <v-btn
@@ -349,6 +348,13 @@ export default {
       { id: 'VTE', name: 'VARIANTE' },
       { id: 'PAR', name: 'PARQUE' },
       { id: 'VIA', name: 'VIA' },
+      { id: 'URB', name: 'URBANIZACION' },
+      { id: 'CON', name: 'CONJUNTO RESIDENCIAL' },
+      { id: 'AP', name: 'APARTAMENTO' },
+      { id: 'CA', name: 'CASA' },
+      { id: 'IN', name: 'INTERIOR' },
+      { id: 'BL', name: 'BLOQUE' },
+      { id: 'MZ', name: 'MANZANA' },
     ],
     letters: [
       { id: '#', name: "NUMERAL '#'" },

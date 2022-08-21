@@ -42,19 +42,48 @@
               {{ expiresAt }}
             </p>
           </v-card-text>
+          <v-card-actions class="text-center">
+            <v-user-agent />
+          </v-card-actions>
         </base-material-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
+<router lang="yaml">
+meta:
+  title: Profile
+</router>
+
 <script>
 import MaterialCard from '~/components/base/MaterialCard'
+import { Constants } from '@/utils/Constants'
+import { Api } from '~/models/Api'
+import { Menu } from '~/models/services/citizen/Menu'
 export default {
   name: 'Profile',
+  nuxtI18n: {
+    paths: {
+      en: '/user/profile',
+      es: '/usuario/perfil',
+    },
+  },
   auth: 'auth',
+  meta: {
+    permissionsUrl: Api.END_POINTS.CITIZEN_PERMISSIONS(),
+    roles: [
+      Constants.Roles.ROLE_ROOT,
+      Constants.Roles.ROLE_ADMIN,
+      Constants.Roles.ROLE_VIEWER,
+    ],
+  },
+  created() {
+    this.drawerModel = new Menu()
+  },
   components: {
     BaseMaterialCard: MaterialCard,
+    VUserAgent: () => import('~/components/base/VUserAgent'),
   },
   head: (vm) => ({
     title: vm.$t('titles.Profile'),
@@ -72,7 +101,7 @@ export default {
     },
     expiresAt() {
       return this.$moment(this.profile.expires_at).isValid()
-        ? this.$moment(this.profile.expires_at).toNow()
+        ? this.$moment(this.profile.expires_at).fromNow()
         : ''
     },
   },

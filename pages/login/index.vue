@@ -21,6 +21,9 @@
                 </v-col>
                 <v-col cols="12" md="6" sm="12">
                   <Sim></Sim>
+                  <v-icon v-if="isDev" color="primary" size="36">
+                    mdi-dev-to
+                  </v-icon>
                   <validation-provider
                     v-slot="{ errors }"
                     rules="required|min:3|max:45"
@@ -44,7 +47,7 @@
                   </validation-provider>
                   <validation-provider
                     v-slot="{ errors }"
-                    rules="required|min:8|max:20"
+                    rules="required|min:8|max:32"
                     vid="password"
                     :name="$t('inputs.Password')"
                   >
@@ -57,7 +60,7 @@
                       :error-messages="errors"
                       clearable
                       counter
-                      :maxlength="20"
+                      :maxlength="32"
                       autocomplete="off"
                       required="required"
                       :type="show ? 'text' : 'password'"
@@ -69,26 +72,6 @@
                     <template #label>
                       {{ $t('inputs.RememberMe') }}
                       <v-spacer></v-spacer>
-                      <nuxt-link
-                        :to="localePath('/password/forgot')"
-                        class="primary--text caption hidden-sm-and-down"
-                      >
-                        {{ $t('texts.ForgotPassword') }}
-                      </nuxt-link>
-                      <v-tooltip top>
-                        <template #activator="{ on, attrs }">
-                          <v-btn
-                            icon
-                            color="primary"
-                            class="hidden-md-and-up"
-                            v-bind="attrs"
-                            v-on="on"
-                          >
-                            <v-icon>mdi-help-circle</v-icon>
-                          </v-btn>
-                        </template>
-                        <span>{{ $t('texts.ForgotPassword') }}</span>
-                      </v-tooltip>
                     </template>
                   </v-checkbox>
                   <v-card-actions>
@@ -113,13 +96,27 @@
         </validation-observer>
       </v-card>
     </v-slide-y-transition>
+    <v-dialog v-model="dialog" max-width="500">
+      <v-card flat>
+        <v-card-title>
+          <v-icon class="text-center" color="amber" large>mdi-alert</v-icon>
+        </v-card-title>
+        <v-card-text>
+          <p>Acceso para funcionarios con permisos al Portal Contratista</p>
+        </v-card-text>
+        <v-card-actions class="text-right">
+          <v-spacer />
+          <v-btn outlined color="primary" @click="dialog = !dialog">OK</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 
 <router lang="yaml">
 path: /login
 meta:
-title: Login
+  title: Login
 </router>
 
 <script>
@@ -129,6 +126,12 @@ import Sim from '~/components/icons/Sim'
 import Town from '~/components/icons/Town'
 export default {
   name: 'Login',
+  nuxtI18n: {
+    paths: {
+      en: '/login',
+      es: '/iniciar-sesion',
+    },
+  },
   components: {
     Sim,
     Town,
@@ -137,6 +140,7 @@ export default {
   auth: 'guest',
   middleware: ['token'],
   data: () => ({
+    dialog: false,
     show: false,
     loading: false,
     form: {
@@ -150,6 +154,10 @@ export default {
   }),
   computed: {
     styles: (vm) => (vm.$vuetify.breakpoint.mdAndUp ? 'min-width: 400px;' : ''),
+    isDev() {
+      const test = process.env.VUE_APP_API_URL_BASE || ''
+      return test.includes('api-dev') || test.includes('test')
+    },
   },
   mounted() {
     lottie.loadAnimation({
@@ -159,6 +167,10 @@ export default {
       autoplay: true,
       animationData: office.default,
     })
+    const that = this
+    setTimeout(function () {
+      that.dialog = true
+    }, 500)
   },
   methods: {
     onSubmit() {
@@ -166,7 +178,7 @@ export default {
       this.$auth
         .loginWith('local', { data: this.form })
         .then(() => {
-          this.$router.push(this.localePath({ name: 'index' }))
+          this.$router.push(this.localePath({ name: 'home' }))
         })
         .catch((errors) => {
           this.loading = false

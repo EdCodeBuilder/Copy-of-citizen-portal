@@ -10,12 +10,13 @@
         <div class="body-3 grey--text font-weight-light" v-text="title" />
         <h3
           v-if="animatedNumber"
-          class="display-2 font-weight-light text--primary"
+          class="display-2 font-weight-regular text--primary"
         >
           <animated-number
             :value="value"
+            round
             :format-value="nFormatter"
-            :duration="500"
+            :duration="800"
           />
         </h3>
         <h3 v-else class="display-2 font-weight-light text--primary">
@@ -128,7 +129,7 @@ export default {
         if (Math.abs(num) > 999999) {
           return Math.sign(num) * (Math.abs(num) / 1000000).toFixed(1) + 'M'
         }
-        return Math.sign(num) * Math.abs(num)
+        return Math.sign(num) * Math.abs(num).toFixed(0)
       }
       return num
     },

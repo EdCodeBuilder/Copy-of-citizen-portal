@@ -1,3 +1,5 @@
+// Utilities
+import pathify from '@/plugins/vuex-pathify'
 const vuexPersistEmitter = () => {
   return (store) => {
     store.subscribe((mutation) => {
@@ -7,4 +9,4 @@ const vuexPersistEmitter = () => {
     })
   }
 }
-export const plugins = [vuexPersistEmitter()]
+export const plugins = [vuexPersistEmitter(), pathify.plugin]

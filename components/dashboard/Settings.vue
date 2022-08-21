@@ -7,7 +7,7 @@
     width="300"
   >
     <v-card-text>
-      <v-btn block class="my-2" color="primary" @click="install">
+      <v-btn v-if="!!pwa" block class="my-2" color="primary" @click="install">
         {{ $t('sidebar.install') }}
         <v-icon right dark>mdi-plus-circle</v-icon>
       </v-btn>
@@ -117,6 +117,8 @@
 </template>
 
 <script>
+// Utilities
+import { call, get } from 'vuex-pathify'
 // Mixins
 import DarkLight from '@/components/base/DarkLight'
 import Language from '@/components/base/Language'
@@ -170,6 +172,7 @@ export default {
     showImg: true,
   }),
   computed: {
+    pwa: get('app/sw@install'),
     barImage: {
       get() {
         return this.$store.getters['app/gerBarImage']
@@ -244,28 +247,7 @@ export default {
     this.$vuetify.rtl = this.rtl
   },
   methods: {
-    install() {
-      const that = this
-      window.addEventListener('beforeinstallprompt', (e) => {
-        // Prevent Chrome 67 and earlier from automatically showing the prompt
-        e.preventDefault()
-        // Stash the event so it can be triggered later.
-        let deferredPrompt = e
-        // Update UI to notify the user they can add to home screen
-        deferredPrompt.prompt()
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            that.$snackbar({
-              message: 'Aplicación Instalada',
-              color: 'success',
-            })
-          } else {
-            that.$snackbar({ message: 'Instalación Cancelada' })
-          }
-          deferredPrompt = null
-        })
-      })
-    },
+    install: call('app/install'),
   },
 }
 </script>

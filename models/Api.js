@@ -1,9 +1,10 @@
 import global from '@/models/routes/global'
-import portal from '@/models/routes/portal'
+import citizen from '@/models/routes/citizen'
 const api = process.env.VUE_APP_API_URL_BASE
 export const Api = {
   END_POINTS: {
     NOTIFICATIONS: () => `${api}/api/notifications`,
+    ANIMATIONS: () => `${api}/api/animations`,
     FORGOT_PASSWORD: () => `${api}/password/forgot`,
     RESET_PASSWORD: () => `${api}/password/reset`,
     LOCATION: () => `${api}/api/localities`,
@@ -22,9 +23,10 @@ export const Api = {
     PARAFISCAL: () => `${api}/api/parafiscal`,
     OFFICES: () => `${api}/api/offices`,
     AREAS: (id) => `${api}/api/offices/${id}/areas`,
+    PARKS: () => `${api}/api/parks`,
     // Global
     ...global,
-    // Portal
-    ...portal,
+    // Citizen
+    ...citizen,
   },
 }

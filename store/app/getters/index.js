@@ -14,6 +14,7 @@ const getters = {
   getSnackBarStatus: (state) => state.showSnack,
   getMenuDrawer: (state) => state.menu,
   getPermissions: (state) => state.permissions,
+  bouncer: (state) => state.bouncer,
 }
 
 export default getters

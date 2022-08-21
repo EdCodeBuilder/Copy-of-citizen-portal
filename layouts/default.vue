@@ -5,9 +5,14 @@
     <v-main>
       <v-container>
         <v-offline />
-        <v-banner elevation="2" outlined transition="slide-y-transition">
+        <v-banner
+          v-if="isDev"
+          elevation="2"
+          outlined
+          transition="slide-y-transition"
+        >
           <v-icon slot="icon" color="primary" size="36">mdi-dev-to</v-icon>
-          Ambiente de pruebas
+          <i18n path="dev" />
         </v-banner>
         <nuxt />
       </v-container>
@@ -28,6 +33,8 @@
 </template>
 
 <script>
+// Utilities
+import { call } from 'vuex-pathify'
 import AppBar from '@/components/dashboard/AppBar'
 import Drawer from '@/components/dashboard/Drawer'
 import SnackBar from '@/components/base/SnackBar'
@@ -36,7 +43,7 @@ import DashboardFooter from '@/components/dashboard/DashboardFooter'
 import Settings from '@/components/dashboard/Settings'
 import Vue from 'vue'
 import GlobalMixin from '@/mixins'
-import { Menu } from '~/models/services/portal/Menu'
+import { Menu } from '~/models/services/citizen/Menu'
 Vue.use(GlobalMixin)
 export default {
   name: 'DashboardLayout',
@@ -59,7 +66,14 @@ export default {
   fetch() {
     this.getMenu()
   },
+  mounted() {
+    this.init()
+  },
   computed: {
+    isDev() {
+      const test = process.env.VUE_APP_API_URL_BASE || ''
+      return test.includes('api-dev') || test.includes('test')
+    },
     rightDrawer: {
       get() {
         return this.$store.getters['app/getStatusRightDrawer']
@@ -78,6 +92,7 @@ export default {
     },
   },
   methods: {
+    init: call('app/init'),
     getMenu() {
       this.model
         .index()

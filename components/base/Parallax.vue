@@ -1,6 +1,6 @@
 <template>
   <div :style="styles">
-    <slot></slot>
+    <slot />
   </div>
 </template>
 
@@ -13,6 +13,14 @@ export default {
       styles: {},
       debounceTimeout: 6,
     }
+  },
+  mounted() {
+    const self = this
+    window.addEventListener('scroll', function () {
+      // if (window.innerWidth > 991) {
+      self.checkForParallax(this.scrollY)
+      // }
+    })
   },
   methods: {
     handleScroll(scrollVal) {
@@ -28,14 +36,6 @@ export default {
       )
       fn()
     },
-  },
-  mounted() {
-    const self = this
-    window.addEventListener('scroll', function () {
-      // if (window.innerWidth > 991) {
-      self.checkForParallax(this.scrollY)
-      // }
-    })
   },
 }
 </script>

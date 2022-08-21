@@ -1,3 +1,5 @@
+import Bouncer from '~/utils/Bouncer'
+
 const state = () => ({
   locales: ['en', 'es'],
   locale: 'es',
@@ -13,27 +15,17 @@ const state = () => ({
   showSnack: false,
   rtl: false,
   snackBar: [],
-  menu: [
-    {
-      icon: 'mdi-view-dashboard',
-      title: 'Dashboard',
-      to: { name: 'orfeo' },
-      exact: true,
-    },
-    {
-      icon: 'mdi-calendar',
-      title: 'Calendario',
-      to: { name: 'calendar' },
-      exact: true,
-    },
-    {
-      icon: 'mdi-domain',
-      title: 'Radicados',
-      to: { name: 'filed' },
-      exact: true,
-    },
-  ],
+  menu: [],
   permissions: [],
+  bouncer: new Bouncer({
+    id: null,
+    roles: [],
+    abilities: [],
+  }),
+  sw: {
+    install: null,
+    update: null,
+  },
 })
 
 export default state
