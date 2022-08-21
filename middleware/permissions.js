@@ -9,7 +9,8 @@ export default async function (context) {
   const meta = context.route.meta[0]
   let model = {}
   const loggedIn = context.app.store.state.auth
-  if (loggedIn && meta.permissionsUrl) {
+  console.log(loggedIn)
+  if (has(loggedIn, 'loggedIn') && loggedIn.loggedIn && meta.permissionsUrl) {
     model = new Auth(meta.permissionsUrl)
   }
   const user = {

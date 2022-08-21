@@ -1,0 +1,365 @@
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["lang-es"],{
+
+/***/ "./locales/es.js":
+/*!***********************!*\
+  !*** ./locales/es.js ***!
+  \***********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es7_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es7.object.get-own-property-descriptors.js */ "./node_modules/core-js/modules/es7.object.get-own-property-descriptors.js");
+/* harmony import */ var core_js_modules_es7_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es7_object_get_own_property_descriptors_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es6_symbol_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es6.symbol.js */ "./node_modules/core-js/modules/es6.symbol.js");
+/* harmony import */ var core_js_modules_es6_symbol_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_symbol_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_web_dom_iterable_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/web.dom.iterable.js */ "./node_modules/core-js/modules/web.dom.iterable.js");
+/* harmony import */ var core_js_modules_web_dom_iterable_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_iterable_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es6_object_to_string_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es6.object.to-string.js */ "./node_modules/core-js/modules/es6.object.to-string.js");
+/* harmony import */ var core_js_modules_es6_object_to_string_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_to_string_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es6_object_keys_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es6.object.keys.js */ "./node_modules/core-js/modules/es6.object.keys.js");
+/* harmony import */ var core_js_modules_es6_object_keys_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_keys_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/esm/defineProperty */ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var core_js_modules_es6_array_iterator_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es6.array.iterator.js */ "./node_modules/core-js/modules/es6.array.iterator.js");
+/* harmony import */ var core_js_modules_es6_array_iterator_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_array_iterator_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_es6_promise_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/es6.promise.js */ "./node_modules/core-js/modules/es6.promise.js");
+/* harmony import */ var core_js_modules_es6_promise_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_promise_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_es6_object_assign_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/es6.object.assign.js */ "./node_modules/core-js/modules/es6.object.assign.js");
+/* harmony import */ var core_js_modules_es6_object_assign_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es6_object_assign_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_es7_promise_finally_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/es7.promise.finally.js */ "./node_modules/core-js/modules/es7.promise.finally.js");
+/* harmony import */ var core_js_modules_es7_promise_finally_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es7_promise_finally_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var vuetify_lib_locale_es__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vuetify/lib/locale/es */ "./node_modules/vuetify/lib/locale/es.js");
+/* harmony import */ var vee_validate_dist_locale_es_json__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vee-validate/dist/locale/es.json */ "./node_modules/vee-validate/dist/locale/es.json");
+var vee_validate_dist_locale_es_json__WEBPACK_IMPORTED_MODULE_11___namespace = /*#__PURE__*/__webpack_require__.t(/*! vee-validate/dist/locale/es.json */ "./node_modules/vee-validate/dist/locale/es.json", 1);
+
+
+
+
+
+
+
+
+
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { Object(_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_5__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  $vuetify: vuetify_lib_locale_es__WEBPACK_IMPORTED_MODULE_10__["default"],
+  validation: _objectSpread({
+    alpha_dots: 'El campo {_field_} solo debe contener letras y puntos',
+    date_format: 'El campo {_field_} no es una fecha válda',
+    greater_than_or_equal_to: 'El campo {_field_} debe ser mayor o igual a {target}',
+    greater_than: 'El campo {_field_} debe ser mayor a {target}',
+    less_than_or_equal_to: 'El campo {_field_} debe ser menor o igual a {target}',
+    less_than: 'El campo {_field_} debe ser menor a {target}',
+    date_equal_to: 'El campo {_field_} debe ser igual a {target}',
+    date_is_between: 'El campo {_field_} debe ser estar entre {min} y {max}'
+  }, vee_validate_dist_locale_es_json__WEBPACK_IMPORTED_MODULE_11__.messages),
+  dev: 'Ambiente de Pruebas',
+  Total: 'Total',
+  All: 'Todo',
+  Yes: 'Si',
+  No: 'No',
+  titles: {
+    AdminUsers: 'Administración de Usuarios',
+    Login: 'Iniciar Sesión',
+    Data: 'Datos',
+    Profile: 'Perfil',
+    Users: 'Usuarios',
+    UsersSchedules: 'Usuarios y Horarios',
+    Home: 'Inicio',
+    Status: 'Estados del Sistema',
+    Stages: 'Escenarios',
+    Programs: 'Programas',
+    Activities: 'Actividades',
+    WeekDays: 'Días',
+    DailyHours: 'Horas',
+    FileTypes: 'Tipos de Archivos',
+    ProfileTypes: 'Tipos de Perfiles',
+    Schedules: 'Horarios',
+    RolesAndPermissions: 'Roles y Permisos',
+    Historic: 'Histórico',
+    Details: 'Detalles',
+    Dashboard: 'Dashboard',
+    Error: 'Error',
+    Audit: 'Auditoría',
+    Logout: 'Cerrar Sesión',
+    Lock: 'Bloqueado',
+    UserValidation: 'Validación de Usuarios',
+    AssignValidator: 'Asignar Validador',
+    AssignStatus: 'Asignar Estado',
+    AssignStatusSign: 'Asignar Estado de Inscripción',
+    ViewObservations: 'Ver Observaciones',
+    ViewAttachment: 'Ver Archivos Adjuntos',
+    ViewActivities: 'Ver Actividades Inscritas',
+    ViewActivitiesDetails: 'Ver Detalles de la Actividad',
+    Observations: 'Observaciones',
+    Attachment: 'Archivos Adjuntos',
+    Filters: 'Filtros',
+    UsersByStage: 'Usuarios por escenario',
+    Notifications: 'Notificaciones',
+    Admin: 'Administrador',
+    Password: 'Olvidé mi Contraseña',
+    AgeGroups: 'Grupos de Edades',
+    PasswordReset: 'Restaurar Contraseña',
+    Remember: 'Recuerde',
+    Settings: 'Confirguración',
+    Modules: 'Módulos',
+    NotFound: 'Esta página no existe',
+    EmptyNotifications: 'No hay notificaciones',
+    ViewAllNotifications: 'Ver todas las notificaciones',
+    Citizen: 'Ciudadano',
+    Massive: 'Masivo',
+    Security: 'Roles y Permisos'
+  },
+  excel: {
+    button: 'Descarga la plantilla actualizada',
+    text: 'En la plantilla del archivo de excel a continuación, las columnas B, D, H, y J contienen selectores que completan automáticamente las casillas A, C, E, G e I, adicionalmente el archivo contiene comentarios de ayuda.',
+    validation: 'Verifica las siguientes filas del archivo de excel',
+    continue: 'Para almacenar los datos y sin importar las coincidencias encontradas, por favor active el campo Forzar Carga y envíe el archivo nuevamente.'
+  },
+  calendar: {
+    today: 'Hoy',
+    month: 'Mes',
+    week: 'Semana',
+    day: 'Día',
+    '4days': '4 días'
+  },
+  snackTitles: {
+    warning: '¡Advertencia!',
+    success: '¡Bien Hecho!',
+    error: '¡Error!',
+    info: '¡Información!'
+  },
+  confirm: {
+    delete: '¿Desea eliminar este registro?. Esta acción no se puede deshacer.',
+    unsubscribe: '¿Estás seguro de desasociar el usuario {user} de esta actividad? Esta acción no se puede deshacer.'
+  },
+  addressDialog: {
+    title: 'Normalizador de Direcciones',
+    helpText: 'Para añadir una dirección presiona los botones correspondientes que aparecen al inferior de este campo.',
+    input: 'Dirección',
+    help: 'Ayuda',
+    toEnd: 'Al finalizar por favor da click en el botón superior o inferior',
+    toDelete: 'Para eliminar una porción de la dirección presiona el botón',
+    toDeleteAll: 'Para eliminar todo el texto presiona',
+    toComplement: 'Para añadir texto complementario a la dirección en la parte inferior podrá insertar dicho complemento.',
+    frequentNom: 'Nomenclaturas Frecuentes',
+    Noms: 'Nomenclaturas',
+    filterNoms: 'Filtrar Nomenclaturas',
+    Numbers: 'Números',
+    Letters: 'Letras',
+    Quadrant: 'Cuadrante',
+    Complement: 'Texto complementario de la dirección',
+    AddComplement: 'Añadir Complemento'
+  },
+  texts: {
+    Error: 'Ha ocurrido un error',
+    EmptyModules: 'No hay Módulos',
+    EmptyModulesText: 'Aún no tiene módulos asignados para acceder, por favor envíe un correo a soporte para solicitar accesos. Gracias.',
+    ForgotPassword: 'Olvidé mi contraseña',
+    OldLogin: 'Ir al sitio anterior',
+    PasswordWarning: 'Al cambiar su contraseña, ésta será la misma para Orfeo, Correo, SIM, Red, PC e Intranet'
+  },
+  inputs: {
+    Name: 'Nombre',
+    Document: 'Número de Documento',
+    Username: 'Usuario',
+    Password: 'Contraseña',
+    PasswordConfirmation: 'Confirmar Contraseña',
+    RememberMe: 'Recordarme',
+    Email: 'Correo electrónico',
+    EmailConfirmation: 'Confirmar Correo electrónico',
+    Captcha: 'Completa el captcha',
+    Role: 'Rol',
+    Permission: 'Permiso',
+    Title: 'Título',
+    SearchPark: 'Buscar Parque',
+    File: 'Archivo',
+    Force: 'Forzar Carga'
+  },
+  helper: {
+    ContactForgotMail: 'Correo electrónico de contácto en donde se enviará el link de restablecimiento de contraseña',
+    UserAdmin: 'Realice la búqueda por nombre de usuario, luego selecciónelo para mostrar los roles disponbles para asignar.',
+    Find: 'Digite el criterio y después de clic sobre la lupa para buscar',
+    Search: 'Digita una palabra para realizar la búsqueda de un servicio de interés'
+  },
+  buttons: {
+    Excel: 'Exportar a Excel',
+    Help: 'Ayuda',
+    Error: 'Sácame de aquí',
+    List: 'Vista de Lista',
+    Grid: 'Vista de Cuadrícula',
+    Actions: 'Acciones',
+    Cancel: 'Cancelar',
+    Close: 'Cerrar',
+    Image: 'Imagen',
+    Go: 'Ir',
+    GoTo: 'Ir a',
+    GoToTop: 'Ir arriba',
+    View: 'Ver',
+    Viewed: 'Visto',
+    Accept: 'Aceptar',
+    Accepted: 'Aceptado',
+    Cancelled: 'Cancelado',
+    Rate: 'Calificar',
+    Rated: 'Calificado',
+    Post: 'Publicar',
+    Posted: 'Publicado',
+    Reset: 'Reiniciar',
+    Reseted: 'Reiniciado',
+    Search: 'Buscar',
+    Send: 'Enviar',
+    Sent: 'Enviado',
+    Submit: 'Enviar',
+    Submitted: 'Enviado',
+    Save: 'Guardar',
+    Saved: 'Guardado',
+    Login: 'Iniciar Sesión',
+    Logout: 'Cerrar Sesión',
+    Add: 'Añadir',
+    Added: 'Añadido',
+    Create: 'Crear',
+    Created: 'Creado',
+    Edit: 'Editar',
+    Edited: 'Editado',
+    Details: 'Detalles',
+    History: 'Historial',
+    Delete: 'Eliminar',
+    Deleted: 'Eliminado',
+    Download: 'Descargar',
+    Downloaded: 'Descargado',
+    Restore: 'Restaurar',
+    Restored: 'Restaurado',
+    Reload: 'Recargar',
+    Reloaded: 'Recargado',
+    Refresh: 'Refrescar',
+    Refreshed: 'Refrescado',
+    Update: 'Actualizar',
+    Updated: 'Actualizado',
+    Loading: 'Cargando',
+    Filter: 'Filtrar',
+    Back: 'Atrás',
+    Next: 'Siguiente',
+    LearnMore: 'Saber más',
+    ViewMore: 'Ver más',
+    ViewLess: 'Ver menos',
+    ViewImage: 'Ver imagen',
+    MoreOptions: 'Más Opciones',
+    LessOptions: 'Menos Opciones',
+    AdvanceSearch: 'Búsqueda Avanzada',
+    OpenInNewWindow: 'Abrir en nueva ventana',
+    AssignRole: 'Asignar Rol',
+    FollowLink: 'Seguir Enlace',
+    File: 'Archivo',
+    Print: 'Imprimir',
+    FreeUpQuota: 'Liberar cupo',
+    MarkAsRead: 'Marcar como leido',
+    Management: 'Gestionar',
+    Custom: 'Personalizado',
+    ViewAudit: 'Ver Auditoría'
+  },
+  footer: {
+    made: 'hecho con',
+    web: 'para una web mejor.'
+  },
+  errors: {
+    request: 'No hay comunicación con el servidor',
+    message: 'Algo salió mal, estamos trabajando para resolver el inconveniente.',
+    online: 'Conexión a internet reestablecida',
+    offline: 'No se puede verificar tu conexión a Internet',
+    permissions: 'No tienes acceso a este módulo.'
+  },
+  sidebar: {
+    filters: 'Color de Acento',
+    background: 'Color Barra Lateral',
+    dark: 'Tema',
+    language: 'Idioma',
+    image: 'Imagen de Fondo',
+    rtl: 'Dirección',
+    images: 'Imágenes',
+    install: 'Instalar SIM'
+  },
+
+  /* Import all locales from other modules */
+  label: {
+    result: 'No se encontraron coincidencias | Se encontró una coincidencia | Se encontraron {qty} coincidencias',
+    result_title: 'Buscar | 1 Resultado | {qty} Resultados',
+    no_data: 'No hay datos disponibles',
+    no_data_desc: 'Selecciona un parámetro para buscar',
+    find_by_name: 'Buscar por nombre',
+    find_by_any: 'Buscar por cualquier criterio',
+    find_by: 'Buscar por',
+    Comment: 'Comentario',
+    comments: 'Sin comentarios | 1 comentario | {qty} comentarios',
+    RateService: 'Califica este servicio',
+    RateGT: 'Calificación superior a',
+    Description: 'Sin descripción | Descripción'
+  },
+  admin: {
+    find: 'Realice la búqueda de un usuario, selecciónelo y asígnele un rol.',
+    users: 'Usuarios del Sistema'
+  },
+  form: {
+    name: 'Nombre',
+    program: 'Programa',
+    activity: 'Actividad',
+    stage: 'Escenario',
+    park_code: 'Codigo del parque',
+    park: 'Parque',
+    address: 'Dirección',
+    weekday: 'Día(s) de la semana',
+    daily: 'Horas',
+    min_age: 'Edad mínima',
+    max_age: 'Edad máxima',
+    quota: 'Cupos',
+    is_paid: 'Es pago',
+    is_initiate: 'Es iniciación',
+    date: 'Fecha',
+    content: 'Contenido',
+    start_time: 'Hora inicio',
+    end_time: 'Hora final',
+    start_date: 'Fecha de apertura',
+    final_date: 'Fecha de cierre',
+    is_activated: 'Está activo',
+    profile_type: 'Tipo de perfil',
+    taken: 'Cupos tomados',
+    quota_less: 'Cupos restantes',
+    not_assigned: 'Sin asignar verificador',
+    assigned: 'Asignados a verificador',
+    new_values: 'Nuevos valores',
+    start_date_filter: 'Feche inicial de registro',
+    final_date_filter: 'Fecha final de registro',
+    old_values: 'Datos anteriores',
+    validator: 'Validador',
+    status: 'Estado',
+    observation: 'Observación',
+    created_at: 'Fecha de creación',
+    schedule_created_at: 'Fecha de inscripción'
+  },
+  terms_and_cond: 'Aceptar términos y condiciones',
+  terms_and_cond_min: 'Aceptar T&C',
+  consent: 'Consentimiento informado',
+  accept: 'Acepto los términos y condiciones'
+});
+
+/***/ }),
+
+/***/ "./node_modules/vee-validate/dist/locale/es.json":
+/*!*******************************************************!*\
+  !*** ./node_modules/vee-validate/dist/locale/es.json ***!
+  \*******************************************************/
+/*! exports provided: code, messages, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"code\":\"es\",\"messages\":{\"alpha\":\"El campo {_field_} solo debe contener letras\",\"alpha_dash\":\"El campo {_field_} solo debe contener letras, números y guiones\",\"alpha_num\":\"El campo {_field_} solo debe contener letras y números\",\"alpha_spaces\":\"El campo {_field_} solo debe contener letras y espacios\",\"between\":\"El campo {_field_} debe estar entre {min} y {max}\",\"confirmed\":\"El campo {_field_} no coincide\",\"digits\":\"El campo {_field_} debe ser numérico y contener exactamente {length} dígitos\",\"dimensions\":\"El campo {_field_} debe ser de {width} píxeles por {height} píxeles\",\"email\":\"El campo {_field_} debe ser un correo electrónico válido\",\"excluded\":\"El campo {_field_} debe ser un valor válido\",\"ext\":\"El campo {_field_} debe ser un archivo válido\",\"image\":\"El campo {_field_} debe ser una imagen\",\"oneOf\":\"El campo {_field_} debe ser un valor válido\",\"integer\":\"El campo {_field_} debe ser un entero\",\"length\":\"El largo del campo {_field_} debe ser {length}\",\"max\":\"El campo {_field_} no debe ser mayor a {length} caracteres\",\"max_value\":\"El campo {_field_} debe de ser {max} o menor\",\"mimes\":\"El campo {_field_} debe ser un tipo de archivo válido\",\"min\":\"El campo {_field_} debe tener al menos {length} caracteres\",\"min_value\":\"El campo {_field_} debe ser {min} o superior\",\"numeric\":\"El campo {_field_} debe contener solo caracteres numéricos\",\"regex\":\"El formato del campo {_field_} no es válido\",\"required\":\"El campo {_field_} es obligatorio\",\"required_if\":\"El campo {_field_} es obligatorio\",\"size\":\"El campo {_field_} debe ser menor a {size}KB\",\"double\":\"El campo {_field_} debe ser un decimal válido\"}}");
+
+/***/ })
+
+}]);
+//# sourceMappingURL=lang-es.js.map

@@ -18,6 +18,7 @@ const attrs = {
 
 const state = () => ({
   activities: attrs,
+  admin: attrs,
   ageGroups: attrs,
   daily: attrs,
   fileTypes: attrs,

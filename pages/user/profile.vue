@@ -57,8 +57,8 @@ meta:
 </router>
 
 <script>
-import MaterialCard from '~/components/base/MaterialCard'
 import { Constants } from '@/utils/Constants'
+import MaterialCard from '~/components/base/MaterialCard'
 import { Api } from '~/models/Api'
 import { Menu } from '~/models/services/citizen/Menu'
 export default {

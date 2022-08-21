@@ -10,6 +10,10 @@ export class Admin extends Model {
     super(Api.END_POINTS.CITIZEN_USERS(), data)
   }
 
+  clone(data = { name: null, is_initiate: false }) {
+    return new Admin(data)
+  }
+
   rolesData(options = {}) {
     return this.get(Api.END_POINTS.CITIZEN_ROLES(), options)
   }

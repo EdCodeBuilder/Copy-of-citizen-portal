@@ -24,17 +24,16 @@ export default ({ app, $axios, redirect, error, store }) => {
         console.log(errors.response)
         if (app.$auth.loggedIn) {
           app.$auth.logout().finally(() => {
-            redirect(app.localePath({ name: 'login' }))
             store.dispatch('app/unsetMenuDrawer')
             store.dispatch('app/unsetBouncer')
+            redirect(app.localePath({ name: 'login' }))
           })
         } else {
-          redirect(app.localePath({ name: 'login' }))
           store.dispatch('app/unsetMenuDrawer')
           store.dispatch('app/unsetBouncer')
+          redirect(app.localePath({ name: 'login' }))
         }
-      }
-      if (
+      } else if (
         ![401, 403, 422, 429, 404, 419, 504].includes(errors.response.status)
       ) {
         // eslint-disable-next-line
@@ -43,8 +42,7 @@ export default ({ app, $axios, redirect, error, store }) => {
           statusCode: errors.response.status,
           message: errors.response.data.message,
         })
-      }
-      if ([504].includes(errors.response.status)) {
+      } else if ([504].includes(errors.response.status)) {
         // eslint-disable-next-line
         console.log(errors.response)
         error({
