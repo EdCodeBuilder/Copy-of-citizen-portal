@@ -195,6 +195,7 @@ export default {
     Edited: 'Editado',
     Details: 'Detalles',
     History: 'Historial',
+    Assistance: 'Asistencia',
     Delete: 'Eliminar',
     Deleted: 'Eliminado',
     Download: 'Descargar',

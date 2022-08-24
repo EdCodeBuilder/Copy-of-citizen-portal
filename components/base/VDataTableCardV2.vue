@@ -189,7 +189,7 @@
                           <span>{{ $t('buttons.MoreOptions') }}</span>
                         </v-tooltip>
                       </template>
-                      <!-- <v-list dense>
+                      <v-list dense>
                         <v-list-item
                           v-if="showUpdateButton"
                           @click="onUpdate(item)"
@@ -199,6 +199,17 @@
                           </v-list-item-icon>
                           <v-list-item-title>
                             {{ $t('buttons.Update') }}
+                          </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item
+                          v-if="showAssistanceButton"
+                          @click="onAssistance(item)"
+                        >
+                          <v-list-item-icon>
+                            <v-icon>mdi-account-plus</v-icon>
+                          </v-list-item-icon>
+                          <v-list-item-title>
+                            {{ $t('buttons.Assistance') }}
                           </v-list-item-title>
                         </v-list-item>
                         <slot name="actionsMenu" :item="item" />
@@ -224,10 +235,10 @@
                             {{ $t('buttons.Delete') }}
                           </v-list-item-title>
                         </v-list-item>
-                      </v-list> -->
+                      </v-list>
                     </v-menu>
                   </template>
-                  <!-- <template v-else>
+                  <template v-else>
                     <slot name="actionsButtons" />
                     <v-tooltip v-if="showHistoryButton" top>
                       <template #activator="{ on }">
@@ -242,6 +253,20 @@
                         </v-btn>
                       </template>
                       <i18n path="buttons.History" tag="span" />
+                    </v-tooltip>
+                    <v-tooltip v-if="showAssistanceButton" top>
+                      <template #activator="{ on }">
+                        <v-btn
+                          :aria-label="$t('buttons.Assistance')"
+                          icon
+                          color="info"
+                          v-on="on"
+                          @click="onAssistance(item)"
+                        >
+                          <v-icon>mdi-account-plus</v-icon>
+                        </v-btn>
+                      </template>
+                      <i18n path="buttons.Assistance" tag="span" />
                     </v-tooltip>
                     <v-tooltip v-if="showUpdateButton" top>
                       <template #activator="{ on }">
@@ -271,7 +296,7 @@
                       </template>
                       <i18n path="buttons.Delete" tag="span" />
                     </v-tooltip>
-                  </template> -->
+                  </template>
                 </template>
                 <template
                   v-if="customExpanded"
@@ -393,6 +418,67 @@
       <v-empty-state v-else icon="mdi-history" :label="$t('label.no_data')" />
     </v-check-dialog>
     <v-check-dialog
+      ref="assistanceDialog"
+      toolbar-color="primary"
+      title="buttons.Assistance"
+      :show-btn="false"
+      width="900"
+    >
+      <v-expansion-panels v-if="!!assistance.length">
+        <v-expansion-panel v-for="(audit, i) in assistance" :key="i">
+          <v-expansion-panel-header>
+            <template #default>
+              {{ audit.type_trans }}
+              <v-spacer />
+              <v-time-ago
+                classes="caption"
+                :prefix="audit.event"
+                :date-time="audit.created_at"
+              />
+            </template>
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-card flat color="transparent">
+              <v-card-title>
+                <v-list dense>
+                  <v-list-item>
+                    <v-list-item-avatar>
+                      <v-avatar>
+                        <v-icon>mdi-account</v-icon>
+                      </v-avatar>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-title v-text="audit.user" />
+                      <v-list-item-subtitle v-text="audit.ip" />
+                      <v-list-item-subtitle>
+                        <v-time-ago
+                          :prefix="audit.event"
+                          :date-time="audit.created_at"
+                        />
+                      </v-list-item-subtitle>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card-title>
+              <v-card-text>
+                <i18n class="display-1" tag="h3" path="form.new_values" />
+                <v-json-pretty :data="audit.new_values" />
+              </v-card-text>
+              <v-divider />
+              <v-card-text>
+                <i18n class="display-1" tag="h3" path="form.old_values" />
+                <v-json-pretty :data="audit.old_values" />
+              </v-card-text>
+              <v-card-actions class="text-center">
+                <v-user-agent :user-agent="audit.user_agent" />
+              </v-card-actions>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+      <v-empty-state v-else icon="mdi-account" :label="$t('label.no_data')" />
+    </v-check-dialog>
+    <v-check-dialog
       ref="formDialog"
       toolbar-color="primary"
       :use-trans="cardTitleTranslate"
@@ -469,7 +555,10 @@ export default {
       type: Boolean,
       default: true,
     },
-
+    showAssistanceButton: {
+      type: Boolean,
+      default: true,
+    },
     showDeleteButton: {
       type: Boolean,
       default: true,
@@ -564,6 +653,7 @@ export default {
     originalmodel: {},
     timeOut: null,
     history: [],
+    assistance: [],
   }),
   methods: {
     updateRoute(page) {
@@ -681,16 +771,16 @@ export default {
         this.form = this.model
       })
     },
-    onAssistanceRegistration(item) {
-      this.form = this.model.clone(item)
-      this.$refs.formDialog.open().catch(() => {
-        this.form = this.model
-      })
-    },
     onHistory(item) {
       this.history = item.audits || []
       this.$refs.historyDialog.open().catch(() => {
         this.history = []
+      })
+    },
+    onAssistance(item) {
+      this.assistance = item.audits || []
+      this.$refs.assistanceDialog.open().catch(() => {
+        this.assistance = []
       })
     },
     refresh() {
