@@ -49,7 +49,7 @@ export default {
   auth: 'auth',
   middleware: ['permissions'],
   components: {
-    VDataTableCard: () => import('@/components/base/VDataTableCard'),
+    VDataTableCard: () => import('@/components/base/VDataTableCardV2'),
     VActivityForm: () => import('@/components/citizen/VActivityForm'),
   },
   meta: {
