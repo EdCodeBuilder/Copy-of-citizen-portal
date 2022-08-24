@@ -88,3 +88,6 @@ sw.*
 
 # Vim swap files
 *.swp
+
+# VSCode debug config
+.vscode/vscode-chrome-debug-userdatadir/
