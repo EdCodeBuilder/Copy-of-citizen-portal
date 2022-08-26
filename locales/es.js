@@ -196,6 +196,7 @@ export default {
     Details: 'Detalles',
     History: 'Historial',
     Assistance: 'Asistencia',
+    Assistance_record: 'Registro de asistencia',
     Delete: 'Eliminar',
     Deleted: 'Eliminado',
     Download: 'Descargar',

@@ -201,17 +201,17 @@
                             {{ $t('buttons.Update') }}
                           </v-list-item-title>
                         </v-list-item>
-                        <v-list-item
+                        <!-- <v-list-item
                           v-if="showAssistanceButton"
                           @click="onAssistance(item)"
                         >
                           <v-list-item-icon>
-                            <v-icon>mdi-account-plus</v-icon>
+                            <v-icon>mdi-account-edit</v-icon>
                           </v-list-item-icon>
                           <v-list-item-title>
                             {{ $t('buttons.Assistance') }}
                           </v-list-item-title>
-                        </v-list-item>
+                        </v-list-item> -->
                         <slot name="actionsMenu" :item="item" />
                         <v-list-item
                           v-if="showHistoryButton"
@@ -259,11 +259,11 @@
                         <v-btn
                           :aria-label="$t('buttons.Assistance')"
                           icon
-                          color="info"
+                          color="success"
                           v-on="on"
                           @click="onAssistance(item)"
                         >
-                          <v-icon>mdi-account-plus</v-icon>
+                          <v-icon>mdi-account-edit</v-icon>
                         </v-btn>
                       </template>
                       <i18n path="buttons.Assistance" tag="span" />
@@ -420,12 +420,25 @@
     <v-check-dialog
       ref="assistanceDialog"
       toolbar-color="primary"
-      title="buttons.Assistance"
+      title="buttons.Assistance_record"
       :show-btn="false"
       width="900"
     >
-      <v-expansion-panels v-if="!!assistance.length">
-        <v-expansion-panel v-for="(audit, i) in assistance" :key="i">
+      <v-card>
+        <v-card-text class="d-flex justify-center">
+          <div>Aqui va el escenario.</div>
+        </v-card-text>
+        <v-card-text class="d-flex justify-center">
+          <div>Aqui va el nombre de la actividad.</div>
+        </v-card-text>
+        <v-card-text class="d-flex justify-content">
+          <div>Aqui va el contenido de la actividad.</div>
+        </v-card-text>
+        <v-card-text class="d-flex justify-center">
+          <div>Registro de asistencia</div>
+        </v-card-text>
+      </v-card>
+      <!-- <v-expansion-panel v-for="(audit, i) in assistance" :key="i">
           <v-expansion-panel-header>
             <template #default>
               {{ audit.type_trans }}
@@ -474,9 +487,8 @@
               </v-card-actions>
             </v-card>
           </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-      <v-empty-state v-else icon="mdi-account" :label="$t('label.no_data')" />
+        </v-expansion-panel> -->
+      <!-- <v-empty-state v-else icon="mdi-account" :label="$t('label.no_data')" /> -->
     </v-check-dialog>
     <v-check-dialog
       ref="formDialog"
